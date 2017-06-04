@@ -1,6 +1,5 @@
-conf.inc.php
+/conf.inc.php
 log/
-.buildpath
-.project
+/.buildpath
+/.project
 .settings/
-
