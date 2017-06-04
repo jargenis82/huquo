@@ -1,8 +1,4 @@
 conf.inc.php
-.project
-.buildpath
-.settings
-.settings/
 log
 log/
 .git
