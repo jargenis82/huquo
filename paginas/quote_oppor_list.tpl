@@ -9,7 +9,6 @@
 
 <link rel="stylesheet"
 	href="../librerias/bootstrap3.3.7/css/bootstrap.min.css">
-[var.js;htmlconv=no;noerr]
 <script type="text/javascript"
 	src="../librerias/jquery_actual/js/jquery.min.js"></script>
 <script type="text/javascript"
@@ -21,6 +20,9 @@
 	href="../librerias/jquery_actual/css/jquery-ui.css">
 <link rel="stylesheet" type="text/css"
 	href="../librerias/jquery-DataTables-1.10.7/media/css/dataTables.jqueryui.min.css">
+
+<!-- XAJAX scripts -->
+[var.js;htmlconv=no;noerr]
 
 <!-- SCRIPTS -->
 
@@ -45,6 +47,8 @@ table, td, th {
 }
 </style>
 <script>
+	var consultingCustomer = "";
+
 	$(function() {
 		var availableTags = [ [var.customers;htmlconv=no;noerr]  ];
 		//var availableTags = [ "Arkcom", "Wellscom", "Asp", "BASIC", "C" ];
@@ -54,13 +58,17 @@ table, td, th {
 
 		$("#tags").autocomplete({
 			change : function(event, ui) {
-				xajax_getCustomer(this.value,1);
+				if (consultingCustomer != this.value) {
+					consultingCustomer = this.value;
+					xajax_getCustomer(this.value,1);
+				}
 			}
 		});
 
 	});
 	$(document).ready(function() {
 		$('#tags').on('autocompleteselect', function(e, ui) {
+			consultingCustomer = ui.item.value;
 			xajax_getCustomer(ui.item.value,1);
 		});
 	});

@@ -13,7 +13,6 @@ function getCustomer($customerName,$getOpportunities) {
 	$objResponse->addAssign ( "a_web", "href", "" );
 	$objResponse->addAssign ( "a_web", "innerHTML", "" );
 	$objResponse->addAssign ( "span_phone", "innerHTML", "" );
-	
 	$i = new Insightly ( APIKEY );
 	$options ['filters'] [0] = "ORGANISATION_NAME = '$customerName'";
 	$arrOrganization = $i->getOrganizations ( $options );
@@ -48,7 +47,6 @@ function getCustomer($customerName,$getOpportunities) {
 			$objResponse->addScript("dataTable('$customerName');");
 		}
 	}
-	
 	return $objResponse;
 }
 
