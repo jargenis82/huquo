@@ -25,6 +25,5 @@ $customers = substr ( $customers, 1 );
 // CARGA DE LA PLANTILLA PRINCIPAL
 $TBS = new clsTinyButStrong ();
 $TBS->LoadTemplate ( '../paginas/quote_oppor_list.tpl' );
-
 $TBS->Show ();
 ?>
