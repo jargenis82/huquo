@@ -29,7 +29,7 @@ if (isset ( $arrOrganizations [0] )) {
 			$myPipelineStage = $i->getPipelineStage($myOpportunity->STAGE_ID);
 			$stageOrder = $myPipelineStage->STAGE_ORDER;
 			$stageName = $myPipelineStage->STAGE_NAME;
-			$unDato [3] = "$stageName<br><img alt='$stageName' src='../images/pipeline_$stageOrder.png' style='width: 100px'>";
+			$unDato [3] = "$stageName<br><img alt='$stageName' src='../imagenes/pipeline_$stageOrder.png' style='width: 100px'>";
 			$unDato [4] = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" 		data-modulo="" data-accion="" onclick="alert(this)"></span>';
 			$arrJson ['aaData'] [] = $unDato;
 		}
