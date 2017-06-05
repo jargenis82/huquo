@@ -1,0 +1,24 @@
+<?php
+/**
+Archivo conf.inc.php necesario para establecer las directivas de conexión con base de datos y los valores de las constantes
+a utilizar por funciones y librerias del sistema.
+Copiar el archivo actual en la raiz del sistema renombrandolo conf.inc.php
+*/
+define ("RUTA_SISTEMA","ruta local del sistema terminando con /");
+
+// SERVIDOR MYSQL
+define ("X","usuario de conexion de base de datos");
+define ("Y","contrasena de conexion de base de datos");
+
+define ("Z","nombre de la base de datos en MySQL");
+define ("W","host del servidor MySQL");
+define ("V","3306"); // Puerto del servidor MySQL - 3306 por defecto
+
+//define ("PROXY", "direccion del proxy (de ser necesario) para conexion CURL de la libreria de Insightly");
+define ("APIKEY", "APIKEY para la libreria de Insightly");
+define ("EXP",6000000); // Tiempo de expiracion en segundos para sesiones de usuario
+setlocale(LC_CTYPE, 'es_ES');
+ini_set("display_errors","0");
+//ini_set("memory_limit","-1");
+session_start();
+?>
