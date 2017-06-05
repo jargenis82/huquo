@@ -1477,13 +1477,10 @@ class InsightlyRequest{
   function __construct($method, $apikey, $url_path){
     $this->curl = curl_init();
     
-    
     // ************************ MODIFICACION ARGENIS RODRIGUEZ
-    if (defined(PROXY)) {
-    
+    if (defined("PROXY")) {
     	curl_setopt($this->curl, CURLOPT_PROXY, PROXY);
     }
-    
     
     $this->url_path = $url_path;
     $this->headers = array("Authorization: Basic " . base64_encode($apikey . ":"));
