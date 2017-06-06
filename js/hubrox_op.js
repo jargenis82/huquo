@@ -20,8 +20,8 @@ function dataTableQuote() {
 					"20171702a1",
 					"02/17/2017",
 					"50.000",
-					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='dataTableQuote()'></span>",
-					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='dataTableQuote()'></span>",
+					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote()'></span>",
+					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='quote()'></span>",
 
 			],
 			[
@@ -29,7 +29,7 @@ function dataTableQuote() {
 					"05/20/2017",
 					"75.000",
 
-					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='dataTableQuote()'></span>",
+					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote()'></span>",
 					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' href='../archivos/quote.pdf' onclick='quote()' ></span>",
 
 			] ]
@@ -49,9 +49,9 @@ function dataTableQuote() {
 }
 
 function quote() {
-	window.location.assign("../archivos/quote.pdf");
+	window.open("../archivos/quote.pdf");	
 }
 function newQuote(){
-	window.location.assign("../controladores/quote_vs2.php");
+	window.open("../controladores/quote_vs2.php");
 
 }
