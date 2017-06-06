@@ -4,3 +4,4 @@ log/
 /.buildpath
 /.project
 .settings/
+.phpintel/
