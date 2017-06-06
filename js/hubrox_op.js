@@ -30,7 +30,7 @@ function dataTableQuote() {
 					"75.000",
 
 					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='dataTableQuote()'></span>",
-					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='dataTableQuote()'></span>",
+					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='alert(1)'></span>",
 
 			] ]
 
