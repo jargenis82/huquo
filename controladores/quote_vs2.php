@@ -23,6 +23,9 @@ $xajax = new xajax("../inc/ajax_funciones.php");
 $xajax->registerFunction ( "getCustomer" );
 $js = $xajax->getJavascript('../librerias/');
 
+// Fecha Actual
+
+
 // Se consulta en el API de Insightly la lista de organizaciones
 $customers = "";
 $i = new Insightly ( APIKEY );
