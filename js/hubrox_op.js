@@ -30,7 +30,7 @@ function dataTableQuote() {
 					"75.000",
 
 					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='dataTableQuote()'></span>",
-					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='alert(1)'></span>",
+					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' href='../archivos/quote.pdf' onclick='quote()' ></span>",
 
 			] ]
 
@@ -44,4 +44,14 @@ function dataTableQuote() {
 		data : data
 
 	});
+	$( '#prueba').html( "<span	class='btn btn-primary btn-sm' glyphicon glyphicon-plus biselado'		id='addRow' data-accion='add' onclick='newQuote()'>NEW QUOTE</span>" );
+
+}
+
+function quote() {
+	window.location.assign("../archivos/quote.pdf");
+}
+function newQuote(){
+	window.location.assign("../controladores/quote_vs2.php");
+
 }
