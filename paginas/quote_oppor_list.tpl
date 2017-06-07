@@ -75,7 +75,7 @@ table, td, th {
 	});
 </script>
 </head>
-<body onload="document.getElementById('tags').focus()">
+<body onload="document.getElementById('tags').focus();dataTableQuote(null); dataTable();">
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -171,6 +171,7 @@ table, td, th {
 										<tr>
 											<th>Quote Number</th>
 											<th>Quote Date</th>
+											<th>Name</th>
 											<th>Total ($)</th>
 											<th>View / Edit</th>
 											<th>PDF</th>
