@@ -44,7 +44,7 @@ $userName = "Annie Wang";
 // Se consulta en el API de Insightly la lista de organizaciones
 $customers = "";
 $i = new Insightly ( APIKEY );
-$options ['top'] = 15;
+$options ['top'] = defined("TOP_LIMIT") ? TOP_LIMIT : null; // Limite de consulta para mejorar el desempeño en máquinas de consulta (Provisional)
 $arrOrganization = $i->getOrganizations ( $options );
 foreach ( $arrOrganization as $j => $myOrganization ) {
 	$customers .= ',"' . $myOrganization->ORGANISATION_NAME . '"';
