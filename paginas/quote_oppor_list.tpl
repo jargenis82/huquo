@@ -48,7 +48,7 @@ table, td, th {
 </style>
 <script>
 	var consultingCustomer = "";
-	var consultingOpportunity = "";
+	var organizationId = "";
 
 	$(function() {
 		var availableTags = [ [var.customers;htmlconv=no;noerr]  ];

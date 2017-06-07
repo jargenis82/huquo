@@ -42,6 +42,7 @@ table, td, th {
 
 <script>
 	var consultingCustomer = "";
+	var organizationId = "[var.organizationId;noerr]";
 
 
   $( function() {
@@ -200,19 +201,19 @@ table, td, th {
 						</tr>
 						<tr>
 							<td><label>QUOTE #</label></td>
-							<td>20170606-012</td>
+							<td>[var.quoteNumber;noerr]</td>
 						</tr>
 						<tr>
 							<td><label>CUSTOMER ID</label></td>
-							<td>73793570</td>
+							<td>[var.organizationId;noerr]</td>
 						</tr>
 						<tr>
 							<td><label>VALID UNTIL</label></td>
-							<td>30/01/2017</td>
+							<td>[var.fechaValidez;noerr]</td>
 						</tr>
 						<tr>
 							<td><label>Prepared by</label></td>
-							<td>Annie Wang</td>
+							<td>[var.userName;noerr]</td>
 						</tr>
 
 					</table>

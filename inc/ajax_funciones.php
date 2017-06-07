@@ -7,7 +7,7 @@ include_once '../librerias/insightly.php';
 
 $xajax = new xajax ( "ajax_funciones.php" );
 $xajax->registerFunction ( "getCustomer" );
-function getCustomer($customerName,$getOpportunities) {
+function getCustomer($customerName, $getOpportunities) {
 	$objResponse = new xajaxResponse ();
 	$objResponse->addAssign ( "span_address", "innerHTML", "" );
 	$objResponse->addAssign ( "a_web", "href", "" );
@@ -17,6 +17,8 @@ function getCustomer($customerName,$getOpportunities) {
 	$options ['filters'] [0] = "ORGANISATION_NAME = '$customerName'";
 	$arrOrganization = $i->getOrganizations ( $options );
 	if (isset ( $arrOrganization [0] )) {
+		$organizationId = $arrOrganization [0]->ORGANISATION_ID;
+		$objResponse->addScript ( "organizationId = '$organizationId';" );
 		$arrAddresses = $arrOrganization [0]->ADDRESSES;
 		if (isset ( $arrAddresses [0] )) {
 			$address = $arrAddresses [0]->STREET . ", " . $arrAddresses [0]->CITY . ", " . $arrAddresses [0]->COUNTRY . ".";
@@ -43,8 +45,8 @@ function getCustomer($customerName,$getOpportunities) {
 				break 1;
 			}
 		}
-		if (comprobarVar($getOpportunities) and $getOpportunities == "1") {
-			$objResponse->addScript("dataTable('$customerName');");
+		if (comprobarVar ( $getOpportunities ) and $getOpportunities == "1") {
+			$objResponse->addScript ( "dataTable('$customerName');" );
 		}
 	}
 	return $objResponse;

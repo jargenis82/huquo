@@ -12,25 +12,28 @@ $arrJson = array (
 );
 
 // Busqueda de oportunidades de la organizacion
-$i = new Insightly ( APIKEY );
-$options ['filters'] [0] = "ORGANISATION_NAME = '" . $_GET ['customerName'] . "'";
-$arrOrganizations = $i->getOrganizations ( $options );
+$organizationId = $_GET ['organizationId'];
+if (comprobarVar ( $organizationId )) {
+	$i = new Insightly ( APIKEY );
+	$myOrganization = $i->getOrganization ( $organizationId );
+}
+
 $unDato = array ();
-if (isset ( $arrOrganizations [0] )) {
-	$arrLinks = $arrOrganizations [0]->LINKS;
+if (isset ( $myOrganization )) {
+	$arrLinks = $myOrganization->LINKS;
 	foreach ( $arrLinks as $aLink ) {
 		$opportunityId = $aLink->OPPORTUNITY_ID;
 		if (comprobarVar ( $opportunityId )) {
 			$myOpportunity = $i->getOpportunity ( $opportunityId );
 			$unDato [0] = $myOpportunity->OPPORTUNITY_NAME;
-			$unDato [1] = substr($myOpportunity->DATE_CREATED_UTC,0,10);
+			$unDato [1] = substr ( $myOpportunity->DATE_CREATED_UTC, 0, 10 );
 			$unDato [2] = $myOpportunity->OPPORTUNITY_STATE;
 			
-			$myPipelineStage = $i->getPipelineStage($myOpportunity->STAGE_ID);
+			$myPipelineStage = $i->getPipelineStage ( $myOpportunity->STAGE_ID );
 			$stageOrder = $myPipelineStage->STAGE_ORDER;
 			$stageName = $myPipelineStage->STAGE_NAME;
 			$unDato [3] = "$stageName<br><img alt='$stageName' src='../imagenes/pipeline_$stageOrder.png' style='width: 100px'>";
-			$unDato [4] = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" data-modulo="" data-accion="" onclick="dataTableQuote('.$opportunityId.')"></span>';
+			$unDato [4] = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" data-modulo="" data-accion="" onclick="dataTableQuote()"></span>';
 			$arrJson ['aaData'] [] = $unDato;
 		}
 	}

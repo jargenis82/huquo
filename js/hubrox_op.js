@@ -8,15 +8,13 @@ function dataTable(customerName) {
 						"bInfo" : false,
 						"paging" : true,
 						destroy : true,
-						"sAjaxSource" : "../controladores/json_consultas/json_consulta.php?customerName="
-								+ customerName
+						"sAjaxSource" : "../controladores/json_consultas/json_consulta.php?organizationId="
+								+ organizationId
 					});
 
 }
 
-function dataTableQuote(opportunityId) {
-	consultingOpportunity = opportunityId;
-	
+function dataTableQuote() {
 	var data = [
 			[
 					"20171702a1",
@@ -55,6 +53,6 @@ function quote() {
 	window.open("../archivos/quote.pdf");	
 }
 function newQuote(){
-	window.open("../controladores/quote_vs2.php?opportunityId="+consultingOpportunity);
+	window.open("../controladores/quote_vs2.php?organizationId="+organizationId);
 
 }
