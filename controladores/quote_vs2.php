@@ -24,7 +24,7 @@ $xajax->registerFunction ( "getCustomer" );
 $js = $xajax->getJavascript('../librerias/');
 
 // Fecha Actual
-
+$fecha = formatoFechaBd(null, "m/d/Y");
 
 // Se consulta en el API de Insightly la lista de organizaciones
 $customers = "";

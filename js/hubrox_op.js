@@ -14,7 +14,9 @@ function dataTable(customerName) {
 
 }
 
-function dataTableQuote() {
+function dataTableQuote(opportunityId) {
+	consultingOpportunity = opportunityId;
+	
 	var data = [
 			[
 					"20171702a1",
@@ -52,6 +54,6 @@ function quote() {
 	window.open("../archivos/quote.pdf");	
 }
 function newQuote(){
-	window.open("../controladores/quote_vs2.php");
+	window.open("../controladores/quote_vs2.php?opportunityId="+consultingOpportunity);
 
 }

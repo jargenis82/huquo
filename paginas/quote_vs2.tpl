@@ -196,11 +196,11 @@ table, td, th {
 					<table class="table-responsive" width="200">
 						<tr>
 							<td><label>DATE</label></td>
-							<td>01/01/01</td>
+							<td>[var.fecha;noerr]</td>
 						</tr>
 						<tr>
-							<td><label>QUOTE </label></td>
-							<td>01/01/2017</td>
+							<td><label>QUOTE #</label></td>
+							<td>20170606-012</td>
 						</tr>
 						<tr>
 							<td><label>CUSTOMER ID</label></td>
