@@ -107,7 +107,15 @@ table, td, th {
 
 } );
 
-
+  $(function() {
+        $( "#fechaVal" ).datepicker
+        ({  dateFormat: 'mm-dd-yy', 
+        	  changeMonth: true, 
+            changeYear: true, 
+            yearRange: '-100:+0'
+       
+        });
+    });
 
    
   </script>
@@ -194,7 +202,7 @@ table, td, th {
 					</input>Quote
 				</div>
 				<div class="panel-body">
-					<table class="table-responsive" width="200">
+					<table class="table-responsive">
 						<tr>
 							<td><label>DATE</label></td>
 							<td>[var.fecha;noerr]</td>
@@ -209,7 +217,7 @@ table, td, th {
 						</tr>
 						<tr>
 							<td><label>VALID UNTIL</label></td>
-							<td>[var.fechaValidez;noerr]</td>
+							<td><input id="fechaVal" value="[var.fechaValidez;noerr]" size="10"> </input></td>
 						</tr>
 						<tr>
 							<td><label>Prepared by</label></td>
