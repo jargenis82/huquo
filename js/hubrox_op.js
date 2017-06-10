@@ -15,25 +15,6 @@ function dataTable(customerName) {
 }
 
 function dataTableQuote() {
-	var data = [
-			[
-					"20171702a1",
-					"02/17/2017",
-					"Annie Wang",
-					"50.000",
-					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote()'></span>",
-					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='quote()'></span>",
-
-			],
-			[
-					"20171702a1",
-					"05/20/2017",
-					"Annie Wang",
-					"75.000",
-					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote()'></span>",
-					"<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' href='../archivos/quote.pdf' onclick='quote()' ></span>",
-
-			] ]
 
 	$('#tQuote').DataTable({
 		searching : true,
@@ -41,8 +22,8 @@ function dataTableQuote() {
 		"bInfo" : false,
 		"paging" : true,
 		destroy : true,
-
-		data : data
+		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php"
+		
 
 	});
 	$( '#prueba').html( "<span	class='btn btn-primary btn-sm' glyphicon glyphicon-plus biselado'		id='addRow' data-accion='add' onclick='newQuote()'>NEW QUOTE</span>" );
