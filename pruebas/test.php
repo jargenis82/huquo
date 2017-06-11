@@ -10,7 +10,7 @@ $myProductType = new ProductType();
 $arrProductType = $myProductType->consultar();
 echo $arrProductType[0]->getAtributo("product_type_id");
 echo "<br>";
-echo $arrProductType[0]->getAtributo("product_type_desc");
+echo $arrProductType[0]->getAtributo("product_type_name");
 
 
 ?>

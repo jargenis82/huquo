@@ -8,8 +8,8 @@ class ProductType extends ClaseBd {
 	function declararTabla() {
 		$tabla = "product_type";
 		$atributos ['product_type_id'] ['esPk'] = true;
-		$atributos ['product_type_desc'] ['esPk'] = false;
-		$strOrderBy = "product_type_desc";
+		$atributos ['product_type_name'] ['esPk'] = false;
+		$strOrderBy = "product_type_name";
 		$this->registrarTabla ( $tabla, $atributos, $objetos, $strOrderBy );
 		$this->dsn = "mysql";
 	}
