@@ -90,7 +90,8 @@ table, td, th {
 } );
 
  var idTxtDescrip = 0;
- var availableDescrip = [ "Arkcom","Wellscom","Asp","BASIC","C"  ];
+ //var availableDescrip = [ "Arkcom","Wellscom","Asp","BASIC","C"  ];
+ var availableDescrip = [ [var.jsData;htmlconv=no;noerr]  ];
  
  $(function() {
         $( "#fechaVal" ).datepicker

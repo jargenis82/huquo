@@ -5,6 +5,7 @@ include_once '../librerias/conexion_bd.php';
 include_once '../librerias/tbs_class/tbs_class.php';
 include_once '../librerias/xajax_0.2.4/xajax.inc.php';
 include_once '../librerias/insightly.php';
+include_once '../clases/product.php';
 // include_once '../clases/inst_usua.php';
 // include_once '../clases/menu.php';
 include_once '../inc/funciones.php';
@@ -41,6 +42,17 @@ $quoteNumber = "20170606-012";
 
 // Prepared by
 $userName = "Annie Wang";
+
+// Se construye el arreglo en Javascript para el autocompletar de productos
+$myProduct = new Product();
+$listaProducto = $myProduct->getListaProducto();
+$jsData = "";
+foreach ($listaProducto as $unProducto) {	
+	$unProducto = str_replace('"', '\"', $unProducto);
+	$jsData .= '"'.$unProducto.'",';
+	$contador++;	
+}
+$jsData = $jsData != "" ? substr($jsData, 0, -1) : "";
 
 
 // Se consulta en el API de Insightly la lista de organizaciones
