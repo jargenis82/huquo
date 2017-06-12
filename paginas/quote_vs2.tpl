@@ -81,6 +81,7 @@ table, td, th {
     var table = $('#descripId').DataTable( {
         searching: false,
         "scrollY": "auto",
+      	 minDate: "today",
         "bInfo": false,
         "paging": false
     } );
@@ -94,23 +95,25 @@ table, td, th {
  
  $(function() {
         $( "#fechaVal" ).datepicker
-        ({  dateFormat: 'mm-dd-yy', 
-        	  changeMonth: true, 
-            changeYear: true, 
-            yearRange: '-100:+0'
-       
+        ({
+        	 minDate: 0,
+        	dateFormat: 'mm/dd/yy',
+        	changeMonth: true,
+          changeYear: true
+ 
         });
+  
     });
   $( function() {
     //var availableTags = [   ];
-       
+
       $( "#txt_decrip" ).autocomplete({
-        source: availableDescrip        
+        source: availableDescrip
       });
-      
+
      $(document).ready(function () {
 	    $('#txt_decrip').on('autocompleteselect', function (e, ui) {
-	    	 	xajax_getDescripProduct(ui.item.value)	        
+	    	 	xajax_getDescripProduct(ui.item.value)
 	    });
 		});  
      } );
@@ -240,24 +243,18 @@ table, td, th {
 						<thead>
 							<tr>
 								<th width="600">DESCRIPTION</th>
-								<th>Discount</th>
 								<th>UNIT PRICE</th>[var.js;htmlconv=no;noerr]
 								<th>QTY</th>
 								<th>AMOUNT US</th>
-								<th>Delete</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td><input id="txt_decrip" size="70%"></td>
-								<td align="center"><input id="txt_discount" size="4"></td>
-								<td align="center"><span id="span_price"></span></td>
+								<td><input id="txt_decrip" class="form-control"></td>
+								<td align="center"><input id="txt_unit" size="5"></td>
 								<td align="center"><input type="txt_qty" size="4"></td>
 								<td align="center"><span id="span_amount" size="4"></span></td>
-								<td align="center"><span id=""
-									class="btn btn-default btn-xs glyphicon glyphicon-remove"
-									onclick=""></span></td>
-							</tr>
+						</tr>
 						</tbody>
 					</table>
 					<br>
@@ -268,10 +265,17 @@ table, td, th {
 								<thead>
 								</thead>
 								<tbody>
+
+									<tr>
+
+										<td>Discount</td>
+										<td><input type="text"size="3" ></input> $    <input type="text" size="2" ></input> % </td>
+
+									</tr>
 									<tr>
 
 										<td>Subtotal (US$)</td>
-										<td><label>$</label></td>
+										<td>$</td>
 
 									</tr>
 									<tr>
@@ -284,21 +288,26 @@ table, td, th {
 										<td>HST</td>
 										<td></td>
 									</tr>
-									<tr>
+										<tr>
 										<td><b>TOTAL (US$)</b></td>
 										<td><b>$100.000<b></td>
 									</tr>
 								</tbody>
 							</table>
 							<divclass"row">
-							<div class="col-sm-8"></div>
-							<div class="cols-sm-4">
-								<span
-									class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
-									id="" data-accion="" onclick="addNewProduct()">ADD</span> <span
-									class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
-									id="btn_Guardar" data-accion='save'">PDF</span>
-							</div>
+							<div class="col-sm-4"></div>
+									<div class="cols-sm-8">
+										<span
+											class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
+											id="" data-accion="" onclick="addNewProduct()">ADD</span>
+										<span
+											class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
+											id="" data-accion="" onclick="">DELETE</span>
+											<span
+											class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
+											id="btn_Guardar" data-accion="">PDF</span>
+									</div>
+
 						</div>
 
 					</div>
@@ -308,11 +317,11 @@ table, td, th {
 	</div>
 
 	<div class="container-fluid">
-		<div class="col-sm-2"></div>
-		<div class="col-sm-10">
+		<div class="col-sm-4"></div>
+		<div class="col-sm-8">
 			<footer>
 				<p>
-					370 Magnetic Dr. North York, ON M3J 2C4,Toronto, Canadá <label>
+					370 Magnetic Dr. North York, ON M3J 2C4,Toronto, Canada <label>
 						Phone:+ 1-647-499-5741</label>Contact information: <a
 						href="http://www.hubrox.com/">www.hubrox.com</a>.
 				</p>
