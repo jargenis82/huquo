@@ -7,6 +7,26 @@ include_once '../librerias/insightly.php';
 
 $xajax = new xajax ( "ajax_funciones.php" );
 $xajax->registerFunction ( "getCustomer" );
+$xajax->registerFunction ( "getDescripProduct");
+$xajax->registerFunction ( "addNewProduct");
+
+function getDescripProduct($productName){
+	$objResponse = new xajaxResponse ();
+	$unitPrice=5000;
+	$qty="12";
+	$amount=$unitPrice*$qty;
+	$objResponse->addAssign("span_price","innerHTML",$unitPrice);
+	$objResponse->addAssign("span_qty","innerHTML",$qty);
+	$objResponse->addAssign("span_amount","innerHTML",$amount);
+	return $objResponse;
+}
+function addNewProduct(){
+	$objResponse = new xajaxResponse ();
+	$objResponse->addAlert("newRow");
+	return $objResponse;
+}
+
+
 function getCustomer($customerName, $getOpportunities) {
 	$objResponse = new xajaxResponse ();
 	$objResponse->addAssign ( "span_address", "innerHTML", "" );
