@@ -246,11 +246,11 @@ table, td, th {
 						<tbody>
 							<tr>
 								<td><input id="txt_decrip" ></td>
-								<td align="center"><input id="txt_discunt" size="4"></ins></td>
+								<td align="center"><input id="txt_discunt" size="4"></td>
 								<td align="center"><span id="span_price"></span></td>
-								<td align="center"><span id="span_qty"></span></td>
-								<td align="center"><span id="span_amount"></span></td>
-								<td align="center"><span id="" class="btn btn-default btn-xs glyphicon glyphicon-remove"  onclick="addNewProduct()"></span></td>
+								<td align="center"><input type="txt_qty" size="4"></td>
+								<td align="center"><span id="span_amount" size="4"></span></td>
+								<td align="center"><span id="" class="btn btn-default btn-xs glyphicon glyphicon-remove"  onclick=""></span></td>
 							</tr>
 						</tbody>
 					</table>
