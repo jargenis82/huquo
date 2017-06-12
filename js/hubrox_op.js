@@ -38,5 +38,6 @@ function newQuote(){
 
 }
 function addNewProduct() {
- xajax_addNewProduct();
+	idTxtDescrip++;
+ xajax_addNewProduct(idTxtDescrip);
 }

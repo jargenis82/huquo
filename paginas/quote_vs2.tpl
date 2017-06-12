@@ -89,6 +89,9 @@ table, td, th {
 
 } );
 
+ var idTxtDescrip = 0;
+ var availableDescrip = [ "Arkcom","Wellscom","Asp","BASIC","C"  ];
+ 
  $(function() {
         $( "#fechaVal" ).datepicker
         ({  dateFormat: 'mm-dd-yy', 
@@ -100,7 +103,7 @@ table, td, th {
     });
   $( function() {
     //var availableTags = [   ];
-       var availableDescrip = [ "Arkcom","Wellscom","Asp","BASIC","C"  ];
+       
       $( "#txt_decrip" ).autocomplete({
         source: availableDescrip        
       });
@@ -211,7 +214,8 @@ table, td, th {
 						</tr>
 						<tr>
 							<td><label>VALID UNTIL</label></td>
-							<td><input id="fechaVal" value="[var.fechaValidez;noerr]" size="10"> </input></td>
+							<td><input id="fechaVal" value="[var.fechaValidez;noerr]"
+								size="10"> </input></td>
 						</tr>
 						<tr>
 							<td><label>Prepared by</label></td>
@@ -245,12 +249,14 @@ table, td, th {
 						</thead>
 						<tbody>
 							<tr>
-								<td><input id="txt_decrip" ></td>
-								<td align="center"><input id="txt_discunt" size="4"></td>
+								<td><input id="txt_decrip" size="70%"></td>
+								<td align="center"><input id="txt_discount" size="4"></td>
 								<td align="center"><span id="span_price"></span></td>
 								<td align="center"><input type="txt_qty" size="4"></td>
 								<td align="center"><span id="span_amount" size="4"></span></td>
-								<td align="center"><span id="" class="btn btn-default btn-xs glyphicon glyphicon-remove"  onclick=""></span></td>
+								<td align="center"><span id=""
+									class="btn btn-default btn-xs glyphicon glyphicon-remove"
+									onclick=""></span></td>
 							</tr>
 						</tbody>
 					</table>
