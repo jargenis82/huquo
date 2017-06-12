@@ -37,3 +37,7 @@ function newQuote(){
 	window.open("../controladores/quote_vs2.php?organizationId="+organizationId);
 
 }
+function addNewProduct() {
+	idTxtDescrip++;
+ xajax_addNewProduct(idTxtDescrip);
+}

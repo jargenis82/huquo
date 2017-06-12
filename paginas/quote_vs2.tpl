@@ -32,6 +32,9 @@
 <!--autoComplete-->
 <script type="text/javascript"
 	src='../librerias/jquery_actual/js/jquery-ui.js'></script>
+<!-- js-->
+
+<script type="text/javascript" src='../js/hubrox_op.js'></script>
 <style type="text/css">
 table, td, th {
 	font-size: 12px;
@@ -75,39 +78,21 @@ table, td, th {
 
 <script type="text/javascript">
  $(document).ready(function() {
-    var table = $('#example').DataTable( {
+    var table = $('#descripId').DataTable( {
         searching: false,
         "scrollY": "auto",
         "bInfo": false,
         "paging": false
     } );
  
-    $('a.toggle-vis').on( 'click', function (e) {
-        e.preventDefault();
- 
-        // Get the column API object
-        var column = table.column( $(this).attr('data-column') );
- 
-        // Toggle the visibility
-        column.visible( ! column.visible() );
-    } );
- var counter = 2;
-  $('#addRow').on( 'click', function () {
-        table.row.add( [
-            counter +'.1',
-            counter +'.2',
-            counter +'.3',
-            counter +'.4',
-            counter +'.5'
-        ] ).draw();
- 
-        counter++;
-    } )
-
+   
 
 } );
 
-  $(function() {
+ var idTxtDescrip = 0;
+ var availableDescrip = [ "Arkcom","Wellscom","Asp","BASIC","C"  ];
+ 
+ $(function() {
         $( "#fechaVal" ).datepicker
         ({  dateFormat: 'mm-dd-yy', 
         	  changeMonth: true, 
@@ -116,12 +101,24 @@ table, td, th {
        
         });
     });
-
-   
+  $( function() {
+    //var availableTags = [   ];
+       
+      $( "#txt_decrip" ).autocomplete({
+        source: availableDescrip        
+      });
+      
+     $(document).ready(function () {
+	    $('#txt_decrip').on('autocompleteselect', function (e, ui) {
+	    	 	xajax_getDescripProduct(ui.item.value)	        
+	    });
+		});  
+     } );
+ 
   </script>
 
 </head>
-<body onload="document.getElementById('tags').focus()">
+<body onload="document.getElementById('tags').focus();">
 
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
@@ -217,7 +214,8 @@ table, td, th {
 						</tr>
 						<tr>
 							<td><label>VALID UNTIL</label></td>
-							<td><input id="fechaVal" value="[var.fechaValidez;noerr]" size="10"> </input></td>
+							<td><input id="fechaVal" value="[var.fechaValidez;noerr]"
+								size="10"> </input></td>
 						</tr>
 						<tr>
 							<td><label>Prepared by</label></td>
@@ -238,21 +236,27 @@ table, td, th {
 			<div class="panel panel-primary">
 				<div class="panel-heading">Description</div>
 				<div class="panel-body">
-					<table id="example" class="display" width="100%" cellspacing="0">
+					<table id="descripId" class="display" width="100%" cellspacing="0">
 						<thead>
 							<tr>
 								<th width="600">DESCRIPTION</th>
+								<th>Discount</th>
 								<th>UNIT PRICE</th>[var.js;htmlconv=no;noerr]
 								<th>QTY</th>
 								<th>AMOUNT US</th>
+								<th>Delete</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td><label for="tags">Tags: </label><input id=""></td>
-								<td id="">Row 1 Data 2</td>
-								<td>Row 1 Data 1</td>
-								<td>Row 1 Data 2</td>
+								<td><input id="txt_decrip" size="70%"></td>
+								<td align="center"><input id="txt_discount" size="4"></td>
+								<td align="center"><span id="span_price"></span></td>
+								<td align="center"><input type="txt_qty" size="4"></td>
+								<td align="center"><span id="span_amount" size="4"></span></td>
+								<td align="center"><span id=""
+									class="btn btn-default btn-xs glyphicon glyphicon-remove"
+									onclick=""></span></td>
 							</tr>
 						</tbody>
 					</table>
@@ -291,7 +295,7 @@ table, td, th {
 							<div class="cols-sm-4">
 								<span
 									class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
-									id="addRow" data-accion='add'>ADD</span> <span
+									id="" data-accion="" onclick="addNewProduct()">ADD</span> <span
 									class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
 									id="btn_Guardar" data-accion='save'">PDF</span>
 							</div>

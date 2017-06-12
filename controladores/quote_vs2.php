@@ -22,6 +22,8 @@ isset ( $_GET ['organizationId'] ) ? $organizationId = $_GET ['organizationId'] 
 // XAJAX
 $xajax = new xajax ( "../inc/ajax_funciones.php" );
 $xajax->registerFunction ( "getCustomer" );
+$xajax->registerFunction ( "getDescripProduct");
+$xajax->registerFunction ( "addNewProduct");
 $js = $xajax->getJavascript ( '../librerias/' );
 
 // Fecha Actual

@@ -7,6 +7,54 @@ include_once '../librerias/insightly.php';
 
 $xajax = new xajax ( "ajax_funciones.php" );
 $xajax->registerFunction ( "getCustomer" );
+$xajax->registerFunction ( "getDescripProduct" );
+$xajax->registerFunction ( "addNewProduct" );
+function getDescripProduct($productName) {
+	$objResponse = new xajaxResponse ();
+	$unitPrice = 5000;
+	$qty = "12";
+	$amount = $unitPrice * $qty;
+	$objResponse->addAssign ( "span_price", "innerHTML", $unitPrice );
+	
+	return $objResponse;
+}
+function addNewProduct($idTxtDescrip) {
+	$objResponse = new xajaxResponse ();
+	// $objResponse->addAlert("newRow");
+	$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
+	$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
+	$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" ></td>';
+	$textoHtml .= '<td align="center"><input id="txt_discunt" size="4"></td>';
+	$textoHtml .= '<td align="center"><span id="span_price"></span></td>';
+	$textoHtml .= '<td align="center"><input type="txt_qty" size="4"></td>';
+	$textoHtml .= '<td align="center"><span id="span_amount" size="4"></span></td>';
+	$textoHtml .= '<td align="center"><span id="" class="btn btn-default btn-xs glyphicon glyphicon-remove"  onclick=""></span></td></tr>';
+	$jq = "
+     		var tr='$textoHtml';
+    		$('#descripId').append(tr);
+	";
+	
+	$js = "
+	$( function() {
+           
+      $( '#txt_decrip$idTxtDescrip' ).autocomplete({
+        source: availableDescrip        
+      });
+      
+     $(document).ready(function () {
+	    $('#txt_decrip$idTxtDescrip').on('autocompleteselect', function (e, ui) {
+	    	 	xajax_getDescripProduct(ui.item.value)	        
+	    });
+		});  
+     } )";
+     
+
+	
+	
+	$objResponse->addScript ( $jq );
+	$objResponse->addScript ( $js );
+	return $objResponse;
+}
 function getCustomer($customerName, $getOpportunities) {
 	$objResponse = new xajaxResponse ();
 	$objResponse->addAssign ( "span_address", "innerHTML", "" );
