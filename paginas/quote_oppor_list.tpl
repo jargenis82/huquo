@@ -153,6 +153,7 @@ table, td, th {
 									<th>Current State</th>
 									<th>Pipeline</th>
 									<th>Quote List</th>
+									<th>New Quote</th>
 								</tr>
 							</thead>
 							<tbody>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,7 +119,12 @@ table, td, th {
 	    });
 		});  
      } );
- 
+ $(document).ready(function(){
+    
+    $('#remove').click(function(){
+        $('#descripId tr:last').remove();
+    })
+	})
   </script>
 
 </head>
@@ -260,7 +266,10 @@ table, td, th {
 					</table>
 					<br>
 					<div class="row">
-						<div class="col-sm-7"></div>
+						<div class="col-sm-7">
+										<label for="comment">Comment:</label>
+ 			 							<textarea class="form-control" rows="5" id="comment"></textarea>
+						</div>
 						<div class="col-sm-5">
 							<table class="table table-striped">
 								<thead>
@@ -302,8 +311,8 @@ table, td, th {
 											class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
 											id="" data-accion="" onclick="addNewProduct()">ADD</span>
 										<span
-											class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
-											id="" data-accion="" onclick="">DELETE</span>
+											class="btn btn-primary btn-sm glyphicon glyphicon-minus biselado"
+											id="remove" data-accion="" onclick="">DELETE</span>
 											<span
 											class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
 											id="btn_Guardar" data-accion="">PDF</span>
@@ -318,7 +327,9 @@ table, td, th {
 	</div>
 
 	<div class="container-fluid">
-		<div class="col-sm-4"></div>
+		<div class="col-sm-4">
+
+		</div>
 		<div class="col-sm-8">
 			<footer>
 				<p>
