@@ -246,7 +246,7 @@ table, td, th {
 			<div class="panel panel-primary">
 				<div class="panel-heading">Description</div>
 				<div class="panel-body">
-					<table id="descripId" class="display" width="100%" cellspacing="0">
+					<table id="descripId" class="table table-striped" width="100%" cellspacing="0">
 						<thead>
 							<tr>
 								<th width="600">DESCRIPTION</th>
