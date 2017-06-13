@@ -1,4 +1,5 @@
 /conf.inc.php
+bd/
 desechable/
 log/
 /.buildpath
