@@ -6,32 +6,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Boostrap -->
 <link rel="stylesheet"
-	href="../librerias/bootstrap3.3.7/css/bootstrap.min.css">
+	href="librerias/bootstrap3.3.7/css/bootstrap.min.css">
 
 [var.js;htmlconv=no;noerr]
 
 <script type="text/javascript"
-	src="../librerias/jquery_actual/js/jquery.min.js"></script>
+	src="librerias/jquery_actual/js/jquery.min.js"></script>
 <script type="text/javascript"
-	src="../librerias/bootstrap3.3.7/js/bootstrap.min.js"></script>
+	src="librerias/bootstrap3.3.7/js/bootstrap.min.js"></script>
 
 <!-- data table styles-->
 <link rel="stylesheet" type="text/css"
-	href="../librerias/jquery_actual/css/jquery-ui.css">
+	href="librerias/jquery_actual/css/jquery-ui.css">
 <link rel="stylesheet" type="text/css"
-	href="../librerias/jquery-DataTables-1.10.7/media/css/dataTables.jqueryui.min.css">
+	href="librerias/jquery-DataTables-1.10.7/media/css/dataTables.jqueryui.min.css">
 
 <!-- SCRIPTS -->
 
 <script type="text/javascript"
-	src='../librerias/jquery-DataTables-1.10.7/media/js/jquery.dataTables.min.js'></script>
+	src='librerias/jquery-DataTables-1.10.7/media/js/jquery.dataTables.min.js'></script>
 <script type="text/javascript"
-	src='../librerias/jquery-DataTables-1.10.7/media/js/dataTables.jqueryui.min.js'></script>
+	src='librerias/jquery-DataTables-1.10.7/media/js/dataTables.jqueryui.min.js'></script>
 
 
 <!--autoComplete-->
 <script type="text/javascript"
-	src='../librerias/jquery_actual/js/jquery-ui.js'></script>
+	src='librerias/jquery_actual/js/jquery-ui.js'></script>
 <style type="text/css">
 table, td, th {
 	font-size: 12px;
@@ -82,7 +82,7 @@ table, td, th {
 	</nav>
 	<div class="row">
 
-      <iframe  src="../controladores/quote_oppor_list.php" frameborder="0" style="position: absolute; height: 100%; width: 100%"  ></iframe>
+      <iframe  src="controladores/[var.page;noerr]" frameborder="0" style="position: absolute; height: 100%; width: 100%"  ></iframe>
    
 </div>
 

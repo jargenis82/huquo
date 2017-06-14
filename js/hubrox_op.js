@@ -33,10 +33,9 @@ function quote() {
 	window.open("../archivos/quote.pdf");	
 }
 function newQuote(){
-	window.open("../controladores/quote_vs2.php?organizationId="+organizationId);
-
+	window.open("../index.php?page=quote&organizationId="+organizationId);
 }
 function addNewProduct() {
 	idTxtDescrip++;
- xajax_addNewProduct(idTxtDescrip);
+	xajax_addNewProduct(idTxtDescrip);
 }

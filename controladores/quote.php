@@ -66,6 +66,6 @@ $customers = substr($customers, 1);
 
 // CARGA DE LA PLANTILLA PRINCIPAL
 $TBS = new clsTinyButStrong();
-$TBS->LoadTemplate('../paginas/quote_vs2.tpl');
+$TBS->LoadTemplate('../paginas/quote.tpl');
 $TBS->Show();
 ?>
