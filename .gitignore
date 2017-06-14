@@ -6,3 +6,5 @@ log/
 /.project
 .settings/
 .phpintel/
+error_log
+
