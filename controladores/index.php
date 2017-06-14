@@ -20,22 +20,13 @@ include_once '../inc/funciones.php';
 
 // XAJAX
 $xajax = new xajax("../inc/ajax_funciones.php");
-$xajax->registerFunction ( "getCustomer" );
+//$xajax->registerFunction("getCustomer");
 $js = $xajax->getJavascript('../librerias/');
 
 // Se consulta en el API de Insightly la lista de organizaciones
-$customers = "";
-$i = new Insightly ( APIKEY );
-$options['top'] = 15;
-$arrOrganization = $i->getOrganizations ($options);
-foreach ( $arrOrganization as $j => $myOrganization ) {
-	$customers .= ',"' . $myOrganization->ORGANISATION_NAME . '"';
-}
-$customers = substr ( $customers, 1 );
-
 
 // CARGA DE LA PLANTILLA PRINCIPAL
-$TBS = new clsTinyButStrong ();
-$TBS->LoadTemplate ( '../paginas/quote.tpl' );
-$TBS->Show ();
+$TBS = new clsTinyButStrong();
+$TBS->LoadTemplate('../paginas/index.tpl');
+$TBS->Show();
 ?>

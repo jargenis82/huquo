@@ -14,15 +14,14 @@ function dataTable(customerName) {
 
 }
 
-function dataTableQuote() {
-
+function dataTableQuote(opportunityId) {
 	$('#tQuote').DataTable({
 		searching : true,
 		"scrollY" : "auto",
 		"bInfo" : false,
 		"paging" : true,
 		destroy : true,
-		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php"
+		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php?opportunityId="+opportunityId
 		
 
 	});
