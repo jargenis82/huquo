@@ -133,17 +133,17 @@ table, td, th {
 		<div class="col-sm-8">
 			<div class="panel panel-primary">
 				<div class="panel-heading">Customer</div>
-				<div class="panel-body">
+				<div class="panel-body" >
 					<table class="table-responsive" border="0">
 						<tr>
-							<td width="200px"><label>Name</label></td>
-							<td width="700px"><input id="tags"></td>
-							<td><label>Ship to</label></td>
+							<td  width="100px" ><label>Name</label></td>
+							<td  width="200px"><input id="tags"></td>
+							<td ><label>Ship to</label></td>
 						</tr>
 						<tr>
 							<td><label>Address</label></td>
 							<td><span id="span_address"></span></td>
-							<td rowspan="3"><textarea rows="2" cols="40"
+							<td rowspan="3"><textarea  rows="2" cols="40"
 									id="txt_address"> </textarea></td>
 						</tr>
 						<tr>
@@ -172,9 +172,9 @@ table, td, th {
 					</input>Quote
 				</div>
 				<div class="panel-body">
-					<table class="table-responsive">
+					<table class="table-responsive" border="0">
 						<tr>
-							<td><label>DATE</label></td>
+							<td width="100px"><label>DATE</label></td>
 							<td>[var.fecha;noerr]</td>
 						</tr>
 						<tr>
@@ -208,14 +208,14 @@ table, td, th {
 		<div class="col-sm-12">
 			<div class="panel panel-primary">
 				<div class="panel-heading">Description</div>
-				<div class="panel-body">
+				<div class="panel-body" >
 					<table id="descripId" class="table table-striped" width="100%" cellspacing="0">
 						<thead>
 							<tr>
 								<th width="600">DESCRIPTION</th>
 								<th>UNIT PRICE</th>[var.js;htmlconv=no;noerr]
 								<th>QTY</th>
-								<th>AMOUNT US</th>
+								<th>AMOUNT US$</th>
 							</tr>
 						</thead>
 						<tbody>
