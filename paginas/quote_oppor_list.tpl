@@ -151,10 +151,7 @@ table, td, th {
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-sm-10"></div>
-				<div id="prueba" class="col-sm -2"></div>
-			</div>
+			
 		</div>
 	</div>
 </body>

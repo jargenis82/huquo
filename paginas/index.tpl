@@ -82,7 +82,7 @@ table, td, th {
 	</nav>
 	<div class="row">
 
-      <iframe  src="controladores/[var.page;noerr]" frameborder="0" style="position: absolute; height: 100%; width: 100%"  ></iframe>
+      <iframe  src="controladores/[var.page;noerr]" frameborder="0" style="position: absolute; height: 100%; width: 100%" scrolling="auto"  ></iframe>
    
 </div>
 
