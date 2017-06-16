@@ -51,7 +51,7 @@ if (isset($myOrganization)) {
  * $arrJson ['aaData'] [] = $unDato [0];
  * $arrJson ['aaData'] [] = $unDato [1];
  */
-file_put_contents("../log/arrJson", var_export($arrJson,true));
+file_put_contents("../../log/arrJson", var_export($arrJson,true));
 echo json_encode($arrJson);
 
 ?>
