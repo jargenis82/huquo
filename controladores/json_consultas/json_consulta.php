@@ -3,6 +3,16 @@ include_once '../../conf.inc.php';
 include_once '../../inc/funciones.php';
 include_once '../../librerias/insightly.php';
 
+// Se consulta una copia local para mejorar el desempeño en máquinas de desarrollo (provisional)
+if (defined("CUSTOMERS")) {
+	include_once '../../log/arrJson.php';
+	if (!comprobarVar($_GET['organizationId'])) {
+		$arrJson['aaData'] = array();
+	}
+	echo json_encode($arrJson);
+	exit;
+}
+
 // Se inicializa el arreglo a transformar en JSON con los resultados de la busqueda
 $arrJson = array(
 	"sEcho"                => 3,
@@ -34,24 +44,11 @@ if (isset($myOrganization)) {
 			$stageName           = $myPipelineStage->STAGE_NAME;
 			$unDato[3]           = "$stageName<br><img alt='$stageName' src='../imagenes/pipeline_$stageOrder.png' style='width: 100px'>";
 			$unDato[4]           = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" data-modulo="" data-accion="" onclick="dataTableQuote('.$opportunityId.')"></span>';
-			$unDato[5]           = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote('.$opportunityId.')'></span>";
+			$unDato[5]           = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote($opportunityId)'></span>";
 			$arrJson['aaData'][] = $unDato;
 		}
 	}
 }
-/**
- * $unDato [0] [0] = 'Arkcom Grupo Khrislys - 150 HB-ID9 ';
- * $unDato [0] [1] = "Thu Apr 27 2017";
- * $unDato [0] [2] = "Open";
- * $unDato [0] [3] = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" data-modulo="" data-accion="" onclick="alert(this)"></span>';
- * $unDato [1] [0] = "Arkcom / Proser - 20 HB-9000 ";
- * $unDato [1] [1] = "Thu 17-Nov-2016";
- * $unDato [1] [2] = "Won";
- * $unDato [1] [3] = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" data-modulo="" data-accion="" onclick="eliminarRegistro(this)"></span>';
- * $arrJson ['aaData'] [] = $unDato [0];
- * $arrJson ['aaData'] [] = $unDato [1];
- */
-file_put_contents("../../log/arrJson", var_export($arrJson,true));
-echo json_encode($arrJson);
 
+echo json_encode($arrJson);
 ?>

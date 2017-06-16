@@ -22,8 +22,6 @@ function dataTableQuote(opportunityId) {
 		"paging" : true,
 		destroy : true,
 		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php?opportunityId="+opportunityId
-		
-
 	});
 	$( '#prueba').html( "<span	class='btn btn-primary btn-sm' glyphicon glyphicon-plus biselado'		id='addRow' data-accion='add' onclick='newQuote()'>NEW QUOTE</span>" );
 

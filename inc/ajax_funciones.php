@@ -26,7 +26,7 @@ function addNewProduct($idTxtDescrip) {
 	$textoHtml .= '<td><input id="txt_decrip'.$idTxtDescrip.'" class="form-control"></td>';
 
 	$textoHtml .= '<td align="center"><input id="txt_unit" size="5"></td>';
-	$textoHtml .= '<td align="center"><input type="txt_qty" size="4"></td>';
+	$textoHtml .= '<td align="center"><input id="txt_qty" size="4"></td>';
 	$textoHtml .= '<td align="center"><span id="span_amount" size="4"></span></td>';
 	$jq = "
      		var tr='$textoHtml';
