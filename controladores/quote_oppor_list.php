@@ -8,19 +8,24 @@ include_once '../librerias/insightly.php';
 include_once '../inc/funciones.php';
 
 // XAJAX
-$xajax = new xajax("../inc/ajax_funciones.php");
+$xajax = new xajax ( "../inc/ajax_funciones.php" );
 $xajax->registerFunction ( "getCustomer" );
-$js = $xajax->getJavascript('../librerias/');
+$js = $xajax->getJavascript ( '../librerias/' );
 
-// Se consulta en el API de Insightly la lista de organizaciones
-$customers = "";
-$i = new Insightly ( APIKEY );
-$options ['top'] = defined("TOP_LIMIT") ? TOP_LIMIT : null; // Limite de consulta para mejorar el desempeño en máquinas de consulta (Provisional)
-$arrOrganization = $i->getOrganizations ($options);
-foreach ( $arrOrganization as $j => $myOrganization ) {
-	$customers .= ',"' . $myOrganization->ORGANISATION_NAME . '"';
+// Se consulta una copia local de customers para mejorar el desempeño en máquinas de desarrollo (provisional)
+if (defined("CUSTOMERS")) {
+	$customers = file_get_contents("../log/customers"); 
+} else {
+	// Se consulta en el API de Insightly la lista de organizaciones
+	$customers = "";
+	$i = new Insightly ( APIKEY );
+	$options ['top'] = defined ( "TOP_LIMIT" ) ? TOP_LIMIT : null; // Limite de consulta para mejorar el desempeño en máquinas de desarrollo (Provisional)
+	$arrOrganization = $i->getOrganizations ( $options );
+	foreach ( $arrOrganization as $j => $myOrganization ) {
+		$customers .= ',"' . $myOrganization->ORGANISATION_NAME . '"';
+	}
+	$customers = substr ( $customers, 1 );
 }
-$customers = substr ( $customers, 1 );
 
 // CARGA DE LA PLANTILLA PRINCIPAL
 $TBS = new clsTinyButStrong ();

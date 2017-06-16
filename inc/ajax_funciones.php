@@ -57,6 +57,24 @@ function getCustomer($customerName, $getOpportunities) {
 	$objResponse->addAssign("a_web", "href", "");
 	$objResponse->addAssign("a_web", "innerHTML", "");
 	$objResponse->addAssign("span_phone", "innerHTML", "");
+	
+	// Se consulta una copia local para mejorar el desempeño en máquinas de desarrollo (provisional)
+	if (defined("CUSTOMERS")) {
+		$getCustomer = file_get_contents("../log/getCustomer");
+		$getCustomer = explode(";", $getCustomer);
+		$organizationId = $getCustomer[0];
+		$address = $getCustomer[1];
+		$web = $getCustomer[2];
+		$phone = $getCustomer[3];
+		$customerName = $getCustomer[4];
+		$objResponse->addScript("organizationId = '$organizationId';");
+		$objResponse->addAssign("span_address", "innerHTML", $address);
+		$objResponse->addAssign("a_web", "href", $web);
+		$objResponse->addAssign("a_web", "innerHTML", $web);
+		$objResponse->addAssign("span_phone", "innerHTML", $phone);
+		$objResponse->addScript("dataTable('$customerName');");
+		return $objResponse;
+	}
 	$i                     = new Insightly(APIKEY);
 	$options['filters'][0] = "ORGANISATION_NAME = '$customerName'";
 	$arrOrganization       = $i->getOrganizations($options);

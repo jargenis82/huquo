@@ -34,7 +34,7 @@ if (isset($myOrganization)) {
 			$stageName           = $myPipelineStage->STAGE_NAME;
 			$unDato[3]           = "$stageName<br><img alt='$stageName' src='../imagenes/pipeline_$stageOrder.png' style='width: 100px'>";
 			$unDato[4]           = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" data-modulo="" data-accion="" onclick="dataTableQuote('.$opportunityId.')"></span>';
-			$unDato[5]           = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote()'></span>";
+			$unDato[5]           = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote('.$opportunityId.')'></span>";
 			$arrJson['aaData'][] = $unDato;
 		}
 	}
@@ -51,6 +51,7 @@ if (isset($myOrganization)) {
  * $arrJson ['aaData'] [] = $unDato [0];
  * $arrJson ['aaData'] [] = $unDato [1];
  */
+file_put_contents("../log/arrJson", var_export($arrJson,true));
 echo json_encode($arrJson);
 
 ?>

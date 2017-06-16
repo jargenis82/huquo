@@ -18,7 +18,8 @@ include_once '../inc/funciones.php';
 // DEFINE LAS VARIABLES $_GET, $_POST Y $_SESSION
 session_start();
 // isset($_SESSION['instUsuaId']) ? $instUsuaId = $_SESSION['instUsuaId'] : $instUsuaId = null;
-isset($_GET['organizationId'])?$organizationId = $_GET['organizationId']:$organizationId = null;
+$opportunityId = comprobarVar($_GET['opportunityId']) ? $_GET['opportunityId'] : null;
+$quoteId = comprobarVar($_GET['quoteId']) ? $_GET['quoteId'] : null;
 
 // XAJAX
 $xajax = new xajax("../inc/ajax_funciones.php");

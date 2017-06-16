@@ -32,8 +32,8 @@ function dataTableQuote(opportunityId) {
 function quote() {
 	window.open("../archivos/quote.pdf");	
 }
-function newQuote(){
-	window.open("../index.php?page=quote&organizationId="+organizationId);
+function newQuote(opportunityId){
+	window.open("../index.php?page=quote&opportunityId="+opportunityId);
 }
 function addNewProduct() {
 	idTxtDescrip++;
