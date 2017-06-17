@@ -26,6 +26,7 @@ $xajax = new xajax ( "../inc/ajax_funciones.php" );
 $xajax->registerFunction ( "getCustomer" );
 $xajax->registerFunction ( "getDescripProduct" );
 $xajax->registerFunction ( "addNewProduct" );
+$xajax->registerFunction ( "calculateAmount" );
 $js = $xajax->getJavascript ( '../librerias/' );
 
 // Fecha Actual
@@ -48,12 +49,15 @@ $userName = "Annie Wang";
 $myProduct = new Product ();
 $listaProducto = $myProduct->getListaProducto ();
 $jsData = "";
-foreach ( $listaProducto as $unProducto ) {
+$jsDataId = "";
+foreach ( $listaProducto as $i=>$unProducto ) {
 	$unProducto = str_replace ( '"', '\"', $unProducto );
 	$jsData .= '"' . $unProducto . '",';
+	$jsDataId .= '"' . $i . '",';
 	$contador ++;
 }
 $jsData = $jsData != "" ? substr ( $jsData, 0, - 1 ) : "";
+$jsDataId = $jsDataId != "" ? substr ( $jsDataId, 0, - 1 ) : "";
 
 // Si quote_id tiene valor se está consultando una Cotización. Si es NULL se está cargando una nueva cotización
 if (comprobarVar ( $quoteId )) {

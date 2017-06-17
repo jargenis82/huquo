@@ -54,8 +54,27 @@ table, td, th {
 } );
 
  var idTxtDescrip = 0;
+ 
  //var availableDescrip = [ "Arkcom","Wellscom","Asp","BASIC","C"  ];
  var availableDescrip = [ [var.jsData;htmlconv=no;noerr]  ];
+ var availableId = [ [var.jsDataId;htmlconv=no;noerr]  ];
+ 
+ function calculateAmount(id) {
+	var unit = $('#txt_unit'+id).val();
+	var qty = $('#txt_qty'+id).val();
+	var amount = $('#span_amount'+id).text();
+	var subtotal = $('#span_subtotal').text();
+	var hstRate = $('#span_hst_rate').text();
+	xajax_calculateAmount(id,unit,qty,amount,subtotal,hstRate);
+ }
+ 
+ function introQty(e) {
+		tecla = (document.all) ? e.keyCode : e.which;
+		if (tecla == 13){
+			window.event.keyCode=0; 
+			addNewProduct();
+		}
+	}
  
  $(function() {
         $( "#fechaVal" ).datepicker
@@ -69,22 +88,29 @@ table, td, th {
   
     });
   $( function() {
-    //var availableTags = [   ];
-
-      $( "#txt_decrip" ).autocomplete({
+     $( "#txt_decrip" ).autocomplete({
         source: availableDescrip
       });
 
      $(document).ready(function () {
-	    $('#txt_decrip').on('autocompleteselect', function (e, ui) {
-	    	 	xajax_getDescripProduct(ui.item.value)
+	    $('#txt_decrip').on('autocompleteselect', function (e, ui) {	    	
+	    		var i = availableDescrip.indexOf(ui.item.value);
+	    		// CustomerRegion 1 PriceType 1 **** PROVISIONAL
+	    		xajax_getDescripProduct(availableId[i],this.id,1,1);
 	    });
 		});  
      } );
  $(document).ready(function(){
     
     $('#remove').click(function(){
-        $('#descripId tr:last').remove();
+    	if (idTxtDescrip > 0) {
+	    	var amount = $('#span_amount'+idTxtDescrip).text();
+	    	var subtotal = $('#span_subtotal').text();
+	    	var hstRate = $('#span_hst_rate').text();
+	    	xajax_calculateAmount(idTxtDescrip,0,0,amount,subtotal,hstRate);
+	    	$('#descripId tr:last').remove();
+	    	idTxtDescrip--;
+    	}
     })
 	})
   </script>
@@ -100,29 +126,27 @@ table, td, th {
 						<tr>
 							<td width="100px"><label>Name</label></td>
 							<td width="200px"><span id="span_name">[var.organizationName;noerr]</span></td>
-							<td><label>Ship to</label></td>
+							<td rowspan="2"><label>Ship to</label></td>
+							<td rowspan="2"><textarea rows="2" cols="40"
+									id="txt_address"> </textarea></td>
 						</tr>
 						<tr>
 							<td><label>Address</label></td>
 							<td><span id="span_address">[var.address;noerr]</span></td>
-							<td rowspan="3"><textarea rows="2" cols="40"
-									id="txt_address"> </textarea></td>
 						</tr>
 						<tr>
 							<td><label>Web</label></td>
 							<td><a href="[var.web;noerr]" id="a_web">[var.web;noerr]</a></td>
+							<td><label>Region</label></td>
+							<td><span id="span_region">Outside US & Canadá</span></td>
 						</tr>
 						<tr>
 							<td><label>Phone</label></td>
 							<td><span id="span_phone">[var.phone;noerr]</span></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
+							<td><label>Type</label></td>
+							<td><span id="span_price_type">Reseller</span></td>
 						</tr>
 					</table>
-
-
 				</div>
 			</div>
 
@@ -172,15 +196,18 @@ table, td, th {
 								<th width="600">DESCRIPTION</th>
 								<th>UNIT PRICE</th>
 								<th>QTY</th>
-								<th>AMOUNT US$</th>
+								<th width="100">AMOUNT (US$)</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td><input id="txt_decrip" class="form-control"></td>
-								<td align="center"><input id="txt_unit" size="5"></td>
-								<td align="center"><input id="txt_qty" size="4"></td>
-								<td align="center"><span id="span_amount"></span></td>
+								<td align="center"><input id="txt_unit" size="5"
+									onchange="calculateAmount('');" dir="rtl"></td>
+								<td align="center"><input id="txt_qty" size="4"
+									onKeyDown="javascript:return introQty(event);"
+									onchange="calculateAmount('');"></td>
+								<td align="right"><span id="span_amount"></span></td>
 							</tr>
 						</tbody>
 					</table>
@@ -206,22 +233,22 @@ table, td, th {
 									<tr>
 
 										<td>Subtotal (US$)</td>
-										<td>$</td>
+										<td><span id="span_subtotal">0,00</span></td>
 
 									</tr>
 									<tr>
 
 										<td>HST Rate</td>
-										<td>0%</td>
+										<td><span id="span_hst_rate">0</span>%</td>
 
 									</tr>
 									<tr>
-										<td>HST</td>
-										<td></td>
+										<td>HST (US$)</td>
+										<td><span id="span_hst">0,00</span></td>
 									</tr>
 									<tr>
 										<td><b>TOTAL (US$)</b></td>
-										<td><b>$100.000</b></td>
+										<td><b><span id="span_total">0,00</span></b></td>
 									</tr>
 								</tbody>
 							</table>
