@@ -40,11 +40,15 @@ table, td, th {
 }
 </style>
 
-
-
+<script type="text/javascript">
+	function ajustarIframe() {
+		document.getElementById('ifrm').style.height = document
+				.getElementById('ifrm').contentWindow.document.body.scrollHeight
+				+ 'px';
+	}
+</script>
 </head>
 <body onload="document.getElementById('tags').focus()">
-
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -81,11 +85,9 @@ table, td, th {
 		</div>
 	</nav>
 	<div class="row">
-
-      <iframe  src="controladores/[var.page;noerr]" frameborder="0" style="position: absolute; height: 100%; width: 100%" scrolling="no"  ></iframe>
-   
-</div>
-
-	
+		<iframe frameborder="0"
+			style="position: absolute; height: 100%; width: 100%"
+			src="controladores/[var.page;noerr]" id="ifrm"></iframe>
+	</div>
 </body>
 </html>

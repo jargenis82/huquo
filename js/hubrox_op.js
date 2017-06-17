@@ -8,10 +8,12 @@ function dataTable(customerName) {
 						"bInfo" : false,
 						"paging" : true,
 						destroy : true,
+						"initComplete": function(settings, json) {
+						    window.parent.ajustarIframe();
+						  },
 						"sAjaxSource" : "../controladores/json_consultas/json_consulta.php?organizationId="
 								+ organizationId
 					});
-
 }
 
 function dataTableQuote(opportunityId) {

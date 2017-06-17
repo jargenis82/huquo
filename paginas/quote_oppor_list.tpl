@@ -49,7 +49,7 @@ table, td, th {
 <script>
 	var consultingCustomer = "";
 	var organizationId = "";
-
+	
 	$(function() {
 		var availableTags = [ [var.customers;htmlconv=no;noerr]  ];
 		//var availableTags = [ "Arkcom", "Wellscom", "Asp", "BASIC", "C" ];
