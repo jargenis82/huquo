@@ -17,6 +17,10 @@ $xajax->registerFunction ( "saveQuote" );
 function saveQuote($quote, $arrProductSale, $arrProduct) {
 	$objResponse = new xajaxResponse ();
 	
+	$objResponse->addAlert(var_export($quote,true));
+	$objResponse->addAlert(var_export($arrProductSale,true));
+	$objResponse->addAlert(var_export($arrProduct,true));
+	
 	return $objResponse;
 }
 function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
