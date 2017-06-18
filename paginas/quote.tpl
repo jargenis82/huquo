@@ -298,15 +298,17 @@ table, td, th {
 								</tbody>
 							</table>
 							<div class="row">
-								<div class="col-sm-4"></div>
-								<div class="cols-sm-8">
+								<div class="col-sm-3"></div>
+								<div class="cols-sm-9">
 									<span
 										class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
 										id="" data-accion="" onclick="addNewProduct()">ADD</span> <span
 										class="btn btn-primary btn-sm glyphicon glyphicon-minus biselado"
-										id="remove" data-accion="" onclick="">DELETE</span> <span
+										id="remove" data-accion="" onclick="">DELETE</span> 
+										<span class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk biselado"
+										id="" data-accion="" onclick="">SAVE</span> <span
 										class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
-										id="btn_Guardar" data-accion="" onclick="saveQuote(); ">PDF</span>
+										id="" data-accion="" onclick="openPdfQuote()">VIEW PDF</span>
 								</div>
 							</div>
 
