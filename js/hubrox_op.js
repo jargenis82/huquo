@@ -39,3 +39,6 @@ function addNewProduct() {
 	idTxtDescrip++;
 	xajax_addNewProduct(idTxtDescrip);
 }
+function openPdfQuote(){
+	window.open("../controladores/pdf/quote_pdf.php");
+}
