@@ -67,28 +67,32 @@ table, td, th {
  
  function saveQuote() {
 	 var quote = new Array();
-	 quote['quoteDate'] = $('#span_date').text();
-	 quote['quoteValidUntil'] = $('#txt_valid_until').val();
-	 quote['quoteDiscount'] = $('#txt_discount_val').val();
-	 quote['quoteHstRate'] = $('#span_hst_rate').text();
-	 quote['quoteShipTo'] = $('#txt_ship_to').val();
-	 quote['quoteNumber'] = $('#span_number').text();
-	 quote['quoteComment'] = $('#txt_comment').val();
-	 quote['orgName'] = $('#span_name').text();
-	 quote['orgAddress'] = $('#span_address').text();
-	 quote['orgWeb'] = $('#href_web').html();
-	 quote['orgPhone'] = $('#span_phone').text();
-	 quote['orgCity'] = "[var.city;noerr]";
-	 quote['orgCountry'] = "[var.country;noerr]";
+	 quote['quote_date'] = $('#span_date').text();
+	 quote['quote_valid_until'] = $('#txt_valid_until').val();
+	 quote['quote_discount'] = $('#txt_discount_val').val();
+	 quote['quote_hst_rate'] = $('#span_hst_rate').text();
+	 quote['quote_ship_to'] = $('#txt_ship_to').val();
+	 quote['quote_number'] = $('#span_number').text();
+	 quote['oppor_id'] = opportunityId;
+	 quote['quote_comment'] = $('#txt_comment').val();
+	 quote['org_name'] = $('#span_name').text();
+	 quote['org_address'] = $('#span_address').text();
+	 quote['org_web'] = $('#href_web').html();
+	 quote['org_phone'] = $('#span_phone').text();
+	 quote['org_city'] = "[var.city;noerr]";
+	 quote['org_country'] = "[var.country;noerr]";
+	 quote['org_ins_id'] = organizationId;
 	 var arrProduct = new Array();
 	 for (var i=0;i <= idTxtDescrip;i++) {
 		 arrProduct[i] = new Array();
 		 arrProduct[i]['product_sale_id'] = arrProductSale[i]['product_sale_id'];
+		 arrProduct[i]['product_sale_desc'] = arrProductSale[i]['quote_line_desc'];
+		 arrProduct[i]['product_sale_price'] = arrProductSale[i]['quote_line_price'];
 		 arrProduct[i]['quote_line_desc'] = $('#txt_decrip'+i.toString()).val();
 		 arrProduct[i]['quote_line_price'] = $('#txt_unit'+i.toString()).val();
 		 arrProduct[i]['quote_line_qty'] = $('#txt_qty'+i.toString()).val();
 	 }
-	 xajax_saveQuote(quote,arrProductSale,arrProduct);
+	 xajax_saveQuote(quote,arrProduct);
  }
  
  function calculateDiscount() {

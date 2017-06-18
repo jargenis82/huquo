@@ -10,9 +10,14 @@ class QuoteLine extends ClaseBd {
 	function declararTabla() {
 		$tabla = "quote_line";
 		$atributos ['quote_line_id'] ['esPk'] = true;
+		$atributos ['quote_line_desc'] ['esPk'] = false;
+		$atributos ['quote_line_price'] ['esPk'] = false;
+		$atributos ['quote_line_discount'] ['esPk'] = false;
 		$atributos ['quote_line_qty'] ['esPk'] = false;
+		$atributos ['quote_line_edit_price'] ['esPk'] = false;
+		$atributos ['quote_line_edit_desc'] ['esPk'] = false;
 		$objetos ['Quote'] ['id'] = "quote_id";
-		$objetos ['Price'] ['id'] = "price_id";
+		$objetos ['ProductSale'] ['id'] = "product_sale_id";
 		$strOrderBy = "quote_line_id";
 		$this->registrarTabla ( $tabla, $atributos, $objetos, $strOrderBy );
 		$this->dsn = "mysql";

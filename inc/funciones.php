@@ -151,6 +151,12 @@ function limpiarPalabra($palabra) {
 	return $resultado;
 }
 
+function convertToDoubleval($number) {
+	$number = str_replace ( ".", "", $number );
+	$number = str_replace ( ",", ".", $number );
+	return doubleval ( $number );
+}
+
 function listaFechas() {
 	ini_set('date.timezone','UTC');
 	$tiempoMod = time() - 14400;

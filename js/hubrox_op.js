@@ -23,6 +23,9 @@ function dataTableQuote(opportunityId) {
 		"bInfo" : false,
 		"paging" : true,
 		destroy : true,
+		"initComplete": function(settings, json) {
+		    window.parent.ajustarIframe();
+		  },
 		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php?opportunityId="+opportunityId
 	});
 	$( '#prueba').html( "<span	class='btn btn-primary btn-sm' glyphicon glyphicon-plus biselado'		id='addRow' data-accion='add' onclick='newQuote()'>NEW QUOTE</span>" );
@@ -43,6 +46,6 @@ function addNewProduct() {
 	arrProductSale[idTxtDescrip]['quote_line_price'] = "";
 	xajax_addNewProduct(idTxtDescrip);
 }
-function openPdfQuote(){
-	window.open("../controladores/pdf/quote_pdf.php");
+function openPdfQuote(quoteId){
+	window.open("../controladores/pdf/quote_pdf.php?quoteId="+quoteId);
 }

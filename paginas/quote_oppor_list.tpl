@@ -116,7 +116,7 @@ table, td, th {
 									<th>Opportunity Created</th>
 									<th>Current State</th>
 									<th>Pipeline</th>
-									<th>Quote List</th>
+									<th>Quotes List</th>
 									<th>New Quote</th>
 								</tr>
 							</thead>
@@ -129,13 +129,13 @@ table, td, th {
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="panel panel-primary">
-							<div class="panel-heading">Quotes</div>
+							<div class="panel-heading">Quotes List</div>
 							<div class="panel-body">
 								<table id="tQuote" class="display" width="100%" cellspacing="0">
 									<thead>
 										<tr>
 											<th>Quote Number</th>
-											<th>Quote Date</th>
+											<th>Quote Date and Time</th>
 											<th>Name</th>
 											<th>Total ($)</th>
 											<th>View / Edit</th>

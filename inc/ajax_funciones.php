@@ -4,9 +4,12 @@ include_once '../inc/funciones.php';
 include_once '../librerias/conexion_bd.php';
 include_once '../librerias/xajax_0.2.4/xajax.inc.php';
 include_once '../librerias/insightly.php';
+include_once '../clases/organisation.php';
 include_once '../clases/price.php';
 include_once '../clases/product.php';
 include_once '../clases/product_sale.php';
+include_once '../clases/quote.php';
+include_once '../clases/quote_line.php';
 
 $xajax = new xajax ( "ajax_funciones.php" );
 $xajax->registerFunction ( "getCustomer" );
@@ -14,27 +17,111 @@ $xajax->registerFunction ( "getDescripProduct" );
 $xajax->registerFunction ( "addNewProduct" );
 $xajax->registerFunction ( "calculateAmount" );
 $xajax->registerFunction ( "saveQuote" );
-function saveQuote($quote, $arrProductSale, $arrProduct) {
+function saveQuote($quote, $arrProduct) {
 	$objResponse = new xajaxResponse ();
+	// Se crea una instancia de conexión con la BD para todas las clases y transacciones
+	$miConexionBd = new ConexionBd ( "mysql" );
+	$miConexionBd->hacerConsulta ( "BEGIN;" );
+	// Se verifica si los datos de la organización ya existe en la Base de Datos o si se han modificado desde la última carga
+	// en caso afirmativo se crea un nuevo registro en la tabla organisation
+	$myOrganisation = new Organisation ( $miConexionBd );
+	$myOrganisation->setAtributo ( "org_name", $quote ['org_name'] );
+	$myOrganisation->setAtributo ( "org_address", $quote ['org_address'] );
+	$myOrganisation->setAtributo ( "org_web", $quote ['org_web'] );
+	$myOrganisation->setAtributo ( "org_phone", $quote ['org_phone'] );
+	$myOrganisation->setAtributo ( "org_city", $quote ['org_city'] );
+	$myOrganisation->setAtributo ( "org_country", $quote ['org_country'] );
+	$myOrganisation->setAtributo ( "org_ins_id", $quote ['org_ins_id'] );
+	$arrOrganisation = $myOrganisation->consultar ();
+	if (count ( $arrOrganisation ) > 1) {
+		$miConexionBd->hacerConsulta ( "ROLLBACK;" );
+		$objResponse->addAlert ( "Error (SQ-001). Please contact your administrator." );
+		return $objResponse;
+	}
+	if (count ( $arrOrganisation ) == 0) {
+		if (! $myOrganisation->registrar ()) {
+			$miConexionBd->hacerConsulta ( "ROLLBACK;" );
+			$objResponse->addAlert ( "Error (SQ-002). Please contact your administrator." );
+			return $objResponse;
+		}
+	}
+	$orgId = $myOrganisation->getAtributo ( "org_id" );
+	// Se carga una nueva instancia de cotización
+	$myQuote = new Quote ( $miConexionBd );
+	// Se valida si la fecha ha cambiado con respecto a la que se muestra por pantalla
+	$quoteDate = formatoFechaHoraBd ();
+	$myQuote->setAtributo ( "quote_date", $quoteDate );
+	$quoteDatePage = formatoFechaBd ( formatoFecha ( $quote ['quote_date'], true ) );
+	if (substr ( $quoteDate, 0, 10 ) != $quoteDatePage) {
+		$newDate = formatoFechaBd ( formatoFecha ( substr ( $quoteDate, 0, 10 ) ), "m/d/Y" );
+		$objResponse->addAlert ( "The quote date has changed to $newDate." );
+	}
+	$myQuote->setAtributo ( "quote_valid_until", formatoFechaBd ( formatoFecha ( $quote ['quote_valid_until'], true ) ) );
+	$myQuote->setAtributo ( "quote_discount", convertToDoubleval ( $quote ['quote_discount'] ) );
+	$myQuote->setAtributo ( "quote_hst_rate", convertToDoubleval ( $quote ['quote_hst_rate'] ) );
+	$myQuote->setAtributo ( "quote_ship_to", $quote ['quote_ship_to'] );
+	$quoteNumber = $myQuote->getNextQuoteNumber ();
+	$myQuote->setAtributo ( "quote_number", $quoteNumber );
+	if ($quoteNumber != $quote ['quote_number']) {
+		$objResponse->addAlert ( "The quote number has changed to $quoteNumber." );
+	}
+	$myQuote->setObjeto ( "Organisation", $orgId );
+	$myQuote->setAtributo ( "oppor_id", $quote ['oppor_id'] );
+	$myQuote->setAtributo ( "quote_comment", $quote ['quote_comment'] );
+	// Se registra la cotización y se obtiene el quote_id
+	if (! $myQuote->registrar ()) {
+		$miConexionBd->hacerConsulta ( "ROLLBACK;" );
+		$objResponse->addAlert ( "Error (SQ-003). Please contact your administrator." );
+		return $objResponse;
+	}
 	
-	$objResponse->addAlert(var_export($quote,true));
-	$objResponse->addAlert(var_export($arrProductSale,true));
-	$objResponse->addAlert(var_export($arrProduct,true));
-	
+	$quoteId = $myQuote->getAtributo ( "quote_id" );
+	// Se cargan las instancias de quote_line
+	foreach ( $arrProduct as $i => $aProduct ) {
+		if (comprobarVar ( $aProduct ['quote_line_desc'] ) or comprobarVar ( $aProduct ['quote_line_price'] ) or comprobarVar ( $aProduct ['quote_line_qty'] )) {
+			$myQuoteLine = new QuoteLine ( $miConexionBd );
+			$myQuoteLine->setAtributo ( 'quote_line_desc', $aProduct ['quote_line_desc'] );
+			$quoteLinePrice = convertToDoubleval ( $aProduct ['quote_line_price'] );
+			$myQuoteLine->setAtributo ( 'quote_line_price', $quoteLinePrice );
+			$myQuoteLine->setAtributo ( 'quote_line_qty', $aProduct ['quote_line_qty'] );
+			$myQuoteLine->setObjeto ( "Quote", $quoteId );
+			if (comprobarVar ( $aProduct ['product_sale_id'] )) {
+				$myQuoteLine->setObjeto ( "ProductSale", $aProduct ['product_sale_id'] );
+				// Si el precio cambió se activa una bandera en la tabla quote_line para identificarlo
+				$quoteLineEditPrice = "0";
+				if ($quoteLinePrice != $aProduct ['product_sale_price']) {
+					$quoteLineEditPrice = "1";
+				}
+				$myQuoteLine->setAtributo ( 'quote_line_edit_price', $quoteLineEditPrice );
+				// Si la descripción cambió se activa una bandera en la tabla quote_line para identificarlo
+				$quoteLineEditDesc = "0";
+				if ($aProduct ['quote_line_desc'] != $aProduct ['product_sale_desc']) {
+					$quoteLineEditDesc = "1";
+				}
+				$myQuoteLine->setAtributo ( 'quote_line_edit_desc', $quoteLineEditDesc );
+			}
+			if (! $myQuoteLine->registrar ()) {
+				$miConexionBd->hacerConsulta ( "ROLLBACK;" );
+				$objResponse->addAlert ( "Error (SQ-004-$i). Please contact your administrator." );
+				return $objResponse;
+			}
+		}
+	}
+	if (! $miConexionBd->hacerConsulta ( "COMMIT;" )) {
+		$miConexionBd->hacerConsulta ( "ROLLBACK;" );
+		$objResponse->addAlert ( "Error (SQ-005). Please contact your administrator." );
+		return $objResponse;
+	}
+	$objResponse->addScript ( "openPdfQuote();" );
+	$objResponse->addScript ( "window.parent.close();" );
 	return $objResponse;
 }
 function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
 	$objResponse = new xajaxResponse ();
-	$unit = str_replace ( ".", "", $unit );
-	$unit = str_replace ( ",", ".", $unit );
-	$unit = doubleval ( $unit );
+	$unit = convertToDoubleval ( $unit );
 	$qty = doubleval ( $qty );
-	$amountAct = str_replace ( ".", "", $amountAct );
-	$amountAct = str_replace ( ",", ".", $amountAct );
-	$amountAct = doubleval ( $amountAct );
-	$subtotal = str_replace ( ".", "", $subtotal );
-	$subtotal = str_replace ( ",", ".", $subtotal );
-	$subtotal = doubleval ( $subtotal );
+	$amountAct = convertToDoubleval ( $amountAct );
+	$subtotal = convertToDoubleval ( $subtotal );
 	$amount = $unit * $qty;
 	$subtotal = $subtotal - $amountAct + $amount;
 	$hstRate = doubleval ( "0.0$hstRate" );
