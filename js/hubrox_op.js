@@ -43,3 +43,6 @@ function addNewProduct() {
 	arrProductSale[idTxtDescrip]['quote_line_price'] = "";
 	xajax_addNewProduct(idTxtDescrip);
 }
+function openPdfQuote(){
+	window.open("../controladores/pdf/quote_pdf.php");
+}
