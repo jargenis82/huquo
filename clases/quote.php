@@ -18,12 +18,32 @@ class Quote extends ClaseBd {
 		$atributos ['quote_ship_to'] ['esPk'] = false;
 		$atributos ['quote_number'] ['esPk'] = false;
 		$atributos ['hubrox_id'] ['esPk'] = false;
+		$atributos ['oppor_id'] ['esPk'] = false;
 		$objetos ['Organisation'] ['id'] = "org_id";
 		$objetos ['Contact'] ['id'] = "contact_id";
 		$objetos ['User'] ['id'] = "user_id";
 		$strOrderBy = "quote_id";
 		$this->registrarTabla ( $tabla, $atributos, $objetos, $strOrderBy );
 		$this->dsn = "mysql";
+	}
+	function getNextQuoteNumber() {
+		$miConexionBd = $this->miConexionBd;
+		$date = intval ( str_replace ( "-", "", formatoFechaBd () ) );
+		$strSelect = "MAX(quote_number) AS maximo";
+		$strFrom = "quote";
+		$r = $miConexionBd->hacerSelect ( $strSelect, $strFrom );
+		if (! comprobarVar ( $r [0] ['maximo'] )) {
+			return "$date-001";
+		}
+		$maximo = $r [0] ['maximo'];
+		$dateMaximo = intval ( substr ( $maximo, 0, 8 ) );
+		if ($date == $dateMaximo) {
+			$nroMaximo = intval ( substr ( $maximo, - 3 ) );
+			$nroMaximo ++;
+			$nroMaximo = $nroMaximo < 10 ? "00$nroMaximo" : ($nroMaximo < 100 ? "0$nroMaximo" : $nroMaximo);
+			return "$date-$nroMaximo";
+		}
+		return "$date-001";
 	}
 }
 

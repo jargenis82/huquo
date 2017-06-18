@@ -13,6 +13,12 @@ $xajax->registerFunction ( "getCustomer" );
 $xajax->registerFunction ( "getDescripProduct" );
 $xajax->registerFunction ( "addNewProduct" );
 $xajax->registerFunction ( "calculateAmount" );
+$xajax->registerFunction ( "saveQuote" );
+function saveQuote($quote, $arrProductSale, $arrProduct) {
+	$objResponse = new xajaxResponse ();
+	
+	return $objResponse;
+}
 function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
 	$objResponse = new xajaxResponse ();
 	$unit = str_replace ( ".", "", $unit );
@@ -35,14 +41,16 @@ function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
 	$subtotal = number_format ( $subtotal, 2, ",", "." );
 	$hst = number_format ( $hst, 2, ",", "." );
 	$total = number_format ( $total, 2, ",", "." );
-	$objResponse->addAssign ( "txt_unit$id", "value", $unit );
-	$objResponse->addAssign ( "span_amount$id", "innerHTML", $amount );
+	if (comprobarVar ( $id )) {
+		$objResponse->addAssign ( "txt_unit$id", "value", $unit );
+		$objResponse->addAssign ( "span_amount$id", "innerHTML", $amount );
+	}
 	$objResponse->addAssign ( "span_subtotal", "innerHTML", $subtotal );
 	$objResponse->addAssign ( "span_hst", "innerHTML", $hst );
 	$objResponse->addAssign ( "span_total", "innerHTML", $total );
 	return $objResponse;
 }
-function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $priceTypeId) {
+function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $priceTypeId, $quoteLineDesc) {
 	$objResponse = new xajaxResponse ();
 	$idTxtDescrip = str_replace ( "txt_decrip", "", $txtDecrip );
 	$miConexionBd = new ConexionBd ( "mysql" );
@@ -58,8 +66,10 @@ function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $price
 		$objResponse->addAssign ( "txt_qty$idTxtDescrip", "value", "" );
 		$objResponse->addScript ( "calculateAmount('$idTxtDescrip');" );
 		$objResponse->addScript ( "document.getElementById('txt_qty$idTxtDescrip').focus();" );
+		$objResponse->addScript ( "arrProductSale[$idTxtDescrip]['product_sale_id'] = '$productSaleId';" );
+		$objResponse->addScript ( "arrProductSale[$idTxtDescrip]['quote_line_desc'] = '$quoteLineDesc';" );
+		$objResponse->addScript ( "arrProductSale[$idTxtDescrip]['quote_line_price'] = '$priceValue';" );
 	}
-	
 	return $objResponse;
 }
 function addNewProduct($idTxtDescrip) {
@@ -68,8 +78,8 @@ function addNewProduct($idTxtDescrip) {
 	$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
 	$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
 	$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" class="form-control"></td>';
-	$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" size="5"  onchange="calculateAmount(' . $idTxtDescrip . ');"  dir="rtl"></td>';
-	$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="4" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');"></td>';
+	$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" size="7"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+	$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="2" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
 	$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '" size="4"></span></td>';
 	$jq = "
      		var tr='$textoHtml';
@@ -85,7 +95,7 @@ function addNewProduct($idTxtDescrip) {
      $(document).ready(function () {
 	    $('#txt_decrip$idTxtDescrip').on('autocompleteselect', function (e, ui) {
 	    	 	var i = availableDescrip.indexOf(ui.item.value);
-	    	 	xajax_getDescripProduct(availableId[i],this.id,1,1);
+	    	 	xajax_getDescripProduct(availableId[i],this.id,customerRegionId,priceTypeId,ui.item.value);
 	    });
 		});
      } )";
@@ -93,6 +103,7 @@ function addNewProduct($idTxtDescrip) {
 	$objResponse->addScript ( $jq );
 	$objResponse->addScript ( $js );
 	$objResponse->addScript ( "document.getElementById('txt_decrip$idTxtDescrip').focus();" );
+	$objResponse->addScript ( "window.parent.ajustarIframe();" );
 	return $objResponse;
 }
 function getCustomer($customerName, $getOpportunities) {

@@ -6,6 +6,7 @@ include_once '../librerias/tbs_class/tbs_class.php';
 include_once '../librerias/xajax_0.2.4/xajax.inc.php';
 include_once '../librerias/insightly.php';
 include_once '../clases/product.php';
+include_once '../clases/quote.php';
 // include_once '../clases/inst_usua.php';
 // include_once '../clases/menu.php';
 include_once '../inc/funciones.php';
@@ -27,6 +28,7 @@ $xajax->registerFunction ( "getCustomer" );
 $xajax->registerFunction ( "getDescripProduct" );
 $xajax->registerFunction ( "addNewProduct" );
 $xajax->registerFunction ( "calculateAmount" );
+$xajax->registerFunction ( "saveQuote" );
 $js = $xajax->getJavascript ( '../librerias/' );
 
 // Fecha Actual
@@ -37,16 +39,17 @@ $fecha = formatoFechaBd ( null, "m/d/Y" );
 // Fecha de validez
 // Si es una nueva cotización debe colocar por defecto 30 días más de la fecha de creación
 // Si se está consultando una cotización deber la fecha de validez colocada durante la creación de la cotización
-$fechaValidez = sumarFecha ( $fecha, 30 );
+$quoteValidUntil = sumarFecha ( $fecha, 30 );
 
 // Quote number
-$quoteNumber = "20170606-012";
+$miConexionBd = new ConexionBd("mysql");
+$quoteNumber = (new Quote($miConexionBd))->getNextQuoteNumber();
 
 // Prepared by
 $userName = "Annie Wang";
 
 // Se construye el arreglo en Javascript para el autocompletar de productos
-$myProduct = new Product ();
+$myProduct = new Product ($miConexionBd);
 $listaProducto = $myProduct->getListaProducto ();
 $jsData = "";
 $jsDataId = "";
@@ -82,10 +85,17 @@ if (comprobarVar ( $quoteId )) {
 			$address = $quote[2];
 			$web = $quote[3];
 			$phone = $quote[4];
+			$country = $quote[5];
+			$customerType = $quote[6];
+			$city = $quote[7];
 		} else {
 			// Se consulta en el API de Insightly los datos de la oportunidad
 			$i = new Insightly ( APIKEY );
 			$myOpportunity = $i->getOpportunity ( $opportunityId );
+			$country = "";
+			$city = "";
+			$customerType = "";
+			$priceTypeId = "";
 			// Se consulta los links de la oportunidad para buscar los datos de la organización relacionada
 			$arrLinks = $myOpportunity->LINKS;
 			foreach ( $arrLinks as $aLink ) {
@@ -93,11 +103,13 @@ if (comprobarVar ( $quoteId )) {
 				if (comprobarVar ( $organizationId )) {
 					$myOrganization = $i->getOrganization ( $organizationId );
 					$organizationName = $myOrganization->ORGANISATION_NAME;
-					$arrAddresses = $myOrganization->ADDRESSES;
+					$arrAddresses = $myOrganization->ADDRESSES;				
 					if (isset ( $arrAddresses [0] )) {
 						$address = $arrAddresses [0]->STREET . ", " . $arrAddresses [0]->CITY . ", " . $arrAddresses [0]->COUNTRY . ".";
 						$address = str_replace ( "\n", " ", $address );
 						$address = str_replace ( "\r", " ", $address );
+						$country = $arrAddresses [0]->COUNTRY;
+						$city = $arrAddresses [0]->CITY;
 					}
 					$arrContactInfos = $myOrganization->CONTACTINFOS;
 					$contadorW = 0;
@@ -115,8 +127,37 @@ if (comprobarVar ( $quoteId )) {
 							break 1;
 						}
 					}
+					$arrCustomfields = $myOrganization->CUSTOMFIELDS;
+					foreach ($arrCustomfields as $myCustomfield) {
+						$customFieldId = $myCustomfield->CUSTOM_FIELD_ID;
+						if ($customFieldId == "ORGANISATION_FIELD_1") {
+							$customerType = $myCustomfield->FIELD_VALUE;
+							break 1;
+						}
+					}
 					break 1;
 				}
+			}
+		}
+		// Se detecta el tipo de precio a aplicar en la cotización según el tipo de cliente
+		if (comprobarVar($customerType)) {
+			if ($customerType == "Customer") {
+				$priceTypeId = "2";
+			} else {
+				$priceTypeId = "1";
+			}
+		}
+		
+		// Se detecta la región del cliente
+		$customerRegionId = "";
+		$region = "";
+		if (comprobarVar($country)) {
+			if ($country == "United States" or $country == "Canada") {
+				$customerRegionId = 2;
+				$region = "US & Canada";
+			} else {
+				$customerRegionId = 1;
+				$region = "Outside US & Canada";
 			}
 		}
 	}

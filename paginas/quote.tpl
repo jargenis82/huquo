@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,10 +53,49 @@ table, td, th {
 } );
 
  var idTxtDescrip = 0;
- 
- //var availableDescrip = [ "Arkcom","Wellscom","Asp","BASIC","C"  ];
  var availableDescrip = [ [var.jsData;htmlconv=no;noerr]  ];
  var availableId = [ [var.jsDataId;htmlconv=no;noerr]  ];
+ var opportunityId = "[var.opportunityId;noerr]";
+ var organizationId = "[var.organizationId;noerr]";
+ var customerRegionId = "[var.customerRegionId;noerr]";
+ var priceTypeId = "[var.priceTypeId;noerr]";
+ var arrProductSale = new Array();
+ arrProductSale[0] = new Array();
+ arrProductSale[0]['product_sale_id'] = "";
+ arrProductSale[0]['quote_line_desc'] = "";
+ arrProductSale[0]['quote_line_price'] = "";
+ 
+ function saveQuote() {
+	 var quote = new Array();
+	 quote['quoteDate'] = $('#span_date').text();
+	 quote['quoteValidUntil'] = $('#txt_valid_until').val();
+	 quote['quoteDiscount'] = $('#txt_discount_val').val();
+	 quote['quoteHstRate'] = $('#span_hst_rate').text();
+	 quote['quoteShipTo'] = $('#txt_ship_to').val();
+	 quote['quoteNumber'] = $('#span_number').text();
+	 quote['quoteComment'] = $('#txt_comment').val();
+	 quote['orgName'] = $('#span_name').text();
+	 quote['orgAddress'] = $('#span_address').text();
+	 quote['orgWeb'] = $('#href_web').html();
+	 quote['orgPhone'] = $('#span_phone').text();
+	 quote['orgCity'] = "[var.city;noerr]";
+	 quote['orgCountry'] = "[var.country;noerr]";
+	 var arrProduct = new Array();
+	 for (var i=0;i <= idTxtDescrip;i++) {
+		 arrProduct[i] = new Array();
+		 arrProduct[i]['product_sale_id'] = arrProductSale[i]['product_sale_id'];
+		 arrProduct[i]['quote_line_desc'] = $('#txt_decrip'+i.toString()).val();
+		 arrProduct[i]['quote_line_price'] = $('#txt_unit'+i.toString()).val();
+		 arrProduct[i]['quote_line_qty'] = $('#txt_qty'+i.toString()).val();
+	 }
+	 xajax_saveQuote(quote,arrProductSale,arrProduct);
+ }
+ 
+ function calculateDiscount() {
+	var subtotal = $('#span_subtotal').text();
+	var discount = $('#txt_discount_val').val();
+
+ }
  
  function calculateAmount(id) {
 	var unit = $('#txt_unit'+id).val();
@@ -77,7 +115,7 @@ table, td, th {
 	}
  
  $(function() {
-        $( "#fechaVal" ).datepicker
+        $( "#txt_valid_until" ).datepicker
         ({
         	 minDate: 0,
         	dateFormat: 'mm/dd/yy',
@@ -88,15 +126,14 @@ table, td, th {
   
     });
   $( function() {
-     $( "#txt_decrip" ).autocomplete({
+     $( "#txt_decrip0" ).autocomplete({
         source: availableDescrip
       });
 
      $(document).ready(function () {
-	    $('#txt_decrip').on('autocompleteselect', function (e, ui) {	    	
+	    $('#txt_decrip0').on('autocompleteselect', function (e, ui) {	    	
 	    		var i = availableDescrip.indexOf(ui.item.value);
-	    		// CustomerRegion 1 PriceType 1 **** PROVISIONAL
-	    		xajax_getDescripProduct(availableId[i],this.id,1,1);
+	    		xajax_getDescripProduct(availableId[i],this.id,customerRegionId,priceTypeId,ui.item.value);
 	    });
 		});  
      } );
@@ -110,13 +147,14 @@ table, td, th {
 	    	xajax_calculateAmount(idTxtDescrip,0,0,amount,subtotal,hstRate);
 	    	$('#descripId tr:last').remove();
 	    	idTxtDescrip--;
+	    	arrProductSale.pop();
     	}
     })
 	})
   </script>
 
 </head>
-<body onload="document.getElementById('tags').focus();">
+<body onload="document.getElementById('txt_decrip0').focus();">
 	<div class="container">
 		<div class="col-sm-8">
 			<div class="panel panel-primary">
@@ -127,8 +165,8 @@ table, td, th {
 							<td width="100px"><label>Name</label></td>
 							<td width="200px"><span id="span_name">[var.organizationName;noerr]</span></td>
 							<td rowspan="2"><label>Ship to</label></td>
-							<td rowspan="2"><textarea rows="2" cols="40"
-									id="txt_address"> </textarea></td>
+							<td rowspan="2"><textarea rows="2" cols="40" tabindex="1"
+									id="txt_ship_to">[var.address;noerr]</textarea></td>
 						</tr>
 						<tr>
 							<td><label>Address</label></td>
@@ -136,15 +174,15 @@ table, td, th {
 						</tr>
 						<tr>
 							<td><label>Web</label></td>
-							<td><a href="[var.web;noerr]" id="a_web">[var.web;noerr]</a></td>
+							<td><a href="[var.web;noerr]" id="href_web">[var.web;noerr]</a></td>
 							<td><label>Region</label></td>
-							<td><span id="span_region">Outside US & Canadá</span></td>
+							<td><span id="span_region">[var.region;noerr]</span></td>
 						</tr>
 						<tr>
 							<td><label>Phone</label></td>
 							<td><span id="span_phone">[var.phone;noerr]</span></td>
 							<td><label>Type</label></td>
-							<td><span id="span_price_type">Reseller</span></td>
+							<td><span id="span_price_type">[var.customerType;noerr]</span></td>
 						</tr>
 					</table>
 				</div>
@@ -158,11 +196,11 @@ table, td, th {
 					<table class="table-responsive" border="0">
 						<tr>
 							<td width="100px"><label>DATE</label></td>
-							<td>[var.fecha;noerr]</td>
+							<td><span id="span_date">[var.fecha;noerr]</span></td>
 						</tr>
 						<tr>
 							<td><label>QUOTE #</label></td>
-							<td>[var.quoteNumber;noerr]</td>
+							<td><span id="span_number">[var.quoteNumber;noerr]</span></td>
 						</tr>
 						<tr>
 							<td><label>CUSTOMER ID</label></td>
@@ -170,8 +208,8 @@ table, td, th {
 						</tr>
 						<tr>
 							<td><label>VALID UNTIL</label></td>
-							<td><input id="fechaVal" value="[var.fechaValidez;noerr]"
-								size="10"></td>
+							<td><input id="txt_valid_until"
+								value="[var.quoteValidUntil;noerr]" tabindex="2" size="10"></td>
 						</tr>
 						<tr>
 							<td><label>Prepared by</label></td>
@@ -201,13 +239,16 @@ table, td, th {
 						</thead>
 						<tbody>
 							<tr>
-								<td><input id="txt_decrip" class="form-control"></td>
-								<td align="center"><input id="txt_unit" size="5"
-									onchange="calculateAmount('');" dir="rtl"></td>
-								<td align="center"><input id="txt_qty" size="4"
-									onKeyDown="javascript:return introQty(event);"
-									onchange="calculateAmount('');"></td>
-								<td align="right"><span id="span_amount"></span></td>
+								<td><input id="txt_decrip0" class="form-control"
+									tabindex="3"></td>
+								<td align="center"><input id="txt_unit0" size="7"
+									tabindex="4" onchange="calculateAmount(0);" dir="rtl"
+									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
+								<td align="center"><input id="txt_qty0" size="2"
+									tabindex="5" onKeyDown="javascript:return introQty(event);"
+									onchange="calculateAmount(0);" dir="rtl"
+									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
+								<td align="right"><span id="span_amount0"></span></td>
 							</tr>
 						</tbody>
 					</table>
@@ -215,7 +256,7 @@ table, td, th {
 					<div class="row">
 						<div class="col-sm-7">
 							<label for="comment">Comment:</label>
-							<textarea class="form-control" rows="5" id="comment"></textarea>
+							<textarea class="form-control" rows="5" id="txt_comment"></textarea>
 						</div>
 						<div class="col-sm-5">
 							<table class="table table-striped">
@@ -226,8 +267,12 @@ table, td, th {
 									<tr>
 
 										<td>Discount</td>
-										<td><input type="text" size="3"></input> $ <input
-											type="text" size="2"></input> %</td>
+										<td><input type="text" id="txt_discount_val" size="7"
+											value="0" onchange="calculateAmount(0);" dir="rtl"
+											onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
+											$ <input type="text" id="txt_discount_per" size="2" value="0"
+											dir="rtl" onfocus="this.dir = 'ltr';"
+											onblur="this.dir = 'rtl';"></input> %</td>
 
 									</tr>
 									<tr>
@@ -261,7 +306,7 @@ table, td, th {
 										class="btn btn-primary btn-sm glyphicon glyphicon-minus biselado"
 										id="remove" data-accion="" onclick="">DELETE</span> <span
 										class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
-										id="btn_Guardar" data-accion="">PDF</span>
+										id="btn_Guardar" data-accion="" onclick="saveQuote(); ">PDF</span>
 								</div>
 							</div>
 
