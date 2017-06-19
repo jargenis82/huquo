@@ -1,199 +1,96 @@
 <?php
+include_once '../../conf.inc.php';
+include_once '../../inc/funciones.php';
+include_once '../../librerias/conexion_bd.php';
+include_once '../../librerias/mpdf53/mpdf.php';
+include_once '../../librerias/tbs_class/tbs_class.php';
+include_once '../../clases/organisation.php';
+include_once '../../clases/quote.php';
+//include_once '../../clases/quote_line.php';
 
-include_once ("../../librerias/mpdf53/mpdf.php");
-$logo="hubrox1.png";
-$quote="QUOTE";
-//variable de secion de usuario
-$prepared="Annie Wang";
+$quoteId = comprobarVar ( $_GET ['quoteId'] ) ? $_GET ['quoteId'] : null;
 
-//VARIABLE VIA GET
-
-$date="01/01/2017";
-$quoteNumber="20170220001";
-$customerId="73793570";
-$valiUntil="23/03/2017";
-$customerInfor="José Darío Montoya Corral
-				soporte@conaris.com.co
-				Conaris
-				Callejon las palmas C11, Juanchito, Candelaria, 
-				Valle del cauca, Colombia
-				http://www.aristizabalconstructores.com/
-				+57 2 4359582
-				";
-$shipTo="Callejon las palmas C11, Juanchito, Candelaria, 
-		Valle del cauca, Colombia";
-$descritionProd="";
-$unitPrice="";
-$qty="";
-$amount="";
-$discountVal="";
-$sunTotal="";
-$hstRate="";
-$hstRate="";
-$total="";
-$cabecera = '
-<table align="left" border="0" width="100%">
-	<tr>
-		<td width="300px" align="left">	<img src="../../imagenes/'.$logo.'" width="120px"/>	</td>
-		<td align= "center" colspan="2"><h1 color="#58ACFA">'.$quote.' </h1></td>
-		
-	</tr>
-	<tr>
-		<td><h5>370 Magnetic Dr. North York, ON M3J 2C4, Toronto, Canada</h5></td>
-		<td><label>DATE</label></td>
-		<td align= "center"><h4>'.$date.' </h4></td>
-	</tr>
-	<tr>
-		<td><h5>Website: www.hubrox.com</h5></td>
-		<td><label>	QUOTE # </label></td>
-		<td align= "center"><h4>'.$quoteNumber.' </h4></td>
-	</tr>
-	<tr>
-		<td><h5>Phone: + 1-647-499-5741</h5></td>
-		<td><label>	CUSTOMER ID  </label></td>
-		<td align= "center"><h4>'.$customerId.' </h4></td>
-	</tr>
-	<tr>
-		<td><h5>Prepared by: '.$prepared.'</h5></td>
-		<td><label>	VALID UNTIL   </label></td>
-		<td align= "center"><h4>'.$valiUntil.' </h4></td>
-	</tr>
-
-</table> ';
-
-$html = '<style>
-th {
-    background-color: #58ACFA;
-    color: white;
-}
-table {
-    border-collapse: collapse;
-    width: 100%;
+// Valida si existe el quote
+if (! comprobarVar ( $quoteId )) {
+	exit ();
 }
 
-th, td {
-    padding: 4px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+$miConexionBd = new ConexionBd ( "mysql" );
+$myQuote = new Quote ( $miConexionBd, $quoteId );
+$myOrganisation = $myQuote->getObjeto ( "Organisation" );
+
+$quote = "QUOTE";
+$logo = "hubrox1.png";
+$date = formatoFechaBd ( formatoFecha ( $myQuote->getAtributo ( "quote_date" ) ), "m/d/Y" );
+$quoteNumber = $myQuote->getAtributo ( "quote_number" );
+$customerId = $myOrganisation->getAtributo ( "org_ins_id" );
+$validUntil = formatoFechaBd ( formatoFecha ( $myQuote->getAtributo ( "quote_valid_until" ) ), "m/d/Y" );
+$prepared = "Annie Wang";
+$customerInfor = $myOrganisation->getAtributo ( "org_name" ) . "<br>";
+$customerInfor .= $myOrganisation->getAtributo ( "org_address" ) . "<br>";
+$customerInfor .= $myOrganisation->getAtributo ( "org_web" ) . "<br>";
+$customerInfor .= $myOrganisation->getAtributo ( "org_phone" ) . "<br>";
+$customerInfor .= $myOrganisation->getAtributo ( "org_city" ) . ", " . $myOrganisation->getAtributo ( "org_country" );
+$shipTo = $myQuote->getAtributo ( "quote_ship_to" );
+$discountVal = doubleval ( $myQuote->getAtributo ( "quote_discount" ) );
+$hstRate = $myQuote->getAtributo ( "quote_hst_rate" );
+$hstUst = $hstRate = doubleval ( "0.$hstRate" );
+$hstRate .= "%";
+$sunTotal = doubleval ( 0 );
+$total = doubleval ( 0 );
+$myQuoteLine = new QuoteLine ( $miConexionBd );
+$myQuoteLine->setObjeto ( "Quote", $quoteId );
+$products = array ();
+$arrQuoteLine = $myQuoteLine->consultar ();
+foreach ( $arrQuoteLine as $i => $aQuoteLine ) {
+	$desc = $aQuoteLine->getAtributo ( "quote_line_desc" );
+	$price = doubleval ( $aQuoteLine->getAtributo ( "quote_line_price" ) );
+	$qty = $aQuoteLine->getAtributo ( "quote_line_qty" );
+	$amount = $price * $qty;
+	$sunTotal += $amount;
+	$products [$i] = array ();
+	$products [$i] ['desc'] = $desc;
+	$products [$i] ['qty'] = $qty;
+	$products [$i] ['qty'] = $qty;
+	$price = number_format ( $price, 2, ",", "." );
+	$products [$i] ['price'] = $price;
+	$amount = number_format ( $amount, 2, ",", "." );
+	$products [$i] ['amount'] = $amount;
 }
 
-tr:hover{background-color:#f5f5f5}
+$sunTotal = $sunTotal - $discountVal;
+$hstUst = $sunTotal * $hstUst;
+$total = $sunTotal + $hstUst;
 
-</style>
-<br>
-<table align=left  border="0" width="100%">
-		<tr>
-		<th align= "left"><label>	CUSTOMER  </label></td>
-		<th align= "left"><label>	SHIP TO </label></td>
-		</tr>
-		<tr>
-		<td>'.$customerInfor.'</td>
-		<td>'.$shipTo.'</td>
-		</tr>		
-</table>
-<br>
+$discountVal = number_format ( $discountVal, 2, ",", "." );
+$sunTotal = number_format ( $sunTotal, 2, ",", "." );
+$hstUst = number_format ( $hstUst, 2, ",", "." );
+$total = number_format ( $total, 2, ",", "." );
 
-<table align=left  border="0" width="100%" >
-		<tr>
-		<th align= "left" width="400px"><label>DESCRIPTION</label></td>
-		<th align= "left" width="50px"><label>UNIT PRICE</label></td>
-		<th align= "left" width="95px"><label>QTY</label></td>
-		<th align= "left" width="100px" ><label>AMOUNT (US$)</label></td>
-		</tr>
-		<tr>
-		<td>'.$descritionProd.'A</td>
-		<td>'.$unitPrice.'10</td>
-		<td>'.$qty.'5</td>
-		<td>'.$amount.'50</td>
-		</tr>
-		<tr>
-		<td colspan="2">
-			<table align=left  border="0" width="600px">
-				<tr>
-				<th align= "left"><label>TERMS AND CONDITIONS </label></td>
-				
-				</tr>
-				<tr>
-					<td><ol>
-						  <li> Customer will be billed after indicating acceptance of this quote</li>
-						  <li> Payment will be due prior to delivery of service and goods</li>
-						  <li> CIF-Miami. Freight to Miami is included in this price. </li>
-						  <li>Please fax or mail the signed price quote to the address above</li>
-						</ol>
+$TBS1 = new clsTinyButStrong ();
+$TBS1->LoadTemplate ( '../../paginas/quote_pdf_cabecera.tpl' );
+$TBS1->Show ( TBS_NOTHING ); // terminate the merging without leaving the script nor to display the result
+$cabecera = $TBS1->Source;
 
-					</td>
-				</tr>
-				<tr>
-					<td>
-					<p>Customer Acceptance (sign below):</p>
-					<label>Print Name_______________ </label>
-					</td>
-				</tr>		
-		</table>
-		</td>
-		
-		<td colspan="2">
-			<table  border="0">
-		<tr>
-			<td width="50px" ><label>	Discount</label></td>
-			<td width="100px">'.$discountVal.'1</td>
-		</tr>
-			<tr>
-			<td><label>	SubTotal(US$)</label></td>
-			<td>'.$sunTotal.'2</td>
-		</tr>	
-			<tr>
-			<td><label>HST Rate</label></td>
-			<td>'.$hstRate.'3</td>
-		</tr>	
-		</tr>	
-			<tr>
-			<td><label>HST (US$)</label></td>
-			<td>'.$hstUst.'4</td>
-		</tr>	
-		</tr>	
-			<tr>
-			<td><label>TOTAL(US$)</label></td>
-			<td>'.$total.'10</td>
-		</tr>	
-		</table>
-		</td>
-		</tr>
+$TBS2 = new clsTinyButStrong ();
+$TBS2->LoadTemplate ( '../../paginas/quote_pdf_html.tpl' );
+$TBS2->MergeBlock('products',$products);
+$TBS2->Show ( TBS_NOTHING ); // terminate the merging without leaving the script nor to display the result
+$html = $TBS2->Source;
 
-</table>
-<br>';
+$TBS3 = new clsTinyButStrong ();
+$TBS3->LoadTemplate ( '../../paginas/quote_pdf_pie.tpl' );
+$TBS3->Show ( TBS_NOTHING ); // terminate the merging without leaving the script nor to display the result
+$piePagina = $TBS3->Source;
 
-
-
-$header = array('L' => array(), 'C' => array(), 'R' => array(
-		'content'         => '{PAGENO}28',
-		'font-family'     => 'sans',
-		'font-style'      => '',
-		'font-size'       => '9', ), 'line'       => 1, );
-
-
-$pagina    = '{PAGENO}/{nb}';
-$piePagina = '<div align="center" style="font-size:16px;color:#666666;"> If you have any questions about this price quote, please contact <strong>'.$prepared.'</strong></div>
-			  <div align="center" style="font-size:25px;color:#666666;"> <strong>Thank You For Your Business!</strong></div>
-			  <div align="center" style="font-size:9px;color:#666666;"></div>';
-$piePagina .= '<table width=100% style="font-size:9px;color:#666666;"><tr><td align="left">'.$x.'</td>
-			  <td align="right">'.$pagina.'</td></tr></table>';
-//==============================================================
-//==============================================================
-//==============================================================
-//mode,format,default_font_size,default_font,margin_left 15,margin_right 15,margin_top 16,
-//margin_bottom 16,margin_header 9,margin_footer 9,orientation P o L,
-$mpdf = new mPDF('c', 'Letter', 10, null, 10, 10, 60, 18, 9, 5);
-$mpdf->SetHTMLHeader($cabecera);
-
-//zoom 'fullpage,fullwidth,real,default o un entero representando el porcentaje',
-//layout 'single,continuous,two,twoleft,tworight,default'
-$mpdf->SetDisplayMode('fullpage', 'single');
-
-$paginas = '{PAGENO}';
-$mpdf->SetHTMLFooter($piePagina);
-
-$mpdf->WriteHTML($html);
-$mpdf->Output();
-exit;
+// mode,format,default_font_size,default_font,margin_left 15,margin_right 15,margin_top 16,
+// margin_bottom 16,margin_header 9,margin_footer 9,orientation P o L,
+$mpdf = new mPDF ( 'c', 'Letter', 10, null, 10, 10, 60, 18, 9, 5 );
+$mpdf->SetHTMLHeader ( $cabecera );
+// zoom 'fullpage,fullwidth,real,default o un entero representando el porcentaje',
+// layout 'single,continuous,two,twoleft,tworight,default'
+$mpdf->SetDisplayMode ( 'fullpage', 'single' );
+$mpdf->SetHTMLFooter ( $piePagina );
+$mpdf->WriteHTML ( $html );
+$mpdf->Output ();
 ?>

@@ -45,7 +45,7 @@ function saveQuote($quote, $arrProduct) {
 			return $objResponse;
 		}
 	}
-	$orgId = $myOrganisation->getAtributo ( "org_id" );
+	$orgId = $arrOrganisation[0]->getAtributo ( "org_id" );
 	// Se carga una nueva instancia de cotización
 	$myQuote = new Quote ( $miConexionBd );
 	// Se valida si la fecha ha cambiado con respecto a la que se muestra por pantalla
@@ -112,7 +112,7 @@ function saveQuote($quote, $arrProduct) {
 		$objResponse->addAlert ( "Error (SQ-005). Please contact your administrator." );
 		return $objResponse;
 	}
-	$objResponse->addScript ( "openPdfQuote();" );
+	$objResponse->addScript ( "openPdfQuote($quoteId);" );
 	$objResponse->addScript ( "window.parent.close();" );
 	return $objResponse;
 }
@@ -124,7 +124,7 @@ function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
 	$subtotal = convertToDoubleval ( $subtotal );
 	$amount = $unit * $qty;
 	$subtotal = $subtotal - $amountAct + $amount;
-	$hstRate = doubleval ( "0.0$hstRate" );
+	$hstRate = doubleval ( "0.$hstRate" );
 	$hst = $subtotal * $hstRate;
 	$total = $subtotal + $hst;
 	$unit = number_format ( $unit, 2, ",", "." );

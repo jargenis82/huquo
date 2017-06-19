@@ -312,7 +312,7 @@ table, td, th {
 										<span class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk biselado"
 										id="" data-accion="" onclick="saveQuote()">SAVE</span> <span
 										class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
-										id="" data-accion="" onclick="openPdfQuote()">VIEW PDF</span>
+										id="" data-accion="" onclick="" hidden="hidden">VIEW PDF</span>
 								</div>
 							</div>
 
