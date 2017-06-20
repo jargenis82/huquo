@@ -75,7 +75,7 @@ table, td, th {
 	});
 </script>
 </head>
-<body onload="document.getElementById('tags').focus();dataTableQuote(''); dataTable();">
+<body onload="document.getElementById('tags').focus();dataTableQuote(); dataTable();">
 		<div class="container">
 		<div class="row">
 			<div class="col-sm-3">
