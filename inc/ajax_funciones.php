@@ -44,8 +44,10 @@ function saveQuote($quote, $arrProduct) {
 			$objResponse->addAlert ( "Error (SQ-002). Please contact your administrator." );
 			return $objResponse;
 		}
+	} else {
+		$myOrganisation = $arrOrganisation[0];
 	}
-	$orgId = $arrOrganisation[0]->getAtributo ( "org_id" );
+	$orgId = $myOrganisation->getAtributo ( "org_id" );
 	// Se carga una nueva instancia de cotización
 	$myQuote = new Quote ( $miConexionBd );
 	// Se valida si la fecha ha cambiado con respecto a la que se muestra por pantalla
