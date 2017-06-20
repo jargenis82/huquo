@@ -113,8 +113,8 @@ table, td, th {
  function introQty(e) {
 		tecla = (document.all) ? e.keyCode : e.which;
 		if (tecla == 13){
-			window.event.keyCode=0; 
-			addNewProduct();
+			//window.event.keyCode=0;
+			addNewProduct();			
 		}
 	}
  
@@ -308,11 +308,14 @@ table, td, th {
 										class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
 										id="" data-accion="" onclick="addNewProduct()">ADD</span> <span
 										class="btn btn-primary btn-sm glyphicon glyphicon-minus biselado"
-										id="remove" data-accion="" onclick="">DELETE</span> 
-										<span class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk biselado"
+										id="remove" data-accion="" onclick="">DELETE</span> <span
+										class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk biselado"
 										id="" data-accion="" onclick="saveQuote()">SAVE</span> <span
+										class="btn btn-primary btn-sm glyphicon glyphicon-log-out biselado"
+										id="" data-accion="" onclick="window.parent.close()">CLOSE</span><span
 										class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
-										id="" data-accion="" onclick="" hidden="hidden">VIEW PDF</span>
+										id="" data-accion="" onclick="" style="visibility: hidden">VIEW
+										PDF</span>
 								</div>
 							</div>
 

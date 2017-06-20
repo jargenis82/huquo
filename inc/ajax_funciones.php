@@ -45,7 +45,7 @@ function saveQuote($quote, $arrProduct) {
 			return $objResponse;
 		}
 	} else {
-		$myOrganisation = $arrOrganisation[0];
+		$myOrganisation = $arrOrganisation [0];
 	}
 	$orgId = $myOrganisation->getAtributo ( "org_id" );
 	// Se carga una nueva instancia de cotización
@@ -115,7 +115,7 @@ function saveQuote($quote, $arrProduct) {
 		return $objResponse;
 	}
 	$objResponse->addScript ( "openPdfQuote($quoteId);" );
-	//$objResponse->addScript ( "window.parent.close();" );
+	$objResponse->addScript ( "window.parent.opener.dataTableQuote(" . $quote ['oppor_id'] . ");" );
 	return $objResponse;
 }
 function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
@@ -167,7 +167,6 @@ function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $price
 }
 function addNewProduct($idTxtDescrip) {
 	$objResponse = new xajaxResponse ();
-	// $objResponse->addAlert("newRow");
 	$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
 	$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
 	$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" class="form-control"></td>';

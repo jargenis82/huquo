@@ -29,7 +29,7 @@ if (comprobarVar ( $opportunityId )) {
 		$unDato [0] [2] = "Annie Wang";
 		$unDato [0] [3] = $quoteTotal;
 		$unDato [0] [4] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick=''></span>";
-		$unDato [0] [5] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='openPdfQuote($quoteId)'></span>";
+		$unDato [0] [5] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='openPdfQuote($quoteId,true)'></span>";
 		$arrJson ['aaData'] [] = $unDato [0];
 	}
 }

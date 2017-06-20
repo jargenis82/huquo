@@ -28,16 +28,12 @@ function dataTableQuote(opportunityId) {
 		  },
 		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php?opportunityId="+opportunityId
 	});
-	$( '#prueba').html( "<span	class='btn btn-primary btn-sm' glyphicon glyphicon-plus biselado'		id='addRow' data-accion='add' onclick='newQuote()'>NEW QUOTE</span>" );
-
 }
 
-function quote() {
-	window.open("../archivos/quote.pdf");	
-}
 function newQuote(opportunityId){
 	window.open("../index.php?page=quote&opportunityId="+opportunityId);
 }
+
 function addNewProduct() {
 	idTxtDescrip++;
 	arrProductSale[idTxtDescrip] = new Array();
@@ -46,6 +42,10 @@ function addNewProduct() {
 	arrProductSale[idTxtDescrip]['quote_line_price'] = "";
 	xajax_addNewProduct(idTxtDescrip);
 }
-function openPdfQuote(quoteId){
-	window.parent.location = "../controladores/pdf/quote_pdf.php?quoteId="+quoteId;
+function openPdfQuote(quoteId,newTag){
+	if (newTag) {
+		window.open("../controladores/pdf/quote_pdf.php?quoteId="+quoteId);
+	} else {
+		window.parent.location = "../controladores/pdf/quote_pdf.php?quoteId="+quoteId;
+	}	
 }
