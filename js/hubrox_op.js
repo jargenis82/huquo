@@ -47,5 +47,5 @@ function addNewProduct() {
 	xajax_addNewProduct(idTxtDescrip);
 }
 function openPdfQuote(quoteId){
-	window.open("../controladores/pdf/quote_pdf.php?quoteId="+quoteId);
+	window.parent.location = "../controladores/pdf/quote_pdf.php?quoteId="+quoteId;
 }

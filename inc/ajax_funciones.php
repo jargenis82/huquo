@@ -115,7 +115,7 @@ function saveQuote($quote, $arrProduct) {
 		return $objResponse;
 	}
 	$objResponse->addScript ( "openPdfQuote($quoteId);" );
-	$objResponse->addScript ( "window.parent.close();" );
+	//$objResponse->addScript ( "window.parent.close();" );
 	return $objResponse;
 }
 function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
