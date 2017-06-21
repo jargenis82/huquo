@@ -30,6 +30,7 @@ function dataTableQuote(opportunityId) {
 		"bInfo" : false,
 		"paging" : true,
 		destroy : true,
+		"order": [[ 1, "desc" ]],
 		"initComplete": function(settings, json) {
 		    window.parent.ajustarIframe();
 		  },
