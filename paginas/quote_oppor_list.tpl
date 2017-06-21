@@ -75,8 +75,9 @@ table, td, th {
 	});
 </script>
 </head>
-<body onload="document.getElementById('tags').focus();dataTableQuote(); dataTable();">
-		<div class="container">
+<body
+	onload="document.getElementById('tags').focus();dataTableQuote(); dataTable();">
+	<div class="container">
 		<div class="row">
 			<div class="col-sm-3">
 				<div class="panel panel-primary">
@@ -133,7 +134,7 @@ table, td, th {
 							<div class="panel-body">
 								<table id="tQuote" class="display" width="100%" cellspacing="0">
 									<thead>
-										<tr>
+										<tr align="center">
 											<th>Quote Number</th>
 											<th>Quote Date and Time</th>
 											<th>Name</th>
@@ -142,8 +143,7 @@ table, td, th {
 											<th>PDF</th>
 										</tr>
 									</thead>
-									<tbody>
-									</tbody>
+									<tbody></tbody>
 								</table>
 								<br>
 							</div>
@@ -151,7 +151,7 @@ table, td, th {
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 </body>
