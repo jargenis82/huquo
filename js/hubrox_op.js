@@ -1,9 +1,10 @@
 function dataTable(customerName) {
-
+	var valueSearch=true;
+	if(customerName==null)valueSearch=false;
 	$('#tOpportunity')
 			.DataTable(
 					{
-						searching : true,
+						searching : valueSearch,
 						"scrollY" : "auto",
 						"bInfo" : false,
 						"paging" : true,
@@ -17,8 +18,10 @@ function dataTable(customerName) {
 }
 
 function dataTableQuote(opportunityId) {
+	var valueSearch=true;
+	if(opportunityId==null)valueSearch=false;
 	$('#tQuote').DataTable({
-		searching : true,
+		searching : valueSearch,
 		"scrollY" : "auto",
 		"bInfo" : false,
 		"paging" : true,

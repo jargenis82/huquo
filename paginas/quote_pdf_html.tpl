@@ -34,16 +34,16 @@ tr:hover {
 
 <table align=left border="0" width="100%">
 	<tr>
-		<th align="left" width="400px"><label>DESCRIPTION</label></th>
-		<th align="left" width="50px"><label>UNIT PRICE</label></th>
-		<th align="left" width="95px"><label>QTY</label></th>
-		<th align="left" width="100px"><label>AMOUNT (US$)</label></th>
+		<th align="center" width="380px"><label>DESCRIPTION</label></th>
+		<th align="right" width="70px"><label>UNIT PRICE</label></th>
+		<th align="center" width="95px"><label>QTY</label></th>
+		<th align="center" width="100px"><label>AMOUNT (US$)</label></th>
 	</tr>
 	<tr>
-		<td>[products.desc;block=tr;noerr]</td>
-		<td>[products.price;noerr]</td>
-		<td>[products.qty;noerr]</td>
-		<td>[products.amount;noerr]</td>
+		<td align="left">[products.desc;block=tr;noerr]</td>
+		<td align="right">[products.price;noerr]</td>
+		<td align="center">[products.qty;noerr]</td>
+		<td align="right">[products.amount;noerr]</td>
 	</tr>
 	<tr>
 		<td colspan="2">
@@ -74,23 +74,23 @@ tr:hover {
 			<table border="0">
 				<tr>
 					<td width="50px"><label> Discount</label></td>
-					<td width="100px">[var.discountVal;noerr]</td>
+					<td align="right" width="100px">[var.discountVal;noerr]</td>
 				</tr>
 				<tr>
 					<td><label> SubTotal(US$)</label></td>
-					<td>[var.sunTotal;noerr]</td>
+					<td align="right">[var.sunTotal;noerr]</td>
 				</tr>
 				<tr>
 					<td><label>HST Rate</label></td>
-					<td>[var.hstRate;noerr]</td>
+					<td align="right">[var.hstRate;noerr]</td>
 				</tr>
 				<tr>
 					<td><label>HST (US$)</label></td>
-					<td>[var.hstUst;noerr]</td>
+					<td align="right">[var.hstUst;noerr]</td>
 				</tr>
 				<tr>
 					<td><label>TOTAL(US$)</label></td>
-					<td>[var.total;noerr]</td>
+					<td align="right">[var.total;noerr]</td>
 				</tr>
 			</table>
 		</td>

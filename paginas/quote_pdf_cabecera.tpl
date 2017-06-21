@@ -9,21 +9,21 @@
 		<td><h5>370 Magnetic Dr. North York, ON M3J 2C4, Toronto,
 				Canada</h5></td>
 		<td><label>DATE</label></td>
-		<td align="center"><h4>[var.date;noerr]</h4></td>
+		<td align="right"><h4>[var.date;noerr]</h4></td>
 	</tr>
 	<tr>
 		<td><h5>Website: www.hubrox.com</h5></td>
 		<td><label> QUOTE # </label></td>
-		<td align="center"><h4>[var.quoteNumber;noerr]</h4></td>
+		<td align="right"><h4>[var.quoteNumber;noerr]</h4></td>
 	</tr>
 	<tr>
 		<td><h5>Phone: + 1-647-499-5741</h5></td>
 		<td><label> CUSTOMER ID </label></td>
-		<td align="center"><h4>[var.customerId;noerr]</h4></td>
+		<td align="right"><h4>[var.customerId;noerr]</h4></td>
 	</tr>
 	<tr>
 		<td><h5>Prepared by: [var.prepared;noerr]</h5></td>
 		<td><label> VALID UNTIL </label></td>
-		<td align="center"><h4>[var.validUntil;noerr]</h4></td>
+		<td align="right"><h4>[var.validUntil;noerr]</h4></td>
 	</tr>
 </table>
