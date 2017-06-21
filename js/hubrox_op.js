@@ -15,6 +15,7 @@ function dataTable(customerName) {
 						"sAjaxSource" : "../controladores/json_consultas/json_consulta.php?organizationId="
 								+ organizationId
 					});
+			dataTableQuote(null);
 }
 
 function dataTableQuote(opportunityId) {
