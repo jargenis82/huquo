@@ -43,7 +43,7 @@ tr:hover {
 		<td align="left">[products.desc;block=tr;noerr]</td>
 		<td align="right">[products.price;noerr]</td>
 		<td align="center">[products.qty;noerr]</td>
-		<td align="right">[products.amount;noerr]</td>
+		<td align="right">[products.amount;noerr]&nbsp;</td>
 	</tr>
 	<tr>
 		<td colspan="2">
