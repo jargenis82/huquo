@@ -73,6 +73,25 @@ table, td, th {
 			xajax_getCustomer(ui.item.value,1);
 		});
 	});
+
+		$('add').ready(function() {
+		   
+		    $('#tOpportunity tbody').on( 'click', 'tr', function () {
+		    	 	
+		        $('#tOpportunity tr').removeClass("selected");
+		           if ( $(this).hasClass('selected') ) {
+		            }
+		           else {
+		           	 $(this).addClass('selected');
+		        		}
+		         
+		                  
+		    } );
+		 
+		    
+		} );
+	
+
 </script>
 </head>
 <body
