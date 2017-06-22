@@ -73,6 +73,26 @@ table, td, th {
 			xajax_getCustomer(ui.item.value,1);
 		});
 	});
+
+
+$(document).ready(function() {
+
+	    
+    $('#tOpportunity tbody').on( 'click', 'tr', function () {
+    	$('#tOpportunity tr').removeClass("selected");
+        if ( $(this).hasClass('selected') ==false) {
+            $(this).addClass('selected');
+          
+        }
+
+        
+    } );
+ 
+   
+} );
+
+
+
 </script>
 </head>
 <body onload="document.getElementById('tags').focus();dataTableQuote(); dataTable();">
