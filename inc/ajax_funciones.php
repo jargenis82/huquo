@@ -16,7 +16,24 @@ $xajax->registerFunction ( "getCustomer" );
 $xajax->registerFunction ( "getDescripProduct" );
 $xajax->registerFunction ( "addNewProduct" );
 $xajax->registerFunction ( "calculateAmount" );
+$xajax->registerFunction ( "calculateDiscount" );
 $xajax->registerFunction ( "saveQuote" );
+$xajax->registerFunction ( "getContactInfos" );
+function getContactInfos($contactInsId) {
+	$objResponse = new xajaxResponse ();
+	$i = new Insightly ( APIKEY );
+	$myContact = $i->getContact ( $contactInsId );
+	$arrContactInfos = $myContact->CONTACTINFOS;
+	$htmlSelect = '';
+	foreach ( $arrContactInfos as $i => $myContactinfo ) {
+		if ($myContactinfo->TYPE == "EMAIL") {
+			$htmlSelect .= '<option value="' . $i . '">' . $myContactinfo->DETAIL . '</option>';
+		}
+	}
+	$htmlSelect = $htmlSelect == '' ? '<option value="0">Any...</option>' : $htmlSelect;
+	$objResponse->addAssign ( "sel_email", "innerHTML", $htmlSelect );
+	return $objResponse;
+}
 function saveQuote($quote, $arrProduct) {
 	$objResponse = new xajaxResponse ();
 	// Se crea una instancia de conexión con la BD para todas las clases y transacciones
@@ -121,7 +138,7 @@ function saveQuote($quote, $arrProduct) {
 	
 	return $objResponse;
 }
-function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
+function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate, $productSaleId) {
 	$objResponse = new xajaxResponse ();
 	$unit = convertToDoubleval ( $unit );
 	$qty = doubleval ( $qty );
@@ -129,6 +146,9 @@ function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
 	$subtotal = convertToDoubleval ( $subtotal );
 	$amount = $unit * $qty;
 	$subtotal = $subtotal - $amountAct + $amount;
+	if (comprobarVar($productSaleId)) {
+		$objResponse->addScript("subTotalProducts = subTotalProducts - $amountAct + $amount;");
+	}	
 	$hstRate = doubleval ( "0.$hstRate" );
 	$hst = $subtotal * $hstRate;
 	$total = $subtotal + $hst;
@@ -146,6 +166,15 @@ function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate) {
 	$objResponse->addAssign ( "span_total", "innerHTML", $total );
 	return $objResponse;
 }
+function calculateDiscount($id,$val,$subTotalProducts) {
+	$objResponse = new xajaxResponse ();
+	
+	
+	
+	return $objResponse;
+}
+
+
 function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $priceTypeId, $quoteLineDesc) {
 	$objResponse = new xajaxResponse ();
 	$idTxtDescrip = str_replace ( "txt_decrip", "", $txtDecrip );

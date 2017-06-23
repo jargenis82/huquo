@@ -28,7 +28,9 @@ $xajax->registerFunction ( "getCustomer" );
 $xajax->registerFunction ( "getDescripProduct" );
 $xajax->registerFunction ( "addNewProduct" );
 $xajax->registerFunction ( "calculateAmount" );
+$xajax->registerFunction ( "calculateDiscount" );
 $xajax->registerFunction ( "saveQuote" );
+$xajax->registerFunction ( "getContactInfos" );
 $js = $xajax->getJavascript ( '../librerias/' );
 
 // Fecha Actual
@@ -53,14 +55,19 @@ $myProduct = new Product ($miConexionBd);
 $listaProducto = $myProduct->getListaProducto ();
 $jsData = "";
 $jsDataId = "";
-foreach ( $listaProducto as $i=>$unProducto ) {
+foreach ( $listaProducto as $ii=>$unProducto ) {
 	$unProducto = str_replace ( '"', '\"', $unProducto );
 	$jsData .= '"' . $unProducto . '",';
-	$jsDataId .= '"' . $i . '",';
+	$jsDataId .= '"' . $ii . '",';
 	$contador ++;
 }
 $jsData = $jsData != "" ? substr ( $jsData, 0, - 1 ) : "";
 $jsDataId = $jsDataId != "" ? substr ( $jsDataId, 0, - 1 ) : "";
+
+
+// Se construye el arreglo en Javascript para el autocompletar de contactos
+$jsDataContact = "";
+$jsDataContactId = "";
 
 // Si quote_id tiene valor se está consultando una Cotización. Si es NULL se está cargando una nueva cotización
 if (comprobarVar ( $quoteId )) {
@@ -90,7 +97,7 @@ if (comprobarVar ( $quoteId )) {
 			$city = $quote[7];
 		} else {
 			// Se consulta en el API de Insightly los datos de la oportunidad
-			$i = new Insightly ( APIKEY );
+			$i = new Insightly ( APIKEY ); // Se instanció para la carga de los contactos
 			$myOpportunity = $i->getOpportunity ( $opportunityId );
 			$country = "";
 			$city = "";
@@ -135,6 +142,22 @@ if (comprobarVar ( $quoteId )) {
 							break 1;
 						}
 					}
+					$arrOrganizationLinks = $myOrganization->LINKS;
+					$arrDataContact = array();
+					foreach ($arrOrganizationLinks as $aOrganizationLink) {
+						$contactId = $aOrganizationLink->CONTACT_ID;
+						if (comprobarVar($contactId)) {
+							$myContact = $i->getContact($contactId);
+							$arrDataContact[$contactId] = $myContact->FIRST_NAME." ".$myContact->LAST_NAME;
+						}
+					}
+					asort($arrDataContact);
+					foreach ($arrDataContact as $jj=>$aDataContact) {
+						$jsDataContactId .= '"' . $jj . '",';
+						$jsDataContact .= '"'.$aDataContact.'",';
+					}
+					$jsDataContact = $jsData != "" ? substr ( $jsDataContact, 0, - 1 ) : "";
+					$jsDataContactId = $jsDataContactId != "" ? substr ( $jsDataContactId, 0, - 1 ) : "";
 					break 1;
 				}
 			}

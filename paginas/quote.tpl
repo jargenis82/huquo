@@ -53,6 +53,8 @@ table, td, th {
 } );
 
  var idTxtDescrip = 0;
+ var availableContact = [ [var.jsDataContact;htmlconv=no;noerr]  ];
+ var availableContactId = [ [var.jsDataContactId;htmlconv=no;noerr]  ];
  var availableDescrip = [ [var.jsData;htmlconv=no;noerr]  ];
  var availableId = [ [var.jsDataId;htmlconv=no;noerr]  ];
  var opportunityId = "[var.opportunityId;noerr]";
@@ -64,6 +66,7 @@ table, td, th {
  arrProductSale[0]['product_sale_id'] = "";
  arrProductSale[0]['quote_line_desc'] = "";
  arrProductSale[0]['quote_line_price'] = "";
+ var subTotalProducts = 0.00;
  
  function saveQuote() {
 	 var quote = new Array();
@@ -94,20 +97,26 @@ table, td, th {
 	 }
 	 xajax_saveQuote(quote,arrProduct);
  }
- 
- function calculateDiscount() {
-	var subtotal = $('#span_subtotal').text();
-	var discount = $('#txt_discount_val').val();
-
- }
- 
+  
  function calculateAmount(id) {
 	var unit = $('#txt_unit'+id).val();
 	var qty = $('#txt_qty'+id).val();
 	var amount = $('#span_amount'+id).text();
 	var subtotal = $('#span_subtotal').text();
 	var hstRate = $('#span_hst_rate').text();
-	xajax_calculateAmount(id,unit,qty,amount,subtotal,hstRate);
+	var productSaleId = "";
+	if (typeof arrProductSale[id] != "undefined"){
+		if (typeof arrProductSale[id]['product_sale_id'] != "undefined"){
+			productSaleId = arrProductSale[id]['product_sale_id'];
+		}
+	}
+	xajax_calculateAmount(id,unit,qty,amount,subtotal,hstRate,productSaleId);
+ }
+ 
+ function calculateDiscount(objeto) {
+	var id = this.id;
+	var val = this.value;
+	xajax_calculateDiscount(id,val,subTotalProducts);	
  }
  
  function introQty(e) {
@@ -129,6 +138,20 @@ table, td, th {
         });
   
     });
+ $( function() {
+     $( "#txt_contact" ).autocomplete({
+        source: availableContact
+      });
+     
+     $(document).ready(function () {
+ 	    $('#txt_contact').on('autocompleteselect', function (e, ui) {	    	
+ 	    		var i = availableContact.indexOf(ui.item.value);
+ 	    		xajax_getContactInfos(availableContactId[i]);
+ 	    		document.getElementById('sel_email').focus();
+ 	    });
+ 		});     
+     } );
+ 
   $( function() {
      $( "#txt_decrip0" ).autocomplete({
         source: availableDescrip
@@ -158,7 +181,7 @@ table, td, th {
   </script>
 
 </head>
-<body onload="document.getElementById('txt_decrip0').focus();">
+<body onload="document.getElementById('txt_contact').focus();">
 	<div class="container">
 		<div class="col-sm-8">
 			<div class="panel panel-primary">
@@ -166,19 +189,30 @@ table, td, th {
 				<div class="panel-body">
 					<table class="table-responsive" border="0">
 						<tr>
+							<td width="100px"><label>Contact</label></td>
+							<td width="200px"><input type="text" id="txt_contact"
+								tabindex="1"></input></td>
+							<td><label>Email</label></td>
+							<td><select id="sel_email" tabindex="2"></select></td>
+						</tr>
+						<tr>
 							<td width="100px"><label>Name</label></td>
 							<td width="200px"><span id="span_name">[var.organizationName;noerr]</span></td>
 							<td rowspan="2"><label>Ship to</label></td>
-							<td rowspan="2"><textarea rows="2" cols="40" tabindex="1"
-									id="txt_ship_to">[var.address;noerr]</textarea></td>
+							<td>Shipping Address&nbsp;<input type="radio"
+								name="rad_ship" id="rad_ship_1" tabindex="3">&nbsp;&nbsp;Billing
+								Address<input type="radio" name="rad_ship" checked="checked"
+								tabindex="3"></td>
 						</tr>
 						<tr>
 							<td><label>Address</label></td>
 							<td><span id="span_address">[var.address;noerr]</span></td>
+							<td><textarea rows="2" cols="40" tabindex="4"
+									id="txt_ship_to">[var.address;noerr]</textarea></td>
 						</tr>
 						<tr>
 							<td><label>Web</label></td>
-							<td><a href="[var.web;noerr]" id="href_web">[var.web;noerr]</a></td>
+							<td><a href="[var.web;noerr]" id="href_web" target="_blank">[var.web;noerr]</a></td>
 							<td><label>Region</label></td>
 							<td><span id="span_region">[var.region;noerr]</span></td>
 						</tr>
@@ -213,7 +247,7 @@ table, td, th {
 						<tr>
 							<td><label>VALID UNTIL</label></td>
 							<td><input id="txt_valid_until"
-								value="[var.quoteValidUntil;noerr]" tabindex="2" size="10"></td>
+								value="[var.quoteValidUntil;noerr]" tabindex="5" size="10"></td>
 						</tr>
 						<tr>
 							<td><label>Prepared by</label></td>
@@ -244,12 +278,12 @@ table, td, th {
 						<tbody>
 							<tr>
 								<td><input id="txt_decrip0" class="form-control"
-									tabindex="3"></td>
+									tabindex="6"></td>
 								<td align="center"><input id="txt_unit0" size="7"
-									tabindex="4" onchange="calculateAmount(0);" dir="rtl"
+									tabindex="7" onchange="calculateAmount(0);" dir="rtl"
 									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
 								<td align="center"><input id="txt_qty0" size="2"
-									tabindex="5" onKeyDown="javascript:return introQty(event);"
+									tabindex="8" onKeyDown="javascript:return introQty(event);"
 									onchange="calculateAmount(0);" dir="rtl"
 									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
 								<td align="right"><span id="span_amount0"></span></td>
@@ -272,10 +306,10 @@ table, td, th {
 
 										<td>Discount</td>
 										<td><input type="text" id="txt_discount_val" size="7"
-											value="0" onchange="calculateAmount(0);" dir="rtl"
+											value="0" onchange="calculateDiscount(this);" dir="rtl"
 											onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
 											$ <input type="text" id="txt_discount_per" size="2" value="0"
-											dir="rtl" onfocus="this.dir = 'ltr';"
+											dir="rtl" onchange="calculateDiscount(this);" onfocus="this.dir = 'ltr';"
 											onblur="this.dir = 'rtl';"></input> %</td>
 
 									</tr>
