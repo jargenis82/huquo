@@ -232,7 +232,7 @@ function formatoFecha($fecha,$mesDia) {
 // La funcion no valida el formato correcto de la fecha
 function sumarFecha($fecha,$dias) {
 	if (isset($fecha)) {
-		$arregloFecha = split('[/]',$fecha);		
+		$arregloFecha = explode("/",$fecha);		
 		// Se toma la marca de tiempo UNIX de la fecha
 		$marcaTiempo = mktime(0,0,0,$arregloFecha[0],$arregloFecha[1],$arregloFecha[2]);
 		// Se suman la cantidad de segundos correspondientes a los dias indicados
@@ -244,9 +244,9 @@ function sumarFecha($fecha,$dias) {
 function formatoFechaBd($fecha,$otroFormato) {
 	if (isset($fecha)) {
 		// Se chequea que la fecha este separada por "/" o "-" y que sean 3 valores
-		$arregloFecha = split('[/]',$fecha);
+		$arregloFecha = explode("/",$fecha);
 		if ((!isset($arregloFecha)) or count($arregloFecha) != 3) {
-			$arregloFecha = split('[-]',$fecha);
+			$arregloFecha = explode("-",$fecha);
 			if ((!isset($arregloFecha)) or count($arregloFecha) != 3) {
 				return null;
 			}
@@ -283,9 +283,9 @@ function formatoFechaBd($fecha,$otroFormato) {
 function formatoFechaBdIfx($fecha,$otroFormato) {
 	if (isset($fecha)) {
 		// Se chequea que la fecha este separada por "/" o "-" y que sean 3 valores
-		$arregloFecha = split('[/]',$fecha);
+		$arregloFecha = explode("/",$fecha);
 		if ((!isset($arregloFecha)) or count($arregloFecha) != 3) {
-			$arregloFecha = split('[-]',$fecha);
+			$arregloFecha = explode("-",$fecha);
 			if ((!isset($arregloFecha)) or count($arregloFecha) != 3) {
 				return null;
 			}
@@ -324,7 +324,7 @@ function verificarFormatoFecha($fecha,$ddmmyyyy) {
 	if (isset($fecha) and strcmp($fecha,"") != 0) {
 		if (strlen($fecha) != 10 and ((!isset($ddmmyyyy)) or $ddmmyyyy === false))
 		return false;
-		$arregloFecha = split('[/]',$fecha);
+		$arregloFecha = explode("/",$fecha);
 		if (isset($arregloFecha) and count($arregloFecha) == 3) {
 			$mesesDias[1] = 31;
 			$mesesDias[3] = 31;
