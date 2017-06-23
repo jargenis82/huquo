@@ -15,15 +15,22 @@ $xajax = new xajax("inc/ajax_funciones.php");
 $js = $xajax->getJavascript('librerias/');
 
 // Valida la pagina del iframe
-$page = comprobarVar($_GET['page']) ? trim($_GET['page']) : "quote_oppor_list";
+$page = comprobarVar($_GET['page'])?trim($_GET['page']):"quote_log_in";
+if(comprobarVar($_GET['page'])){
+
+   $menuHid="";
+}
+  else{
+    $menuHid="disabled";
+  }
+
 $page .= ".php?";
 // Valida gets extra
-foreach ($_GET as $get=>$valor) {
-	if ($i != "page") {
-		$page .= "$get=$valor&";
-	}
+foreach ($_GET as $get => $valor) {
+  if ($i != "page") {
+    $page .= "$get=$valor&";
+  }
 }
-
 
 // CARGA DE LA PLANTILLA PRINCIPAL
 $TBS = new clsTinyButStrong();

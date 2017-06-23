@@ -38,6 +38,13 @@ table, td, th {
 	font-family: Arial, Helvetica, sans-serif;
 	border-color: blue;
 }
+a.disabled {
+   pointer-events: none;
+  	visibility: hidden;
+ 	 
+}
+
+
 </style>
 
 <script type="text/javascript">
@@ -63,12 +70,12 @@ table, td, th {
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Quotes</a></li>
+					<li class="active"><a href="#" class="[var.menuHid;noerr]">Quotes</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span class="glyphicon glyphicon-user"></span>
+					<li  ><a href="#" class="[var.menuHid;noerr]"><span class="glyphicon glyphicon-user"></span>
 							Sign Up</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-log-in"></span>
+					<li><a href="#" class="[var.menuHid;noerr]"><span class="glyphicon glyphicon-log-in" ></span>
 							Login</a></li>
 				</ul>
 			</div>
@@ -77,7 +84,7 @@ table, td, th {
 	<div class="row">
 		<iframe frameborder="0"
 			style="position: absolute; height: 100%; width: 100%"
-			src="controladores/[var.page;noerr]" id="ifrm"></iframe>
+			src="controladores/[var.page;noerr]" id="ifrm"></iframe> 
 	</div>
 </body>
 </html>
