@@ -12,6 +12,9 @@ function dataTable(customerName) {
 						"initComplete": function(settings, json) {
 						    window.parent.ajustarIframe();
 						  },
+						  "columnDefs": [
+						                 { className: "dt-center", "targets": [ 0,1,2,3,4,5 ] }
+						               ],
 						"sAjaxSource" : "../controladores/json_consultas/json_consulta.php?organizationId="
 								+ organizationId
 					});
@@ -27,9 +30,21 @@ function dataTableQuote(opportunityId) {
 		"bInfo" : false,
 		"paging" : true,
 		destroy : true,
+		"order": [[ 1, "desc" ]],
 		"initComplete": function(settings, json) {
 		    window.parent.ajustarIframe();
 		  },
+		  "columns": [
+		              { className: "dt-center" },
+		              { className: "dt-center" },
+		              { className: "dt-center" },
+		              { className: "dt-head-center dt-body-right" },
+		              { className: "dt-center" },
+		              { className: "dt-center" }
+		            ],
+		  
+		  
+		  
 		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php?opportunityId="+opportunityId
 	});
 }
