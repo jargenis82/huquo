@@ -67,13 +67,14 @@ table, td, th {
  arrProductSale[0]['quote_line_desc'] = "";
  arrProductSale[0]['quote_line_price'] = "";
  var subTotalProducts = 0.00;
+ var discount = 0.00;
  
  function saveQuote() {
 	 var quote = new Array();
 	 quote['quote_date'] = $('#span_date').text();
 	 quote['quote_valid_until'] = $('#txt_valid_until').val();
 	 quote['quote_discount'] = $('#txt_discount_val').val();
-	 quote['quote_hst_rate'] = $('#span_hst_rate').text();
+	 quote['quote_hst_rate'] = $('#txt_hst_rate').val();
 	 quote['quote_ship_to'] = $('#txt_ship_to').val();
 	 quote['quote_number'] = $('#span_number').text();
 	 quote['oppor_id'] = opportunityId;
@@ -103,7 +104,7 @@ table, td, th {
 	var qty = $('#txt_qty'+id).val();
 	var amount = $('#span_amount'+id).text();
 	var subtotal = $('#span_subtotal').text();
-	var hstRate = $('#span_hst_rate').text();
+	var hstRate = $('#txt_hst_rate').val();
 	var productSaleId = "";
 	if (typeof arrProductSale[id] != "undefined"){
 		if (typeof arrProductSale[id]['product_sale_id'] != "undefined"){
@@ -114,9 +115,11 @@ table, td, th {
  }
  
  function calculateDiscount(objeto) {
-	var id = this.id;
-	var val = this.value;
-	xajax_calculateDiscount(id,val,subTotalProducts);	
+	var id = objeto.id;
+	var val = objeto.value;
+	var subtotal = $('#span_subtotal').text();
+	var hstRate = $('#txt_hst_rate').val();
+	xajax_calculateDiscount(id,val,subTotalProducts,discount,subtotal,hstRate);	
  }
  
  function introQty(e) {
@@ -170,7 +173,7 @@ table, td, th {
     	if (idTxtDescrip > 0) {
 	    	var amount = $('#span_amount'+idTxtDescrip).text();
 	    	var subtotal = $('#span_subtotal').text();
-	    	var hstRate = $('#span_hst_rate').text();
+	    	var hstRate = $('#txt_hst_rate').val();
 	    	xajax_calculateAmount(idTxtDescrip,0,0,amount,subtotal,hstRate);
 	    	$('#descripId tr:last').remove();
 	    	idTxtDescrip--;
@@ -305,12 +308,13 @@ table, td, th {
 									<tr>
 
 										<td>Discount</td>
-										<td><input type="text" id="txt_discount_val" size="7"
+										<td><input type="text" id="txt_discount_val" size="8"
 											value="0" onchange="calculateDiscount(this);" dir="rtl"
 											onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
-											$ <input type="text" id="txt_discount_per" size="2" value="0"
-											dir="rtl" onchange="calculateDiscount(this);" onfocus="this.dir = 'ltr';"
-											onblur="this.dir = 'rtl';"></input> %</td>
+											$ <input type="text" id="txt_discount_per" size="4" value="0"
+											dir="rtl" onchange="calculateDiscount(this);"
+											onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
+											%</td>
 
 									</tr>
 									<tr>
@@ -322,7 +326,10 @@ table, td, th {
 									<tr>
 
 										<td>HST Rate</td>
-										<td><span id="span_hst_rate">0</span>%</td>
+										<td><input type="text" id="txt_hst_rate" size="4"
+											value="0" dir="rtl" onchange="calculateAmount(0)" onfocus="this.dir = 'ltr';"
+											onblur="this.dir = 'rtl';"></input>
+											%</td>
 
 									</tr>
 									<tr>

@@ -146,35 +146,49 @@ function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate, $pro
 	$subtotal = convertToDoubleval ( $subtotal );
 	$amount = $unit * $qty;
 	$subtotal = $subtotal - $amountAct + $amount;
-	if (comprobarVar($productSaleId)) {
-		$objResponse->addScript("subTotalProducts = subTotalProducts - $amountAct + $amount;");
-	}	
-	$hstRate = doubleval ( "0.$hstRate" );
-	$hst = $subtotal * $hstRate;
-	$total = $subtotal + $hst;
+	if (comprobarVar ( $productSaleId )) {
+		$objResponse->addScript ( "subTotalProducts = subTotalProducts - $amountAct + $amount;" );
+	}
 	$unit = number_format ( $unit, 2, ",", "." );
 	$amount = number_format ( $amount, 2, ",", "." );
 	$subtotal = number_format ( $subtotal, 2, ",", "." );
-	$hst = number_format ( $hst, 2, ",", "." );
-	$total = number_format ( $total, 2, ",", "." );
 	if (comprobarVar ( $id )) {
 		$objResponse->addAssign ( "txt_unit$id", "value", $unit );
 		$objResponse->addAssign ( "span_amount$id", "innerHTML", $amount );
 	}
+	$objResponse->addScript("xajax_calculateDiscount('txt_discount_val',discount,subTotalProducts,discount,'$subtotal','$hstRate');");
+	return $objResponse;
+}
+function calculateDiscount($id, $val, $subTotalProducts,$discountAct,$subtotal,$hstRate) {
+	$objResponse = new xajaxResponse ();
+	$subTotalProducts = doubleval ( $subTotalProducts );
+	if ($id == "txt_discount_val") {
+		$val = convertToDoubleval ( $val );
+		$per = ($val / $subTotalProducts) * 100;
+	} else if ($id == "txt_discount_per") {
+		$per = convertToDoubleval ( $val );
+		$val = ($per / 100) * $subTotalProducts;
+	}	
+	$discountAct = doubleval($discountAct);
+	$subtotal = convertToDoubleval ( $subtotal );	
+	$subtotal = $subtotal + $discountAct - $val;
+	$hstRate = convertToDoubleval ( $hstRate );
+	$hstRate = $hstRate / 100;
+	$hst = $subtotal * $hstRate;
+	$total = $subtotal + $hst;
+	$objResponse->addScript ( "discount = $val;" );
+	$val = number_format ( $val, 2, ",", "." );
+	$per = number_format ( $per, 2, ",", "." );
+	$subtotal = number_format ( $subtotal, 2, ",", "." );
+	$hst = number_format ( $hst, 2, ",", "." );
+	$total = number_format ( $total, 2, ",", "." );	
+	$objResponse->addAssign ( "txt_discount_val", "value", $val );
+	$objResponse->addAssign ( "txt_discount_per", "value", $per );
 	$objResponse->addAssign ( "span_subtotal", "innerHTML", $subtotal );
 	$objResponse->addAssign ( "span_hst", "innerHTML", $hst );
 	$objResponse->addAssign ( "span_total", "innerHTML", $total );
 	return $objResponse;
 }
-function calculateDiscount($id,$val,$subTotalProducts) {
-	$objResponse = new xajaxResponse ();
-	
-	
-	
-	return $objResponse;
-}
-
-
 function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $priceTypeId, $quoteLineDesc) {
 	$objResponse = new xajaxResponse ();
 	$idTxtDescrip = str_replace ( "txt_decrip", "", $txtDecrip );
@@ -204,7 +218,7 @@ function addNewProduct($idTxtDescrip) {
 	$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" class="form-control"></td>';
 	$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" size="7"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
 	$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="2" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
-	$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '" size="4"></span></td>';
+	$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '"></span></td>';
 	$jq = "
      		var tr='$textoHtml';
     		$('#descripId').append(tr);

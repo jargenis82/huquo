@@ -34,7 +34,7 @@ $customerInfor .= $myOrganisation->getAtributo ( "org_city" ) . ", " . $myOrgani
 $shipTo = $myQuote->getAtributo ( "quote_ship_to" );
 $discountVal = doubleval ( $myQuote->getAtributo ( "quote_discount" ) );
 $hstRate = $myQuote->getAtributo ( "quote_hst_rate" );
-$hstUst = $hstRate = doubleval ( "0.$hstRate" );
+$hstUst = convertToDoubleval($hstRate) / 100;
 $hstRate .= "%";
 $sunTotal = doubleval ( 0 );
 $total = doubleval ( 0 );
