@@ -41,6 +41,12 @@ class Quote extends ClaseBd {
 				$quoteLineQty = doubleval ( $aQuoteLine->getAtributo ( 'quote_line_qty' ) );
 				$total += $quoteLinePrice * $quoteLineQty;
 			}
+			
+			$myQuote = new Quote ( $miConexionBd, $quoteId );
+			$quoteDiscount = doubleval($myQuote->getAtributo("quote_discount"));
+			$quoteHstRate = doubleval($myQuote->getAtributo("quote_hst_rate"));
+			$total -= $quoteDiscount;
+			$total = ($total * ($quoteHstRate/100)) + $total;
 			$total = number_format ( $total, 2, ",", "." );
 			return $total;
 		} else {
