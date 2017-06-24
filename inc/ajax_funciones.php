@@ -155,10 +155,8 @@ function saveQuote($quote, $arrProduct) {
 		return $objResponse;
 	}
 	$objResponse->addScript ( "openPdfQuote($quoteId);" );
-	$objResponse->addScript ( "window.parent.opener.dataTable(" . $quote ['org_name'] . ");" );
-	
+	$objResponse->addScript ( "window.parent.opener.dataTable('" . $quote ['org_name'] . "');" );
 	$objResponse->addScript ( "window.parent.opener.dataTableQuote(" . $quote ['oppor_id'] . ");" );
-	
 	return $objResponse;
 }
 function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate, $productSaleId) {
