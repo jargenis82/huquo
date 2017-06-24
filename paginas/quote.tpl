@@ -52,6 +52,7 @@ table, td, th {
     } );
 } );
 
+ var contactInsId = "";
  var idTxtDescrip = 0;
  var availableContact = [ [var.jsDataContact;htmlconv=no;noerr]  ];
  var availableContactId = [ [var.jsDataContactId;htmlconv=no;noerr]  ];
@@ -71,6 +72,9 @@ table, td, th {
  
  function saveQuote() {
 	 var quote = new Array();
+	 quote['contact_name'] = $('#txt_contact').val();
+	 quote['contact_email'] = $('#sel_email').val();
+	 quote['contact_ins_id'] = contactInsId;	 
 	 quote['quote_date'] = $('#span_date').text();
 	 quote['quote_valid_until'] = $('#txt_valid_until').val();
 	 quote['quote_discount'] = $('#txt_discount_val').val();
@@ -149,7 +153,8 @@ table, td, th {
      $(document).ready(function () {
  	    $('#txt_contact').on('autocompleteselect', function (e, ui) {	    	
  	    		var i = availableContact.indexOf(ui.item.value);
- 	    		xajax_getContactInfos(availableContactId[i]);
+ 	    		contactInsId = availableContactId[i];
+ 	    		xajax_getContactInfos(contactInsId);
  	    		document.getElementById('sel_email').focus();
  	    });
  		});     

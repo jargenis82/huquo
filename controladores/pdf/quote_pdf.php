@@ -6,7 +6,7 @@ include_once '../../librerias/mpdf53/mpdf.php';
 include_once '../../librerias/tbs_class/tbs_class.php';
 include_once '../../clases/organisation.php';
 include_once '../../clases/quote.php';
-//include_once '../../clases/quote_line.php';
+// include_once '../../clases/quote_line.php';
 
 $quoteId = comprobarVar ( $_GET ['quoteId'] ) ? $_GET ['quoteId'] : null;
 
@@ -18,7 +18,7 @@ if (! comprobarVar ( $quoteId )) {
 $miConexionBd = new ConexionBd ( "mysql" );
 $myQuote = new Quote ( $miConexionBd, $quoteId );
 $myOrganisation = $myQuote->getObjeto ( "Organisation" );
-
+$myContact = $myQuote->getObjeto ( "Contact" );
 $quote = "QUOTE";
 $logo = "hubrox1.png";
 $date = formatoFechaBd ( formatoFecha ( $myQuote->getAtributo ( "quote_date" ) ), "m/d/Y" );
@@ -26,15 +26,23 @@ $quoteNumber = $myQuote->getAtributo ( "quote_number" );
 $customerId = $myOrganisation->getAtributo ( "org_ins_id" );
 $validUntil = formatoFechaBd ( formatoFecha ( $myQuote->getAtributo ( "quote_valid_until" ) ), "m/d/Y" );
 $prepared = "Annie Wang";
-$customerInfor = $myOrganisation->getAtributo ( "org_name" ) . "<br>";
+
+$customerInfor = $myContact->getAtributo ( "contact_name" ) . "<br>";
+$customerInfor .= $myContact->getAtributo ( "contact_email" ) . "<br>";
+$customerInfor .= $myOrganisation->getAtributo ( "org_name" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_address" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_web" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_phone" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_city" ) . ", " . $myOrganisation->getAtributo ( "org_country" );
 $shipTo = $myQuote->getAtributo ( "quote_ship_to" );
 $discountVal = doubleval ( $myQuote->getAtributo ( "quote_discount" ) );
-$hstRate = $myQuote->getAtributo ( "quote_hst_rate" );
-$hstUst = convertToDoubleval($hstRate) / 100;
+$hstRate = doubleval ( $myQuote->getAtributo ( "quote_hst_rate" ) );
+$hstUst = $hstRate / 100;
+if ($hstRate == doubleval ( intval ( $hstRate ) )) {
+	$hstRate = intval ( $hstRate );
+} else {
+	$hstRate = number_format ( $hstRate, 2, ",", "." );
+}
 $hstRate .= "%";
 $sunTotal = doubleval ( 0 );
 $total = doubleval ( 0 );
@@ -74,7 +82,7 @@ $cabecera = $TBS1->Source;
 
 $TBS2 = new clsTinyButStrong ();
 $TBS2->LoadTemplate ( '../../paginas/quote_pdf_html.tpl' );
-$TBS2->MergeBlock('products',$products);
+$TBS2->MergeBlock ( 'products', $products );
 $TBS2->Show ( TBS_NOTHING ); // terminate the merging without leaving the script nor to display the result
 $html = $TBS2->Source;
 

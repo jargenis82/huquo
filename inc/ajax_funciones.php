@@ -27,7 +27,7 @@ function getContactInfos($contactInsId) {
 	$htmlSelect = '';
 	foreach ( $arrContactInfos as $i => $myContactinfo ) {
 		if ($myContactinfo->TYPE == "EMAIL") {
-			$htmlSelect .= '<option value="' . $i . '">' . $myContactinfo->DETAIL . '</option>';
+			$htmlSelect .= '<option value="' . $myContactinfo->DETAIL . '">' . $myContactinfo->DETAIL . '</option>';
 		}
 	}
 	$htmlSelect = $htmlSelect == '' ? '<option value="0">Any...</option>' : $htmlSelect;
@@ -65,6 +65,28 @@ function saveQuote($quote, $arrProduct) {
 		$myOrganisation = $arrOrganisation [0];
 	}
 	$orgId = $myOrganisation->getAtributo ( "org_id" );
+	// Se verifica si los datos del contacto ya existe en la Base de Datos o si se han modificado desde la última carga
+	// en caso afirmativo se crea un nuevo registro en la tabla contact
+	$myContact = new Contact ( $miConexionBd );
+	$myContact->setAtributo ( "contact_name", $quote ['contact_name'] );
+	$myContact->setAtributo ( "contact_email", $quote ['contact_email'] );
+	$myContact->setAtributo ( "contact_ins_id", $quote ['contact_ins_id'] );
+	$arrContact = $myContact->consultar ();
+	if (count ( $arrContact ) > 1) {
+		$miConexionBd->hacerConsulta ( "ROLLBACK;" );
+		$objResponse->addAlert ( "Error (SQ-0021). Please contact your administrator." );
+		return $objResponse;
+	}
+	if (count ( $arrContact ) == 0) {
+		if (! $myContact->registrar ()) {
+			$miConexionBd->hacerConsulta ( "ROLLBACK;" );
+			$objResponse->addAlert ( "Error (SQ-0022). Please contact your administrator." );
+			return $objResponse;
+		}
+	} else {
+		$myContact = $arrContact [0];
+	}
+	$contactId = $myContact->getAtributo ( "contact_id" );
 	// Se carga una nueva instancia de cotización
 	$myQuote = new Quote ( $miConexionBd );
 	// Se valida si la fecha ha cambiado con respecto a la que se muestra por pantalla
@@ -85,6 +107,7 @@ function saveQuote($quote, $arrProduct) {
 		$objResponse->addAlert ( "The quote number has changed to $quoteNumber." );
 	}
 	$myQuote->setObjeto ( "Organisation", $orgId );
+	$myQuote->setObjeto ( "Contact", $contactId );
 	$myQuote->setAtributo ( "oppor_id", $quote ['oppor_id'] );
 	$myQuote->setAtributo ( "quote_comment", $quote ['quote_comment'] );
 	// Se registra la cotización y se obtiene el quote_id
@@ -156,10 +179,10 @@ function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate, $pro
 		$objResponse->addAssign ( "txt_unit$id", "value", $unit );
 		$objResponse->addAssign ( "span_amount$id", "innerHTML", $amount );
 	}
-	$objResponse->addScript("xajax_calculateDiscount('txt_discount_val',discount,subTotalProducts,discount,'$subtotal','$hstRate');");
+	$objResponse->addScript ( "xajax_calculateDiscount('txt_discount_val',discount,subTotalProducts,discount,'$subtotal','$hstRate');" );
 	return $objResponse;
 }
-function calculateDiscount($id, $val, $subTotalProducts,$discountAct,$subtotal,$hstRate) {
+function calculateDiscount($id, $val, $subTotalProducts, $discountAct, $subtotal, $hstRate) {
 	$objResponse = new xajaxResponse ();
 	$subTotalProducts = doubleval ( $subTotalProducts );
 	if ($id == "txt_discount_val") {
@@ -168,9 +191,9 @@ function calculateDiscount($id, $val, $subTotalProducts,$discountAct,$subtotal,$
 	} else if ($id == "txt_discount_per") {
 		$per = convertToDoubleval ( $val );
 		$val = ($per / 100) * $subTotalProducts;
-	}	
-	$discountAct = doubleval($discountAct);
-	$subtotal = convertToDoubleval ( $subtotal );	
+	}
+	$discountAct = doubleval ( $discountAct );
+	$subtotal = convertToDoubleval ( $subtotal );
 	$subtotal = $subtotal + $discountAct - $val;
 	$hstRate = convertToDoubleval ( $hstRate );
 	$hstRate = $hstRate / 100;
@@ -181,7 +204,7 @@ function calculateDiscount($id, $val, $subTotalProducts,$discountAct,$subtotal,$
 	$per = number_format ( $per, 2, ",", "." );
 	$subtotal = number_format ( $subtotal, 2, ",", "." );
 	$hst = number_format ( $hst, 2, ",", "." );
-	$total = number_format ( $total, 2, ",", "." );	
+	$total = number_format ( $total, 2, ",", "." );
 	$objResponse->addAssign ( "txt_discount_val", "value", $val );
 	$objResponse->addAssign ( "txt_discount_per", "value", $per );
 	$objResponse->addAssign ( "span_subtotal", "innerHTML", $subtotal );
