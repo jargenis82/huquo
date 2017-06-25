@@ -69,7 +69,3 @@ function openPdfQuote(quoteId,newTag){
 	}	
 }
 
-function validarUsuario(){
-
-alert( $('#password').val()+""+$('#userName').val());
-}

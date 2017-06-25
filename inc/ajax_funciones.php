@@ -17,6 +17,19 @@ $xajax->registerFunction ( "getDescripProduct" );
 $xajax->registerFunction ( "addNewProduct" );
 $xajax->registerFunction ( "calculateAmount" );
 $xajax->registerFunction ( "saveQuote" );
+$xajax->registerFunction ( "validateUser" );
+function validateUser($user,$password){
+	$objResponse = new xajaxResponse ();
+	//$objResponse->addAlert ($user."-".$password);
+	session_start();
+	$menuAvable = "avaible";
+	$_SESSION['page'] = "quote_oppor_list.php";
+	$_SESSION['menuHid']="";
+	$objResponse->addScript("window.top.location.reload(true);");
+	return $objResponse;
+
+}
+
 function saveQuote($quote, $arrProduct) {
 	$objResponse = new xajaxResponse ();
 	// Se crea una instancia de conexión con la BD para todas las clases y transacciones

@@ -9,6 +9,7 @@ include_once '../inc/funciones.php';
 
 // XAJAX
 $xajax = new xajax("../inc/ajax_funciones.php");
+$xajax->registerFunction ("validateUser");
 $js    = $xajax->getJavascript('../librerias/');
 
 // Se consulta una copia local de customers para mejorar el desempeño en máquinas de desarrollo (provisional)

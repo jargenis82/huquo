@@ -12,25 +12,32 @@ include_once 'inc/funciones.php';
 // XAJAX
 $xajax = new xajax("inc/ajax_funciones.php");
 //$xajax->registerFunction("getCustomer");
+$xajax->registerFunction ("validateUser");
 $js = $xajax->getJavascript('librerias/');
 
+
+ $menuHid="disabled";
+
+if($_SESSION['page']=="quote_oppor_list.php"&&$_GET['page']==""){
+$page=$_SESSION['page'];
+ $menuHid=$_SESSION['menuHid'];
+}
+else {
+
 // Valida la pagina del iframe
-$page = comprobarVar($_GET['page'])?trim($_GET['page']):"quote_log_in";
-if(comprobarVar($_GET['page'])){
-
-   $menuHid="";
+	$page = comprobarVar($_GET['page'])?trim($_GET['page']):"quote_log_in";
+	$page .= ".php?";
+	// Valida gets extra
+	foreach ($_GET as $get => $valor) {
+	  if ($i != "page") {
+	    $page .= "$get=$valor&";
+	  }
+	}
+	isset($_SESSION['page'])? $menuHid="":$menuHid="disabled";
 }
-  else{
-    $menuHid="disabled";
-  }
 
-$page .= ".php?";
-// Valida gets extra
-foreach ($_GET as $get => $valor) {
-  if ($i != "page") {
-    $page .= "$get=$valor&";
-  }
-}
+
+
 
 // CARGA DE LA PLANTILLA PRINCIPAL
 $TBS = new clsTinyButStrong();
