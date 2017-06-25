@@ -37,9 +37,12 @@ if (isset ( $myOrganization )) {
 		if (comprobarVar ( $opportunityId )) {
 			$myOpportunity = $i->getOpportunity ( $opportunityId );
 			$unDato [0] = $myOpportunity->OPPORTUNITY_NAME;
-			$unDato [1] = substr ( $myOpportunity->DATE_CREATED_UTC, 0, 10 );
+			$myDateTimeZone = new DateTimeZone ( "UTC" );
+			$myDateTime = DateTime::createFromFormat ( "Y-m-d H:i:s", $myOpportunity->DATE_CREATED_UTC, $myDateTimeZone );
+			$myDateTimeZone = new DateTimeZone ( date_default_timezone_get ());
+			$myDateTime->setTimezone($myDateTimeZone);
+			$unDato [1] = $myDateTime->format("Y-m-d");
 			$unDato [2] = $myOpportunity->OPPORTUNITY_STATE;
-			
 			$myPipelineStage = $i->getPipelineStage ( $myOpportunity->STAGE_ID );
 			$stageOrder = $myPipelineStage->STAGE_ORDER;
 			$stageName = $myPipelineStage->STAGE_NAME;

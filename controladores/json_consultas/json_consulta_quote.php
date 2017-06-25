@@ -20,12 +20,10 @@ if (comprobarVar ( $opportunityId )) {
 	foreach ( $arrQuote as $myQuote ) {
 		$quoteId = $myQuote->getAtributo("quote_id");
 		$unDato [0] [0] = $myQuote->getAtributo("quote_number");
-		$quoteTime = substr($myQuote->getAtributo("quote_date"),-8);
-		$quoteDate = substr($myQuote->getAtributo("quote_date"),0,10);
-		$quoteDate = formatoFecha($quoteDate);
-		$quoteDate = formatoFechaBd($quoteDate, "m/d/Y");
+		$myDateTime = DateTime::createFromFormat("Y-m-d H:i:s", $myQuote->getAtributo("quote_date"));
+		$quoteDate = $myDateTime->format("Y-m-d H:i:s");
 		$quoteTotal = $myQuote->getQuoteTotal();
-		$unDato [0] [1] = $quoteDate." ".$quoteTime;
+		$unDato [0] [1] = $quoteDate;
 		$unDato [0] [2] = "Annie Wang";
 		$unDato [0] [3] = $quoteTotal;
 		$unDato [0] [4] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick=''></span>";

@@ -36,26 +36,32 @@ $js = $xajax->getJavascript ( '../librerias/' );
 // Fecha Actual
 // Si es una nueva cotización debe ser la fecha del día.
 // Si se está consultando una cotización debe ser la fecha original de creación de la cotización
-$fecha = formatoFechaBd ( null, "m/d/Y" );
+$fecha = date ( "Y-m-d" );
 
 // Fecha de validez
 // Si es una nueva cotización debe colocar por defecto 30 días más de la fecha de creación
 // Si se está consultando una cotización deber la fecha de validez colocada durante la creación de la cotización
-$quoteValidUntil = sumarFecha ( $fecha, 30 );
+$myDateTime = DateTime::createFromFormat ( "Y-m-d", $fecha );
+$myDateTime->setTimestamp ( $myDateTime->getTimestamp () + 30 * 24 * 60 * 60 );
+$quoteValidUntil = $myDateTime->format ( "d-M-Y" );
+
+// Ajuste de formato de fechas a d-M-Y (Ej: 24/Jan/2017)
+$myDateTime = DateTime::createFromFormat ( "Y-m-d", $fecha );
+$fecha = $myDateTime->format ( "d-M-Y" );
 
 // Quote number
-$miConexionBd = new ConexionBd("mysql");
-$quoteNumber = (new Quote($miConexionBd))->getNextQuoteNumber();
+$miConexionBd = new ConexionBd ( "mysql" );
+$quoteNumber = (new Quote ( $miConexionBd ))->getNextQuoteNumber ();
 
 // Prepared by
 $userName = "Annie Wang";
 
 // Se construye el arreglo en Javascript para el autocompletar de productos
-$myProduct = new Product ($miConexionBd);
+$myProduct = new Product ( $miConexionBd );
 $listaProducto = $myProduct->getListaProducto ();
 $jsData = "";
 $jsDataId = "";
-foreach ( $listaProducto as $ii=>$unProducto ) {
+foreach ( $listaProducto as $ii => $unProducto ) {
 	$unProducto = str_replace ( '"', '\"', $unProducto );
 	$jsData .= '"' . $unProducto . '",';
 	$jsDataId .= '"' . $ii . '",';
@@ -63,7 +69,6 @@ foreach ( $listaProducto as $ii=>$unProducto ) {
 }
 $jsData = $jsData != "" ? substr ( $jsData, 0, - 1 ) : "";
 $jsDataId = $jsDataId != "" ? substr ( $jsDataId, 0, - 1 ) : "";
-
 
 // Se construye el arreglo en Javascript para el autocompletar de contactos
 $jsDataContact = "";
@@ -85,16 +90,16 @@ if (comprobarVar ( $quoteId )) {
 	if (comprobarVar ( $opportunityId )) {
 		// Se consulta una copia local de customers para mejorar el desempeño en máquinas de desarrollo (provisional)
 		if (defined ( "CUSTOMERS" )) {
-			$quote = file_get_contents("../log/quote");
-			$quote = explode(";", $quote);
-			$organizationId = $quote[0];
-			$organizationName = $quote[1];
-			$address = $quote[2];
-			$web = $quote[3];
-			$phone = $quote[4];
-			$country = $quote[5];
-			$customerType = $quote[6];
-			$city = $quote[7];
+			$quote = file_get_contents ( "../log/quote" );
+			$quote = explode ( ";", $quote );
+			$organizationId = $quote [0];
+			$organizationName = $quote [1];
+			$address = $quote [2];
+			$web = $quote [3];
+			$phone = $quote [4];
+			$country = $quote [5];
+			$customerType = $quote [6];
+			$city = $quote [7];
 		} else {
 			// Se consulta en el API de Insightly los datos de la oportunidad
 			$i = new Insightly ( APIKEY ); // Se instanció para la carga de los contactos
@@ -110,7 +115,7 @@ if (comprobarVar ( $quoteId )) {
 				if (comprobarVar ( $organizationId )) {
 					$myOrganization = $i->getOrganization ( $organizationId );
 					$organizationName = $myOrganization->ORGANISATION_NAME;
-					$arrAddresses = $myOrganization->ADDRESSES;				
+					$arrAddresses = $myOrganization->ADDRESSES;
 					if (isset ( $arrAddresses [0] )) {
 						$address = $arrAddresses [0]->STREET . ", " . $arrAddresses [0]->CITY . ", " . $arrAddresses [0]->COUNTRY . ".";
 						$address = str_replace ( "\n", " ", $address );
@@ -135,7 +140,7 @@ if (comprobarVar ( $quoteId )) {
 						}
 					}
 					$arrCustomfields = $myOrganization->CUSTOMFIELDS;
-					foreach ($arrCustomfields as $myCustomfield) {
+					foreach ( $arrCustomfields as $myCustomfield ) {
 						$customFieldId = $myCustomfield->CUSTOM_FIELD_ID;
 						if ($customFieldId == "ORGANISATION_FIELD_1") {
 							$customerType = $myCustomfield->FIELD_VALUE;
@@ -143,18 +148,18 @@ if (comprobarVar ( $quoteId )) {
 						}
 					}
 					$arrOrganizationLinks = $myOrganization->LINKS;
-					$arrDataContact = array();
-					foreach ($arrOrganizationLinks as $aOrganizationLink) {
+					$arrDataContact = array ();
+					foreach ( $arrOrganizationLinks as $aOrganizationLink ) {
 						$contactId = $aOrganizationLink->CONTACT_ID;
-						if (comprobarVar($contactId)) {
-							$myContact = $i->getContact($contactId);
-							$arrDataContact[$contactId] = $myContact->FIRST_NAME." ".$myContact->LAST_NAME;
+						if (comprobarVar ( $contactId )) {
+							$myContact = $i->getContact ( $contactId );
+							$arrDataContact [$contactId] = $myContact->FIRST_NAME . " " . $myContact->LAST_NAME;
 						}
 					}
-					asort($arrDataContact);
-					foreach ($arrDataContact as $jj=>$aDataContact) {
+					asort ( $arrDataContact );
+					foreach ( $arrDataContact as $jj => $aDataContact ) {
 						$jsDataContactId .= '"' . $jj . '",';
-						$jsDataContact .= '"'.$aDataContact.'",';
+						$jsDataContact .= '"' . $aDataContact . '",';
 					}
 					$jsDataContact = $jsData != "" ? substr ( $jsDataContact, 0, - 1 ) : "";
 					$jsDataContactId = $jsDataContactId != "" ? substr ( $jsDataContactId, 0, - 1 ) : "";
@@ -163,7 +168,7 @@ if (comprobarVar ( $quoteId )) {
 			}
 		}
 		// Se detecta el tipo de precio a aplicar en la cotización según el tipo de cliente
-		if (comprobarVar($customerType)) {
+		if (comprobarVar ( $customerType )) {
 			if ($customerType == "Customer") {
 				$priceTypeId = "2";
 			} else {
@@ -174,7 +179,7 @@ if (comprobarVar ( $quoteId )) {
 		// Se detecta la región del cliente
 		$customerRegionId = "";
 		$region = "";
-		if (comprobarVar($country)) {
+		if (comprobarVar ( $country )) {
 			if ($country == "United States" or $country == "Canada") {
 				$customerRegionId = 2;
 				$region = "US & Canada";

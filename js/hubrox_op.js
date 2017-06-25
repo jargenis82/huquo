@@ -9,6 +9,7 @@ function dataTable(customerName) {
 						"bInfo" : false,
 						"paging" : true,
 						destroy : true,
+						"order": [[ 1, "desc" ]],
 						"initComplete": function(settings, json) {
 						    window.parent.ajustarIframe();
 						  },
@@ -41,10 +42,7 @@ function dataTableQuote(opportunityId) {
 		              { className: "dt-head-center dt-body-right" },
 		              { className: "dt-center" },
 		              { className: "dt-center" }
-		            ],
-		  
-		  
-		  
+		            ],		  
 		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php?opportunityId="+opportunityId
 	});
 }
@@ -68,4 +66,3 @@ function openPdfQuote(quoteId,newTag){
 		window.parent.location = "../controladores/pdf/quote_pdf.php?quoteId="+quoteId;
 	}	
 }
-

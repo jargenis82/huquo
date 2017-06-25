@@ -228,16 +228,16 @@ function formatoFecha($fecha,$mesDia) {
 	}
 }
 
-// Sumara dias (valor entero valido) a una fecha valida que este en formato m/d/Y.
+// Sumara dias (valor entero valido) a una fecha valida que este en formato Y-m-d.
 // La funcion no valida el formato correcto de la fecha
 function sumarFecha($fecha,$dias) {
 	if (isset($fecha)) {
-		$arregloFecha = explode("/",$fecha);		
+		$arregloFecha = explode("-",$fecha);		
 		// Se toma la marca de tiempo UNIX de la fecha
-		$marcaTiempo = mktime(0,0,0,$arregloFecha[0],$arregloFecha[1],$arregloFecha[2]);
+		$marcaTiempo = mktime(0,0,0,$arregloFecha[1],$arregloFecha[2],$arregloFecha[0]);
 		// Se suman la cantidad de segundos correspondientes a los dias indicados
 		$marcaTiempo += intval($dias) * 24 * 60 * 60;
-		return date("m/d/Y",$marcaTiempo);
+		return date("Y-m-d",$marcaTiempo);
 	}
 }
 

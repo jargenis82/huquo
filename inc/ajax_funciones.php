@@ -101,14 +101,14 @@ function saveQuote($quote, $arrProduct) {
 	// Se carga una nueva instancia de cotización
 	$myQuote = new Quote ( $miConexionBd );
 	// Se valida si la fecha ha cambiado con respecto a la que se muestra por pantalla
-	$quoteDate = formatoFechaHoraBd ();
+	$quoteDate = date("Y-m-d H:i:s");
 	$myQuote->setAtributo ( "quote_date", $quoteDate );
-	$quoteDatePage = formatoFechaBd ( formatoFecha ( $quote ['quote_date'], true ) );
+	$quoteDatePage = date ( "Y-m-d", strtotime ( $quote ['quote_date'] ) );
 	if (substr ( $quoteDate, 0, 10 ) != $quoteDatePage) {
-		$newDate = formatoFechaBd ( formatoFecha ( substr ( $quoteDate, 0, 10 ) ), "m/d/Y" );
+		$newDate = formatoFechaBd ( formatoFecha ( substr ( $quoteDate, 0, 10 ) ), "d-M-Y" );
 		$objResponse->addAlert ( "The quote date has changed to $newDate." );
 	}
-	$myQuote->setAtributo ( "quote_valid_until", formatoFechaBd ( formatoFecha ( $quote ['quote_valid_until'], true ) ) );
+	$myQuote->setAtributo ( "quote_valid_until", date ( "Y-m-d", strtotime ( $quote ['quote_valid_until'] ) ) );
 	$myQuote->setAtributo ( "quote_discount", convertToDoubleval ( $quote ['quote_discount'] ) );
 	$myQuote->setAtributo ( "quote_hst_rate", convertToDoubleval ( $quote ['quote_hst_rate'] ) );
 	$myQuote->setAtributo ( "quote_ship_to", $quote ['quote_ship_to'] );

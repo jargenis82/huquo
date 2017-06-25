@@ -21,12 +21,13 @@ $myOrganisation = $myQuote->getObjeto ( "Organisation" );
 $myContact = $myQuote->getObjeto ( "Contact" );
 $quote = "QUOTE";
 $logo = "hubrox1.png";
-$date = formatoFechaBd ( formatoFecha ( $myQuote->getAtributo ( "quote_date" ) ), "m/d/Y" );
+$myDateTime = DateTime::createFromFormat("Y-m-d H:i:s", $myQuote->getAtributo("quote_date"));
+$date = $myDateTime->format("d-M-Y");
 $quoteNumber = $myQuote->getAtributo ( "quote_number" );
 $customerId = $myOrganisation->getAtributo ( "org_ins_id" );
-$validUntil = formatoFechaBd ( formatoFecha ( $myQuote->getAtributo ( "quote_valid_until" ) ), "m/d/Y" );
+$myDateTime = DateTime::createFromFormat("Y-m-d H:i:s", $myQuote->getAtributo("quote_valid_until"));
+$validUntil = $myDateTime->format("d-M-Y");
 $prepared = "Annie Wang";
-
 $customerInfor = $myContact->getAtributo ( "contact_name" ) . "<br>";
 $customerInfor .= $myContact->getAtributo ( "contact_email" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_name" ) . "<br>";

@@ -138,7 +138,7 @@ table, td, th {
         $( "#txt_valid_until" ).datepicker
         ({
         	 minDate: 0,
-        	dateFormat: 'mm/dd/yy',
+        	dateFormat: 'dd-M-yy',
         	changeMonth: true,
           changeYear: true
  
