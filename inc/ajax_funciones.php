@@ -19,6 +19,7 @@ $xajax->registerFunction ( "calculateAmount" );
 $xajax->registerFunction ( "calculateDiscount" );
 $xajax->registerFunction ( "saveQuote" );
 $xajax->registerFunction ( "getContactInfos" );
+$xajax->registerFunction ( "validateUser" );
 function getContactInfos($contactInsId) {
 	$objResponse = new xajaxResponse ();
 	$i = new Insightly ( APIKEY );
@@ -32,6 +33,16 @@ function getContactInfos($contactInsId) {
 	}
 	$htmlSelect = $htmlSelect == '' ? '<option value="0">Any...</option>' : $htmlSelect;
 	$objResponse->addAssign ( "sel_email", "innerHTML", $htmlSelect );
+	return $objResponse;
+}
+function validateUser($user, $password) {
+	$objResponse = new xajaxResponse ();
+	// $objResponse->addAlert ($user."-".$password);
+	session_start ();
+	$menuAvable = "avaible";
+	$_SESSION ['page'] = "quote_oppor_list.php";
+	$_SESSION ['menuHid'] = "";
+	$objResponse->addScript ( "window.top.location.reload(true);" );
 	return $objResponse;
 }
 function saveQuote($quote, $arrProduct) {

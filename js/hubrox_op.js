@@ -68,3 +68,4 @@ function openPdfQuote(quoteId,newTag){
 		window.parent.location = "../controladores/pdf/quote_pdf.php?quoteId="+quoteId;
 	}	
 }
+
