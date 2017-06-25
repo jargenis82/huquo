@@ -41,7 +41,7 @@ if (isset ( $myOrganization )) {
 			$myDateTime = DateTime::createFromFormat ( "Y-m-d H:i:s", $myOpportunity->DATE_CREATED_UTC, $myDateTimeZone );
 			$myDateTimeZone = new DateTimeZone ( date_default_timezone_get ());
 			$myDateTime->setTimezone($myDateTimeZone);
-			$unDato [1] = $myDateTime->format("Y-m-d");
+			$unDato [1] = "<span style='display: none;'>".$myDateTime->format("Y-m-d")."</span>".$myDateTime->format("d-M-Y");
 			$unDato [2] = $myOpportunity->OPPORTUNITY_STATE;
 			$myPipelineStage = $i->getPipelineStage ( $myOpportunity->STAGE_ID );
 			$stageOrder = $myPipelineStage->STAGE_ORDER;

@@ -21,7 +21,7 @@ if (comprobarVar ( $opportunityId )) {
 		$quoteId = $myQuote->getAtributo("quote_id");
 		$unDato [0] [0] = $myQuote->getAtributo("quote_number");
 		$myDateTime = DateTime::createFromFormat("Y-m-d H:i:s", $myQuote->getAtributo("quote_date"));
-		$quoteDate = $myDateTime->format("Y-m-d H:i:s");
+		$quoteDate = "<span style='display: none;'>".$myDateTime->format("Y-m-d H:i:s")."</span>".$myDateTime->format("d-M-Y H:i:s");
 		$quoteTotal = $myQuote->getQuoteTotal();
 		$unDato [0] [1] = $quoteDate;
 		$unDato [0] [2] = "Annie Wang";
