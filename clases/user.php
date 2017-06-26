@@ -9,7 +9,7 @@ class User extends ClaseBd {
 	function declararTabla() {
 		$tabla = "user";
 		$atributos ['user_id'] ['esPk'] = true;
-		$atributos ['user_ins_id'] ['esPk'] = false;
+		$atributos ['user_login_ftp'] ['esPk'] = false;
 		$objetos ['Contact'] ['id'] = "contact_id";
 		$strOrderBy = "user_id";
 		$this->registrarTabla ( $tabla, $atributos, $objetos, $strOrderBy );

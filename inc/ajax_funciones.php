@@ -4,12 +4,14 @@ include_once '../inc/funciones.php';
 include_once '../librerias/conexion_bd.php';
 include_once '../librerias/xajax_0.2.4/xajax.inc.php';
 include_once '../librerias/insightly.php';
+include_once '../librerias/class-phpass.php';
 include_once '../clases/organisation.php';
 include_once '../clases/price.php';
 include_once '../clases/product.php';
 include_once '../clases/product_sale.php';
 include_once '../clases/quote.php';
 include_once '../clases/quote_line.php';
+include_once '../clases/user.php';
 
 $xajax = new xajax ( "ajax_funciones.php" );
 $xajax->registerFunction ( "getCustomer" );
@@ -37,12 +39,41 @@ function getContactInfos($contactInsId) {
 }
 function validateUser($user, $password) {
 	$objResponse = new xajaxResponse ();
-	// $objResponse->addAlert ($user."-".$password);
-	session_start ();
-	$menuAvable = "avaible";
-	$_SESSION ['page'] = "quote_oppor_list.php";
-	$_SESSION ['menuHid'] = "";
-	$objResponse->addScript ( "window.top.location.reload(true);" );
+	// Se ajusta el nombre de usuario de tal manera que no tenga espacios en blanco y permita las comillas
+	// Se evita la inyección de código
+	$user = aceptarComilla ( limpiarPalabra ( $user ) );
+	// Se crea enlace con base de datos a wordpress (FTP)
+	$enlace = new PDO ( "mysql:host=" . W . ";port=" . V . ";dbname=" . ZZ, XX, YY );
+	$miConexionBd = new ConexionBd ( null, $enlace );
+	// Se consulta el usuario en Wordpress para obtener el HASH del password
+	$r = $miConexionBd->hacerSelect ( "user_pass", "wp_users", "user_login = '$user'" );
+	if (comprobarVar ( $r [0] ['user_pass'] )) {
+		// Se instancia la clase para validar el password con el HASH
+		$myPasswordHash = new PasswordHash ();
+		if ($myPasswordHash->CheckPassword ( aceptarComilla ( $password ), $r [0] ['user_pass'] )) {
+			// Se busca el usuario en la BD de Huquo
+			$myUser = new User ();
+			$myUser->setAtributo ( "user_login_ftp", $user );
+			$arrUser = $myUser->consultar ();
+			if (count ( $arrUser ) == 1) {
+				$_SESSION ['user_id'] = $arrUser [0]->getAtributo ( "user_id" );
+				$_SESSION ['user_login_ftp'] = $arrUser [0]->getAtributo ( "user_login_ftp" );
+			} else {
+				if ($myUser->registrar ()) {
+					$_SESSION ['user_id'] = $myUser->getAtributo ( "user_id" );
+					$_SESSION ['user_login_ftp'] = $myUser->getAtributo ( "user_login_ftp" );
+				} else {
+					$objResponse->addAlert ( "Error (VU-001). Please contact your administrator." );
+					return $objResponse;
+				}
+			}
+			$objResponse->addScript ( "window.top.location.reload(true);" );
+		} else {
+			$objResponse->addAlert ( "Datos incorrectos. Intente nuevamente." );
+		}
+	} else { // Si no existe el usuario en el FTP termina
+		$objResponse->addAlert ( "Datos incorrectos. Intente nuevamente." );
+	}
 	return $objResponse;
 }
 function saveQuote($quote, $arrProduct) {
@@ -101,7 +132,7 @@ function saveQuote($quote, $arrProduct) {
 	// Se carga una nueva instancia de cotización
 	$myQuote = new Quote ( $miConexionBd );
 	// Se valida si la fecha ha cambiado con respecto a la que se muestra por pantalla
-	$quoteDate = date("Y-m-d H:i:s");
+	$quoteDate = date ( "Y-m-d H:i:s" );
 	$myQuote->setAtributo ( "quote_date", $quoteDate );
 	$quoteDatePage = date ( "Y-m-d", strtotime ( $quote ['quote_date'] ) );
 	if (substr ( $quoteDate, 0, 10 ) != $quoteDatePage) {
