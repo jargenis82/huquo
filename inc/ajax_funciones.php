@@ -203,7 +203,7 @@ function saveQuote($quote, $arrProduct) {
 		$objeto->TITLE = 'Test of PDF Quote From HUQUO';
 		$objeto->LINK_SUBJECT_ID = $quote ['oppor_id'];
 		$objeto->LINK_SUBJECT_TYPE = 'Opportunity';
-		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf.php?quoteId=' . $quoteId . '">Quote ' . $quoteNumber . '</a>';
+		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf.php?quoteId=' . $quoteId . '" target="_blank">Quote ' . $quoteNumber . '</a>';
 		$noteLinks = new stdClass ();
 		$noteLinks->ORGANISATION_ID = $quote ['org_ins_id'];
 		$arrNoteLinks [0] = $noteLinks;
