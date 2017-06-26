@@ -10,32 +10,33 @@ include_once 'librerias/insightly.php';
 include_once 'inc/funciones.php';
 
 // XAJAX
-$xajax = new xajax ( "inc/ajax_funciones.php" );
+$xajax = new xajax("inc/ajax_funciones.php");
 // $xajax->registerFunction("getCustomer");
-$xajax->registerFunction ( "validateUser" );
-$js = $xajax->getJavascript ( 'librerias/' );
+$xajax->registerFunction("validateUser");
+$js = $xajax->getJavascript('librerias/');
 
 // Si el usuario ya se validó debe tener una variable de sesión 'user_id' activa
 if (comprobarVar($_SESSION['user_id'])) {
-	$userLoginFtp = comprobarVar($_SESSION['user_login_ftp']) ? $_SESSION['user_login_ftp'] : "";
-	$menuHid = ""; // Se habilita menú de la barra superior
+	$userLoginFtp = comprobarVar($_SESSION['user_login_ftp'])?$_SESSION['user_login_ftp']:"";
+	$userLoginFtp = strtoupper($userLoginFtp);
+	$menuHid      = "";// Se habilita menú de la barra superior
 	// La página a consultar se solicita por parámetro GET o si no es por defecto quote_oppor_list
-	$page = comprobarVar ( $_GET ['page'] ) ? trim ( $_GET ['page'] ) : "quote_oppor_list"; 
+	$page = comprobarVar($_GET['page'])?trim($_GET['page']):"quote_oppor_list";
 	$page .= ".php?";
 	// Valida gets extra
-	foreach ( $_GET as $get => $valor ) {
+	foreach ($_GET as $get => $valor) {
 		if ($i != "page") {
 			$page .= "$get=$valor&";
 		}
-	}	
-} else {	
+	}
+} else {
 	// Valida la pagina del iframe
-	$page = "quote_log_in.php";
-	$menuHid = "disabled"; // Se deshabilita menu de la barra superior
+	$page    = "quote_log_in.php";
+	$menuHid = "disabled";// Se deshabilita menu de la barra superior
 }
 
 // CARGA DE LA PLANTILLA PRINCIPAL
-$TBS = new clsTinyButStrong ();
-$TBS->LoadTemplate ( 'paginas/index.tpl' );
-$TBS->Show ();
+$TBS = new clsTinyButStrong();
+$TBS->LoadTemplate('paginas/index.tpl');
+$TBS->Show();
 ?>
