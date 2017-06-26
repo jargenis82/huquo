@@ -70,10 +70,12 @@ a.disabled {
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#" class="[var.menuHid;noerr]">Quotes</a></li>
 				</ul>
+
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="./controladores/cerrar_sesion.php"
+						 <li><a class="[var.menuHid;noerr]"><span		class="glyphicon glyphicon-user"></span>:&nbsp;[var.userLoginFtp;noerr] </a></li>
+						<li><a href="./controladores/cerrar_sesion.php"
 						class="[var.menuHid;noerr]"><span
-							class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+							class="glyphicon glyphicon-log-out"></span>Log out</a></li>
 				</ul>
 			</div>
 		</div>
@@ -85,3 +87,4 @@ a.disabled {
 	</div>
 </body>
 </html>
+ 
