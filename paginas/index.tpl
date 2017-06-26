@@ -38,13 +38,11 @@ table, td, th {
 	font-family: Arial, Helvetica, sans-serif;
 	border-color: blue;
 }
+
 a.disabled {
-   pointer-events: none;
-  	visibility: hidden;
- 	 
+	pointer-events: none;
+	visibility: hidden;
 }
-
-
 </style>
 
 <script type="text/javascript">
@@ -73,16 +71,17 @@ a.disabled {
 					<li class="active"><a href="#" class="[var.menuHid;noerr]">Quotes</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="./controladores/cerrar_sesion.php"  class="[var.menuHid;noerr]"><span class="glyphicon glyphicon-log-out" ></span>
-							Log out</a></li>
+					<li><a href="./controladores/cerrar_sesion.php"
+						class="[var.menuHid;noerr]"><span
+							class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
 	<div class="row">
-		<iframe id="FrameID"frameborder="0"
+		<iframe frameborder="0" id="ifrm"
 			style="position: absolute; height: 100%; width: 100%"
-			src="controladores/[var.page;noerr]" id="ifrm"></iframe> 
+			src="controladores/[var.page;noerr]"></iframe>
 	</div>
 </body>
 </html>
