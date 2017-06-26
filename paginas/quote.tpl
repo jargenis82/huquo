@@ -290,7 +290,7 @@ table, td, th {
 								<td align="center"><input id="txt_unit0" size="7"
 									tabindex="7" onchange="calculateAmount(0);" dir="rtl"
 									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
-								<td align="center"><input id="txt_qty0" size="2"
+								<td align="center"><input id="txt_qty0" size="4"
 									tabindex="8" onKeyDown="javascript:return introQty(event);"
 									onchange="calculateAmount(0);" dir="rtl"
 									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>

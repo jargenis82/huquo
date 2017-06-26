@@ -158,7 +158,6 @@ function saveQuote($quote, $arrProduct) {
 		$objResponse->addAlert ( "Error (SQ-003). Please contact your administrator." );
 		return $objResponse;
 	}
-	
 	$quoteId = $myQuote->getAtributo ( "quote_id" );
 	// Se cargan las instancias de quote_line
 	foreach ( $arrProduct as $i => $aProduct ) {
@@ -196,6 +195,22 @@ function saveQuote($quote, $arrProduct) {
 		$objResponse->addAlert ( "Error (SQ-005). Please contact your administrator." );
 		return $objResponse;
 	}
+	
+	if (comprobarVar ( strstr ( $_SERVER ['HTTP_REFERER'], "hubrox.com" ) )) {
+		// Se agrega un enlace de la cotización en Insighly
+		$i = new Insightly ( APIKEY );
+		$objeto = new stdClass ();
+		$objeto->TITLE = 'Test of PDF Quote From HUQUO';
+		$objeto->LINK_SUBJECT_ID = $quote ['oppor_id'];
+		$objeto->LINK_SUBJECT_TYPE = 'Opportunity';
+		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf.php?quoteId=' . $quoteId . '">Quote ' . $quoteNumber . '</a>';
+		$noteLinks = new stdClass ();
+		$noteLinks->ORGANISATION_ID = $quote ['org_ins_id'];
+		$arrNoteLinks [0] = $noteLinks;
+		$objeto->NOTELINKS = $arrNoteLinks;
+		$objeto = $i->addNote ( $objeto );
+	}
+	
 	$objResponse->addScript ( "openPdfQuote($quoteId);" );
 	$objResponse->addScript ( "window.parent.opener.dataTable('" . $quote ['org_name'] . "');" );
 	$objResponse->addScript ( "window.parent.opener.dataTableQuote(" . $quote ['oppor_id'] . ");" );
@@ -280,7 +295,7 @@ function addNewProduct($idTxtDescrip) {
 	$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
 	$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" class="form-control"></td>';
 	$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" size="7"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
-	$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="2" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+	$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="4" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
 	$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '"></span></td>';
 	$jq = "
      		var tr='$textoHtml';
