@@ -9,7 +9,7 @@ function dataTable(customerName) {
 						"bInfo" : false,
 						"paging" : true,
 						destroy : true,
-						"order": [[ 1, "desc" ]],
+						"order": [[ 2, "asc" ],[ 1, "desc" ]],
 						"initComplete": function(settings, json) {
 						    window.parent.ajustarIframe();
 						  },

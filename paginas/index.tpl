@@ -72,7 +72,7 @@ a.disabled {
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-						 <li><a class="[var.menuHid;noerr]"><span		class="glyphicon glyphicon-user"></span>:&nbsp;[var.userLoginFtp;noerr] </a></li>
+						 <li><a class="[var.menuHid;noerr]"><span		class="glyphicon glyphicon-user"></span>&nbsp;[var.userLoginFtp;noerr] </a></li>
 						<li><a href="./controladores/cerrar_sesion.php"
 						class="[var.menuHid;noerr]"><span
 							class="glyphicon glyphicon-log-out"></span>Log out</a></li>

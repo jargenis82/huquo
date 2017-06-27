@@ -42,7 +42,15 @@ if (isset ( $myOrganization )) {
 			$myDateTimeZone = new DateTimeZone ( date_default_timezone_get ());
 			$myDateTime->setTimezone($myDateTimeZone);
 			$unDato [1] = "<span style='display: none;'>".$myDateTime->format("Y-m-d")."</span>".$myDateTime->format("d-M-Y");
-			$unDato [2] = $myOpportunity->OPPORTUNITY_STATE;
+			// Se coloca un caracter oculto adelante del estado de la oportunidad
+			// de tal manera que siempre ordene de primero a las oportunidades OPEN
+			$opporState = $myOpportunity->OPPORTUNITY_STATE;
+			if ($opporState == 'OPEN') {
+				$dato = "1";
+			} else {
+				$dato = "2";
+			}
+			$unDato [2] = "<span style='display: none;'>$dato</span>".$myOpportunity->OPPORTUNITY_STATE;
 			$myPipelineStage = $i->getPipelineStage ( $myOpportunity->STAGE_ID );
 			$stageOrder = $myPipelineStage->STAGE_ORDER;
 			$stageName = $myPipelineStage->STAGE_NAME;
@@ -51,7 +59,7 @@ if (isset ( $myOrganization )) {
 			$myQuote->setAtributo ( "oppor_id", $opportunityId );
 			$cantidad = $myQuote->consultar ( true );
 			($cantidad > 0) ? $unDato [4] = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" data-modulo="" data-accion="" onclick="dataTableQuote(' . $opportunityId . ')"></span>' : $unDato [4] = '<span></span>';
-			$unDato [5] = ($unDato [2] == "OPEN") ? "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote($opportunityId)'></span>" : '<span></span>';
+			$unDato [5] = ($opporState == "OPEN") ? "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote($opportunityId)'></span>" : '<span></span>';
 			$arrJson ['aaData'] [] = $unDato;
 		}
 	}
