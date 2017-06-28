@@ -62,14 +62,14 @@ function validateUser($user, $password) {
 			$arrUser = $myUser->consultar ();
 			// Si existe el usuario obtengo los datos a mantener en la variable de sesión
 			if (count ( $arrUser ) == 1) {
-				$myUser = $arrUser[0];
+				$myUser = $arrUser [0];
 			} else {
 				$myUser->setAtributo ( "user_creation_date", date ( "Y-m-d H:i:s" ) );
 				if (! $myUser->registrar ()) {
 					$miConexionBd->hacerConsulta ( "ROLLBACK;" );
 					$objResponse->addAlert ( "Error (VU-001). Please contact your administrator." );
 					return $objResponse;
-				}				
+				}
 			}
 			$_SESSION ['user_id'] = $myUser->getAtributo ( "user_id" );
 			$_SESSION ['user_login_ftp'] = $myUser->getAtributo ( "user_login_ftp" );
@@ -159,6 +159,7 @@ function saveQuote($quote, $arrProduct) {
 	}
 	$myQuote->setObjeto ( "Organisation", $orgId );
 	$myQuote->setObjeto ( "Contact", $contactId );
+	$myQuote->setObjeto ( "User", $_SESSION ['user_id'] );
 	$myQuote->setAtributo ( "oppor_id", $quote ['oppor_id'] );
 	$myQuote->setAtributo ( "quote_comment", $quote ['quote_comment'] );
 	// Se registra la cotización y se obtiene el quote_id

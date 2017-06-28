@@ -18,13 +18,13 @@ if (comprobarVar ( $opportunityId )) {
 	$myQuote->setAtributo ( "oppor_id", $opportunityId );
 	$arrQuote = $myQuote->consultar ();
 	foreach ( $arrQuote as $myQuote ) {
-		$quoteId = $myQuote->getAtributo("quote_id");
-		$unDato [0] [0] = $myQuote->getAtributo("quote_number");
-		$myDateTime = DateTime::createFromFormat("Y-m-d H:i:s", $myQuote->getAtributo("quote_date"));
-		$quoteDate = "<span style='display: none;'>".$myDateTime->format("Y-m-d H:i:s")."</span>".$myDateTime->format("d-M-Y H:i:s");
-		$quoteTotal = $myQuote->getQuoteTotal();
+		$quoteId = $myQuote->getAtributo ( "quote_id" );
+		$unDato [0] [0] = $myQuote->getAtributo ( "quote_number" );
+		$myDateTime = DateTime::createFromFormat ( "Y-m-d H:i:s", $myQuote->getAtributo ( "quote_date" ) );
+		$quoteDate = "<span style='display: none;'>" . $myDateTime->format ( "Y-m-d H:i:s" ) . "</span>" . $myDateTime->format ( "d-M-Y H:i:s" );
+		$quoteTotal = $myQuote->getQuoteTotal ();
 		$unDato [0] [1] = $quoteDate;
-		$unDato [0] [2] = "Annie Wang";
+		$unDato [0] [2] = $myQuote->getObjeto ( "User" )->getAtributo ( "user_name" );
 		$unDato [0] [3] = $quoteTotal;
 		$unDato [0] [4] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick=''></span>";
 		$unDato [0] [5] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='openPdfQuote($quoteId,true)'></span>";

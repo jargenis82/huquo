@@ -38,7 +38,7 @@ function dataTableQuote(opportunityId) {
 		  "columns": [
 		              { className: "dt-center" },
 		              { className: "dt-center" },
-		              { className: "dt-center" },
+		              { className: "dt-center nowrap" },
 		              { className: "dt-head-center dt-body-right" },
 		              { className: "dt-center" },
 		              { className: "dt-center" }

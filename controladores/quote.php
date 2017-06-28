@@ -54,7 +54,7 @@ $miConexionBd = new ConexionBd ( "mysql" );
 $quoteNumber = (new Quote ( $miConexionBd ))->getNextQuoteNumber ();
 
 // Prepared by
-$userName = "Annie Wang";
+$userName = $_SESSION ['user_name'];
 
 // Se construye el arreglo en Javascript para el autocompletar de productos
 $myProduct = new Product ( $miConexionBd );

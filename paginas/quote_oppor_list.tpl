@@ -128,7 +128,7 @@ $(document).ready(function() {
 				<div class="panel panel-primary">
 					<div class="panel-heading">Opportunities List</div>
 					<div class="panel-body">
-						<table id="tOpportunity" class="display" width="100%"
+						<table id="tOpportunity" class="display nowrap" width="100%"
 							cellspacing="0">
 							<thead>
 								<tr>
@@ -151,7 +151,7 @@ $(document).ready(function() {
 						<div class="panel panel-primary">
 							<div class="panel-heading">Quotes List</div>
 							<div class="panel-body">
-								<table id="tQuote" class="display" width="100%" cellspacing="0">
+								<table id="tQuote" class="display nowrap" width="100%" cellspacing="0">
 									<thead>
 										<tr>
 											<th>Quote Number</th>
