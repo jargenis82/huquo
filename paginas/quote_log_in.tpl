@@ -42,38 +42,31 @@
 <style type="text/css">
 </style>
 <script>
-
-
-
-function validarUser(){
-
-xajax_validateUser($('#userName').val(),$('#password').val());
-
-
-}
+	function validarUser() {
+		xajax_validateUser($('#userName').val(), $('#password').val());
+	}
 </script>
 </head>
-<body>
-
-<div class="container">
-   	<div class="row">
-	 		<div class="col-sm-4 col-sm-offset-3 text-left">
-	   		<form  id="idForm" action="javascript:validarUser();">
-			    <h4 class="form-signin-heading">Welcome Huquo Please Sign In</h4>
-				  <hr class="colorgraph"><br>
-				  <label><b>Username</b></label>
-				  <input type="text" class="form-control" id="userName" name="userName" placeholder="Username" required  />
-				  <label><b>Password</b></label>
-				  <input type="password" class="form-control" id="password" name="password" placeholder="Password" required/>
-				  <hr class="colorgraph"><br>
-				  <button class="btn btn-lg btn-primary btn-block"   value="Login" type="submit" >Login</button>
-			<div class="col-sm-8" ></div>
+<body onload="document.getElementById('userName').focus();">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-3 text-left">
+				<form id="idForm" action="javascript:validarUser();">
+					<h4 class="form-signin-heading">Welcome Huquo Please Sign In</h4>
+					<hr class="colorgraph">
+					<br> <label><b>Username</b></label> <input type="text"
+						class="form-control" id="userName" name="userName"
+						placeholder="Username" required /> <label><b>Password</b></label>
+					<input type="password" class="form-control" id="password"
+						name="password" placeholder="Password" required />
+					<hr class="colorgraph">
+					<br>
+					<button class="btn btn-lg btn-primary btn-block" value="Login"
+						type="submit">Login</button>
+					<div class="col-sm-8"></div>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
-
 </body>
-	
-</body>
-
 </html>

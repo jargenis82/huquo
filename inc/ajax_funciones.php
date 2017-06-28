@@ -5,6 +5,7 @@ include_once '../librerias/conexion_bd.php';
 include_once '../librerias/xajax_0.2.4/xajax.inc.php';
 include_once '../librerias/insightly.php';
 include_once '../librerias/class-phpass.php';
+include_once '../clases/contact.php';
 include_once '../clases/organisation.php';
 include_once '../clases/price.php';
 include_once '../clases/product.php';
@@ -46,27 +47,35 @@ function validateUser($user, $password) {
 	$enlace = new PDO ( "mysql:host=" . W . ";port=" . V . ";dbname=" . ZZ, XX, YY );
 	$miConexionBd = new ConexionBd ( null, $enlace );
 	// Se consulta el usuario en Wordpress para obtener el HASH del password
-	$r = $miConexionBd->hacerSelect ( "user_pass", "wp_users", "user_login = '$user'" );
+	$r = $miConexionBd->hacerSelect ( "user_pass,user_email,display_name", "wp_users", "user_login = '$user'" );
 	if (comprobarVar ( $r [0] ['user_pass'] )) {
 		// Se instancia la clase para validar el password con el HASH
 		$myPasswordHash = new PasswordHash ();
 		if ($myPasswordHash->CheckPassword ( aceptarComilla ( $password ), $r [0] ['user_pass'] )) {
 			// Se busca el usuario en la BD de Huquo
-			$myUser = new User ();
+			$miConexionBd = new ConexionBd ( "mysql" );
+			$miConexionBd->hacerConsulta ( "BEGIN;" );
+			$myUser = new User ( $miConexionBd );
 			$myUser->setAtributo ( "user_login_ftp", $user );
+			$myUser->setAtributo ( "user_name", utf8_encode ( $r [0] ['display_name'] ) );
+			$myUser->setAtributo ( "user_email", utf8_encode ( $r [0] ['user_email'] ) );
 			$arrUser = $myUser->consultar ();
+			// Si existe el usuario obtengo los datos a mantener en la variable de sesión
 			if (count ( $arrUser ) == 1) {
-				$_SESSION ['user_id'] = $arrUser [0]->getAtributo ( "user_id" );
-				$_SESSION ['user_login_ftp'] = $arrUser [0]->getAtributo ( "user_login_ftp" );
+				$myUser = $arrUser[0];
 			} else {
-				if ($myUser->registrar ()) {
-					$_SESSION ['user_id'] = $myUser->getAtributo ( "user_id" );
-					$_SESSION ['user_login_ftp'] = $myUser->getAtributo ( "user_login_ftp" );
-				} else {
+				$myUser->setAtributo ( "user_creation_date", date ( "Y-m-d H:i:s" ) );
+				if (! $myUser->registrar ()) {
+					$miConexionBd->hacerConsulta ( "ROLLBACK;" );
 					$objResponse->addAlert ( "Error (VU-001). Please contact your administrator." );
 					return $objResponse;
-				}
+				}				
 			}
+			$_SESSION ['user_id'] = $myUser->getAtributo ( "user_id" );
+			$_SESSION ['user_login_ftp'] = $myUser->getAtributo ( "user_login_ftp" );
+			$_SESSION ['user_name'] = $myUser->getAtributo ( "user_name" );
+			$_SESSION ['user_email'] = $myUser->getAtributo ( "user_email" );
+			$miConexionBd->hacerConsulta ( "COMMIT;" );
 			$objResponse->addScript ( "window.top.location.reload(true);" );
 		} else {
 			$objResponse->addAlert ( "Datos incorrectos. Intente nuevamente." );
