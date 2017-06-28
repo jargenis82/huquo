@@ -152,8 +152,7 @@ function limpiarPalabra($palabra) {
 }
 
 function convertToDoubleval($number) {
-	$number = str_replace ( ".", "", $number );
-	$number = str_replace ( ",", ".", $number );
+	$number = str_replace ( ",", "", $number );	
 	return doubleval ( $number );
 }
 

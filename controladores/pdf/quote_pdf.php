@@ -62,9 +62,9 @@ foreach ( $arrQuoteLine as $i => $aQuoteLine ) {
 	$products [$i] ['desc'] = $desc;
 	$products [$i] ['qty'] = $qty;
 	$products [$i] ['qty'] = $qty;
-	$price = number_format ( $price, 2, ",", "." );
+	$price = number_format ( $price, 2, ".", "," );
 	$products [$i] ['price'] = $price;
-	$amount = number_format ( $amount, 2, ",", "." );
+	$amount = number_format ( $amount, 2, ".", "," );
 	$products [$i] ['amount'] = $amount;
 }
 
@@ -72,10 +72,10 @@ $sunTotal = $sunTotal - $discountVal;
 $hstUst = $sunTotal * $hstUst;
 $total = $sunTotal + $hstUst;
 
-$discountVal = number_format ( $discountVal, 2, ",", "." );
-$sunTotal = number_format ( $sunTotal, 2, ",", "." );
-$hstUst = number_format ( $hstUst, 2, ",", "." );
-$total = number_format ( $total, 2, ",", "." );
+$discountVal = number_format ( $discountVal, 2, ".", "," );
+$sunTotal = number_format ( $sunTotal, 2, ".", "," );
+$hstUst = number_format ( $hstUst, 2, ".", "," );
+$total = number_format ( $total, 2, ".", "," );
 
 $TBS1 = new clsTinyButStrong ();
 $TBS1->LoadTemplate ( '../../paginas/quote_pdf_cabecera.tpl' );

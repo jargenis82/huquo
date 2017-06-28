@@ -47,10 +47,10 @@ class Quote extends ClaseBd {
 			$quoteHstRate = doubleval($myQuote->getAtributo("quote_hst_rate"));
 			$total -= $quoteDiscount;
 			$total = ($total * ($quoteHstRate/100)) + $total;
-			$total = number_format ( $total, 2, ",", "." );
+			$total = number_format ( $total, 2, ".", "," );
 			return $total;
 		} else {
-			return "0,00";
+			return "0.00";
 		}
 	}
 	function getNextQuoteNumber() {

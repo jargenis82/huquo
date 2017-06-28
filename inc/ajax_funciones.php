@@ -237,9 +237,9 @@ function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate, $pro
 	if (comprobarVar ( $productSaleId )) {
 		$objResponse->addScript ( "subTotalProducts = subTotalProducts - $amountAct + $amount;" );
 	}
-	$unit = number_format ( $unit, 2, ",", "." );
-	$amount = number_format ( $amount, 2, ",", "." );
-	$subtotal = number_format ( $subtotal, 2, ",", "." );
+	$unit = number_format ( $unit, 2, ".", "," );
+	$amount = number_format ( $amount, 2, ".", "," );
+	$subtotal = number_format ( $subtotal, 2, ".", "," );
 	if (comprobarVar ( $id )) {
 		$objResponse->addAssign ( "txt_unit$id", "value", $unit );
 		$objResponse->addAssign ( "span_amount$id", "innerHTML", $amount );
@@ -265,11 +265,11 @@ function calculateDiscount($id, $val, $subTotalProducts, $discountAct, $subtotal
 	$hst = $subtotal * $hstRate;
 	$total = $subtotal + $hst;
 	$objResponse->addScript ( "discount = $val;" );
-	$val = number_format ( $val, 2, ",", "." );
-	$per = number_format ( $per, 2, ",", "." );
-	$subtotal = number_format ( $subtotal, 2, ",", "." );
-	$hst = number_format ( $hst, 2, ",", "." );
-	$total = number_format ( $total, 2, ",", "." );
+	$val = number_format ( $val, 2, ".", "," );
+	$per = number_format ( $per, 2, ".", "," );
+	$subtotal = number_format ( $subtotal, 2, ".", "," );
+	$hst = number_format ( $hst, 2, ".", "," );
+	$total = number_format ( $total, 2, ".", "," );
 	$objResponse->addAssign ( "txt_discount_val", "value", $val );
 	$objResponse->addAssign ( "txt_discount_per", "value", $per );
 	$objResponse->addAssign ( "span_subtotal", "innerHTML", $subtotal );
@@ -288,7 +288,7 @@ function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $price
 	$arrPrice = $myPrice->consultar ();
 	if (count ( $arrPrice ) == 1) {
 		$priceValue = $arrPrice [0]->getAtributo ( "price_value" );
-		$priceValue = number_format ( $priceValue, 2, ",", "." );
+		$priceValue = number_format ( $priceValue, 2, ".", "," );
 		$objResponse->addAssign ( "txt_unit$idTxtDescrip", "value", $priceValue );
 		$objResponse->addAssign ( "txt_qty$idTxtDescrip", "value", "" );
 		$objResponse->addScript ( "calculateAmount('$idTxtDescrip');" );

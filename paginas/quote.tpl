@@ -325,7 +325,7 @@ table, td, th {
 									<tr>
 
 										<td>Subtotal (US$)</td>
-										<td><span id="span_subtotal">0,00</span></td>
+										<td><span id="span_subtotal">0.00</span></td>
 
 									</tr>
 									<tr>
@@ -339,11 +339,11 @@ table, td, th {
 									</tr>
 									<tr>
 										<td>HST (US$)</td>
-										<td><span id="span_hst">0,00</span></td>
+										<td><span id="span_hst">0.00</span></td>
 									</tr>
 									<tr>
 										<td><b>TOTAL (US$)</b></td>
-										<td><b><span id="span_total">0,00</span></b></td>
+										<td><b><span id="span_total">0.00</span></b></td>
 									</tr>
 								</tbody>
 							</table>
