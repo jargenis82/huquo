@@ -51,13 +51,20 @@ function newQuote(opportunityId){
 	window.open("../index.php?page=quote&opportunityId="+opportunityId+"&newPage=1");
 }
 
-function addNewProduct() {
+function viewQuote(quoteId,opportunityId){
+	window.open("../index.php?page=quote&quoteId="+quoteId+"&opportunityId="+opportunityId+"&newPage=1");
+}
+
+function addNewProduct(quoteId) {	
+	if (typeof(quoteId) == "undefined") {
+		quoteId = "";
+	}
 	idTxtDescrip++;
 	arrProductSale[idTxtDescrip] = new Array();
 	arrProductSale[idTxtDescrip]['product_sale_id'] = "";
 	arrProductSale[idTxtDescrip]['quote_line_desc'] = "";
 	arrProductSale[idTxtDescrip]['quote_line_price'] = "";
-	xajax_addNewProduct(idTxtDescrip);
+	xajax_addNewProduct(idTxtDescrip,quoteId,customerRegionId,priceTypeId);
 }
 function openPdfQuote(quoteId,newTag){
 	if (newTag) {

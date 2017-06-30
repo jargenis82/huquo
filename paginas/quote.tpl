@@ -103,7 +103,7 @@ table, td, th {
 	 xajax_saveQuote(quote,arrProduct);
  }
   
- function calculateAmount(id) {
+ function calculateAmount(id,getQuoteLine) {
 	var unit = $('#txt_unit'+id).val();
 	var qty = $('#txt_qty'+id).val();
 	var amount = $('#span_amount'+id).text();
@@ -189,7 +189,7 @@ table, td, th {
   </script>
 
 </head>
-<body onload="document.getElementById('txt_contact').focus();">
+<body onload="document.getElementById('txt_contact').focus();xajax_addNewProduct(0,'[var.quoteId;noerr]',customerRegionId,priceTypeId);">
 	<div class="container">
 		<div class="col-sm-8">
 			<div class="panel panel-primary">

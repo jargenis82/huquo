@@ -26,7 +26,7 @@ if (comprobarVar ( $opportunityId )) {
 		$unDato [0] [1] = $quoteDate;
 		$unDato [0] [2] = $myQuote->getObjeto ( "User" )->getAtributo ( "user_name" );
 		$unDato [0] [3] = $quoteTotal;
-		$unDato [0] [4] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick=''></span>";
+		$unDato [0] [4] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='viewQuote($quoteId,$opportunityId)'></span>";
 		$unDato [0] [5] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='openPdfQuote($quoteId,true)'></span>";
 		$arrJson ['aaData'] [] = $unDato [0];
 	}

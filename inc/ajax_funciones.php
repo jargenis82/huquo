@@ -23,7 +23,7 @@ $xajax->registerFunction ( "calculateDiscount" );
 $xajax->registerFunction ( "saveQuote" );
 $xajax->registerFunction ( "getContactInfos" );
 $xajax->registerFunction ( "validateUser" );
-function getContactInfos($contactInsId) {
+function getContactInfos($contactInsId, $contactEmail) {
 	$objResponse = new xajaxResponse ();
 	$i = new Insightly ( APIKEY );
 	$myContact = $i->getContact ( $contactInsId );
@@ -31,7 +31,13 @@ function getContactInfos($contactInsId) {
 	$htmlSelect = '';
 	foreach ( $arrContactInfos as $i => $myContactinfo ) {
 		if ($myContactinfo->TYPE == "EMAIL") {
-			$htmlSelect .= '<option value="' . $myContactinfo->DETAIL . '">' . $myContactinfo->DETAIL . '</option>';
+			$selected = '';
+			if (comprobarVar ( $contactEmail )) {
+				if (trim ( $myContactinfo->DETAIL ) == $contactEmail) {
+					$selected = 'selected="selected"';
+				}
+			}
+			$htmlSelect .= '<option value="' . $myContactinfo->DETAIL . '" ' . $selected . '>' . $myContactinfo->DETAIL . '</option>';
 		}
 	}
 	$htmlSelect = $htmlSelect == '' ? '<option value="0">Any...</option>' : $htmlSelect;
@@ -260,9 +266,10 @@ function calculateDiscount($id, $val, $subTotalProducts, $discountAct, $subtotal
 	$discountAct = doubleval ( $discountAct );
 	$subtotal = convertToDoubleval ( $subtotal );
 	$subtotal = $subtotal + $discountAct - $val;
-	$hstRate = convertToDoubleval ( $hstRate );
+	$hstRate = doubleval ( $hstRate );
 	$hstRate = $hstRate / 100;
 	$hst = $subtotal * $hstRate;
+	$hstRate = $hstRate * 100;
 	$total = $subtotal + $hst;
 	$objResponse->addScript ( "discount = $val;" );
 	$val = number_format ( $val, 2, ".", "," );
@@ -273,6 +280,7 @@ function calculateDiscount($id, $val, $subTotalProducts, $discountAct, $subtotal
 	$objResponse->addAssign ( "txt_discount_val", "value", $val );
 	$objResponse->addAssign ( "txt_discount_per", "value", $per );
 	$objResponse->addAssign ( "span_subtotal", "innerHTML", $subtotal );
+	$objResponse->addAssign ( "txt_hst_rate", "value", $hstRate );
 	$objResponse->addAssign ( "span_hst", "innerHTML", $hst );
 	$objResponse->addAssign ( "span_total", "innerHTML", $total );
 	return $objResponse;
@@ -291,27 +299,28 @@ function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $price
 		$priceValue = number_format ( $priceValue, 2, ".", "," );
 		$objResponse->addAssign ( "txt_unit$idTxtDescrip", "value", $priceValue );
 		$objResponse->addAssign ( "txt_qty$idTxtDescrip", "value", "" );
-		$objResponse->addScript ( "calculateAmount('$idTxtDescrip');" );
-		$objResponse->addScript ( "document.getElementById('txt_qty$idTxtDescrip').focus();" );
 		$objResponse->addScript ( "arrProductSale[$idTxtDescrip]['product_sale_id'] = '$productSaleId';" );
 		$objResponse->addScript ( "arrProductSale[$idTxtDescrip]['quote_line_desc'] = '$quoteLineDesc';" );
 		$objResponse->addScript ( "arrProductSale[$idTxtDescrip]['quote_line_price'] = '$priceValue';" );
+		$objResponse->addScript ( "calculateAmount('$idTxtDescrip');" );
+		$objResponse->addScript ( "document.getElementById('txt_qty$idTxtDescrip').focus();" );
 	}
 	return $objResponse;
 }
-function addNewProduct($idTxtDescrip) {
+function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId) {
 	$objResponse = new xajaxResponse ();
-	$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
-	$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
-	$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" class="form-control"></td>';
-	$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" size="7"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
-	$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="4" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
-	$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '"></span></td>';
-	$jq = "
+	if (comprobarVar ( $idTxtDescrip ) and intval ( $idTxtDescrip ) != 0) {
+		$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
+		$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
+		$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" class="form-control" ></td>';
+		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" size="7"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="4" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '"></span></td>';
+		$jq = "
      		var tr='$textoHtml';
     		$('#descripId').append(tr);
 ";
-	$js = "
+		$js = "
 	$( function() {
 
       $( '#txt_decrip$idTxtDescrip' ).autocomplete({
@@ -325,11 +334,88 @@ function addNewProduct($idTxtDescrip) {
 	    });
 		});
      } )";
-	
-	$objResponse->addScript ( $jq );
-	$objResponse->addScript ( $js );
-	$objResponse->addScript ( "document.getElementById('txt_decrip$idTxtDescrip').focus();" );
-	$objResponse->addScript ( "window.parent.ajustarIframe();" );
+		
+		$objResponse->addScript ( $jq );
+		$objResponse->addScript ( $js );
+		$objResponse->addScript ( "window.parent.ajustarIframe();" );
+		$objResponse->addScript ( "document.getElementById('txt_decrip$idTxtDescrip').focus();" );
+	}
+	if (comprobarVar ( $quoteId ) and comprobarVar ( $customerRegionId ) and comprobarVar ( $priceTypeId )) {
+		$miConexionBd = new ConexionBd ( "mysql" );
+		$myQuoteLine = new QuoteLine ( $miConexionBd );
+		$myQuoteLine->setObjeto ( "Quote", $quoteId );
+		$cantidad = $myQuoteLine->consultar ( true );
+		$totalNewProduct = intval ( $idTxtDescrip ) + 1;
+		if ($totalNewProduct == $cantidad) {
+			$arrQuoteLine = $myQuoteLine->consultar ();
+			$j = 0;
+			$subTotal = doubleval ( 0 );
+			$subTotalProducts = doubleval ( 0 );
+			foreach ( $arrQuoteLine as $i => $aQuoteLine ) {
+				$quoteLineDesc = $aQuoteLine->getAtributo ( "quote_line_desc" );
+				$quoteLinePrice = convertToDoubleval ( $aQuoteLine->getAtributo ( "quote_line_price" ) );
+				$quoteLineQty = intval ( $aQuoteLine->getAtributo ( "quote_line_qty" ) );
+				$quoteLineAmount = $quoteLinePrice * $quoteLineQty;
+				$subTotal += $quoteLineAmount;
+				$myProductSale = $aQuoteLine->getObjeto ( "ProductSale" );
+				if (isset ( $myProductSale )) {
+					$productSaleId = $myProductSale->getAtributo ( "product_sale_id" );
+					$myPrice = new Price ( $miConexionBd );
+					$myPrice->setObjeto ( "ProductSale", $productSaleId );
+					$myPrice->setObjeto ( "CustomerRegion", $customerRegionId );
+					$myPrice->setObjeto ( "PriceType", $priceTypeId );
+					$arrPrice = $myPrice->consultar ();
+					if (count ( $arrPrice ) == 1) {
+						$priceValue = $arrPrice [0]->getAtributo ( "price_value" );
+						$priceValue = number_format ( $priceValue, 2, ".", "," );
+						$objResponse->addScript ( "arrProductSale[$i]['product_sale_id'] = '$productSaleId';" );
+						$objResponse->addScript ( "arrProductSale[$i]['quote_line_desc'] = availableDescrip[availableId.indexOf('$productSaleId')];" );
+						$objResponse->addScript ( "arrProductSale[$i]['quote_line_price'] = '$priceValue';" );
+						$objResponse->addScript ( "subTotalProducts = subTotalProducts + $quoteLineAmount;" );
+						$subTotalProducts += $quoteLineAmount;
+					}
+				}
+				$quoteLinePrice = number_format ( $quoteLinePrice, 2, ".", "," );
+				$quoteLineAmount = number_format ( $quoteLineAmount, 2, ".", "," );
+				$objResponse->addAssign ( "txt_decrip$i", "value", $quoteLineDesc );
+				$objResponse->addAssign ( "txt_unit$i", "value", $quoteLinePrice );
+				$objResponse->addAssign ( "txt_qty$i", "value", $quoteLineQty );
+				$objResponse->addAssign ( "span_amount$i", "innerHTML", $quoteLineAmount );				
+			}
+			$myQuote = new Quote ( $miConexionBd, $quoteId );
+			$myContact = $myQuote->getObjeto ( "Contact" );
+			if (isset ( $myContact )) {
+				$contactName = $myContact->getAtributo ( "contact_name" );
+				$contactEmail = $myContact->getAtributo ( "contact_email" );
+				$contactInsId = $myContact->getAtributo ( "contact_ins_id" );
+				$objResponse->addAssign ( "txt_contact", "value", $contactName );
+				$objResponse->addScript ( "xajax_getContactInfos($contactInsId,'$contactEmail');" ); // FALTA MARCARLO
+				
+			}
+			$quoteComment = $myQuote->getAtributo ( "quote_comment" );
+			$quoteDiscount = convertToDoubleval ( $myQuote->getAtributo ( "quote_discount" ) );
+			$quoteDiscountPer = $quoteDiscount * 100 / $subTotalProducts;
+			$subTotal = $subTotal - $quoteDiscount;
+			$quoteHstRate = doubleval ( $myQuote->getAtributo ( "quote_hst_rate" ) );
+			$quoteHst = $subTotal * $quoteHstRate / 100;
+			$total = $subTotal + $quoteHst;
+			$quoteDiscount = number_format ( $quoteDiscount, 2, ".", "," );
+			$quoteDiscountPer = number_format ( $quoteDiscountPer, 2, ".", "," );
+			$subTotal = number_format ( $subTotal, 2, ".", "," );
+			$quoteHst = number_format ( $quoteHst, 2, ".", "," );
+			$total = number_format ( $total, 2, ".", "," );
+			$objResponse->addAssign ( "txt_comment", "value", $quoteComment );
+			$objResponse->addAssign ( "txt_discount_val", "value", $quoteDiscount );
+			$objResponse->addAssign ( "txt_discount_per", "value", $quoteDiscountPer );
+			$objResponse->addAssign ( "span_subtotal", "innerHTML", $subTotal );
+			$objResponse->addAssign ( "txt_hst_rate", "value", $quoteHstRate );
+			$objResponse->addAssign ( "span_hst", "innerHTML", $quoteHst );
+			$objResponse->addAssign ( "span_total", "innerHTML", $total );
+			$objResponse->addScript ( "document.getElementById('txt_contact').focus();" );
+		} else {
+			$objResponse->addScript ( "addNewProduct($quoteId);" );
+		}
+	}
 	return $objResponse;
 }
 function getCustomer($customerName, $getOpportunities) {
