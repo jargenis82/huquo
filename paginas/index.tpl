@@ -72,8 +72,11 @@ a.disabled {
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-						 <li><a class="[var.menuHid;noerr]"><span class="glyphicon glyphicon-user"></span>&nbsp;[var.userName;noerr] </a></li>
-						<li><a href="./controladores/cerrar_sesion.php"
+					<li><a class="[var.menuHid;noerr]"><span
+							class="glyphicon glyphicon-user"></span>&nbsp;[var.userName;noerr]
+					</a></li>
+					<li><a
+						href="./controladores/cerrar_sesion.php?newPage=[var.newPage;noerr]"
 						class="[var.menuHid;noerr]"><span
 							class="glyphicon glyphicon-log-out"></span>Log out</a></li>
 				</ul>
@@ -87,4 +90,3 @@ a.disabled {
 	</div>
 </body>
 </html>
- 

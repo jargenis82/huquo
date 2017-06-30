@@ -48,7 +48,7 @@ function dataTableQuote(opportunityId) {
 }
 
 function newQuote(opportunityId){
-	window.open("../index.php?page=quote&opportunityId="+opportunityId);
+	window.open("../index.php?page=quote&opportunityId="+opportunityId+"&newPage=1");
 }
 
 function addNewProduct() {

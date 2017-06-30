@@ -49,14 +49,11 @@ table, td, th {
 <script>
 	var consultingCustomer = "";
 	var organizationId = "";
-	
 	$(function() {
 		var availableTags = [ [var.customers;htmlconv=no;noerr]  ];
-		//var availableTags = [ "Arkcom", "Wellscom", "Asp", "BASIC", "C" ];
 		$("#tags").autocomplete({
 			source : availableTags
 		});
-
 		$("#tags").autocomplete({
 			change : function(event, ui) {
 				if (consultingCustomer != this.value) {
@@ -73,30 +70,19 @@ table, td, th {
 			xajax_getCustomer(ui.item.value,1);
 		});
 	});
-
-
-$(document).ready(function() {
-
-	    
-    $('#tOpportunity tbody').on( 'click', 'tr', function () {
-    	$('#tOpportunity tr').removeClass("selected");
-        if ( $(this).hasClass('selected') ==false) {
-            $(this).addClass('selected');
-          
-        }
-
-        
-    } );
- 
-   
-} );
-
-
-
+	$(document).ready(function() {    
+	    $('#tOpportunity tbody').on( 'click', 'tr', function () {
+	    	$('#tOpportunity tr').removeClass("selected");
+	        if ( $(this).hasClass('selected') ==false) {
+	            $(this).addClass('selected'); 
+	        }
+	    } );
+	} );
 </script>
 </head>
-<body onload="document.getElementById('tags').focus();dataTableQuote(); dataTable();">
-		<div class="container">
+<body
+	onload="document.getElementById('tags').focus();dataTableQuote(); dataTable();">
+	<div class="container">
 		<div class="row">
 			<div class="col-sm-3">
 				<div class="panel panel-primary">
@@ -151,7 +137,8 @@ $(document).ready(function() {
 						<div class="panel panel-primary">
 							<div class="panel-heading">Quotes List</div>
 							<div class="panel-body">
-								<table id="tQuote" class="display nowrap" width="100%" cellspacing="0">
+								<table id="tQuote" class="display nowrap" width="100%"
+									cellspacing="0">
 									<thead>
 										<tr>
 											<th>Quote Number</th>
@@ -171,9 +158,8 @@ $(document).ready(function() {
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 </body>
-
 </html>

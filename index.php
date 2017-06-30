@@ -15,6 +15,9 @@ $xajax = new xajax ( "inc/ajax_funciones.php" );
 $xajax->registerFunction ( "validateUser" );
 $js = $xajax->getJavascript ( 'librerias/' );
 
+// Variable GET que indica si la página actual esta activa en una nueva pestaña o es la única página del sistema
+$newPage = comprobarVar ( $_GET ['newPage'] ) ? trim ( $_GET ['newPage'] ) : "0";
+
 // Si el usuario ya se validó debe tener una variable de sesión 'user_id' activa
 if (comprobarVar ( $_SESSION ['user_id'] )) {
 	$userLoginFtp = comprobarVar ( $_SESSION ['user_login_ftp'] ) ? $_SESSION ['user_login_ftp'] : "";

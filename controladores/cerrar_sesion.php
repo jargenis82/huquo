@@ -3,7 +3,8 @@ include_once '../conf.inc.php';
 include_once RUTA_SISTEMA.'inc/funciones.php';
 session_start();
 
-
+// Variable GET que indica si la página actual esta activa en una nueva pestaña o es la única página del sistema
+$newPage = comprobarVar ( $_GET ['newPage'] ) ? trim ( $_GET ['newPage'] ) : "0";
 
 // Se borran y se destruyen todos los datos de la sesi�n
 session_unset();
@@ -14,7 +15,13 @@ session_destroy();
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<script language="JavaScript" type="text/javascript">
-		window.parent.parent.location = "../index.php";
+		var newPage = "<?php echo $newPage;?>";
+		if (newPage == "1") {
+			window.opener.parent.location = "../index.php";
+			window.close();
+		} else {
+			window.location = "../index.php";
+		}
 	</script>
 </head>
 <body>
