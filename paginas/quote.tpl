@@ -199,8 +199,8 @@ table, td, th {
 	function validarKeyPress() {	
 		//called when key is pressed in textbox
 		$(".validNumber").keypress(function (e) {
-			// Si no es punto, Tecla Intro o números
-			if (e.which != 46 && e.which != 13 && (e.which < 48 || e.which > 57)) {
+			// Si no es punto, Intro, Backspace, Caracter nulo o números
+			if (e.which != 46 && e.which != 13 && e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
 				mostrarMsjFadeOut("Digits Only", $(this));
 				return false;
 			}
