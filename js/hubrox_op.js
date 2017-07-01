@@ -48,11 +48,11 @@ function dataTableQuote(opportunityId) {
 }
 
 function newQuote(opportunityId){
-	window.open("../index.php?page=quote&opportunityId="+opportunityId+"&newPage=1");
+	window.parent.pagAbiertas[window.parent.pagAbiertas.length] = window.open("../index.php?page=quote&opportunityId="+opportunityId+"&newPage=1");
 }
 
 function viewQuote(quoteId,opportunityId){
-	window.open("../index.php?page=quote&quoteId="+quoteId+"&opportunityId="+opportunityId+"&newPage=1");
+	window.parent.pagAbiertas[window.parent.pagAbiertas.length] = window.open("../index.php?page=quote&quoteId="+quoteId+"&opportunityId="+opportunityId+"&newPage=1");
 }
 
 function addNewProduct(quoteId) {	

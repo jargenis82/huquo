@@ -17,10 +17,10 @@ session_destroy();
 	<script language="JavaScript" type="text/javascript">
 		var newPage = "<?php echo $newPage;?>";
 		if (newPage == "1") {
-			window.opener.parent.location = "../index.php";
-			window.close();
+			window.opener.parent.location = "..";
+			window.opener.parent.cerrarPagAbiertas();
 		} else {
-			window.location = "../index.php";
+			window.location = "..";
 		}
 	</script>
 </head>

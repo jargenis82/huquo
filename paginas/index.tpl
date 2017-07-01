@@ -46,6 +46,23 @@ a.disabled {
 </style>
 
 <script type="text/javascript">
+	var pagAbiertas = new Array();
+
+	function cerrarSesion() {
+		var url = "./controladores/cerrar_sesion.php?newPage=[var.newPage;noerr]";
+		cerrarPagAbiertas();
+		window.location = url;
+	}
+	
+	function cerrarPagAbiertas() {
+		var tamano = pagAbiertas.length;
+		for (var i=0;i < tamano;i++) {
+			if (typeof(pagAbiertas[i]) != "undefined") {
+				pagAbiertas[i].close();
+			}
+		}
+	}
+	
 	function ajustarIframe() {
 		document.getElementById('ifrm').style.height = document
 				.getElementById('ifrm').contentWindow.document.body.scrollHeight
@@ -76,7 +93,7 @@ a.disabled {
 							class="glyphicon glyphicon-user"></span>&nbsp;[var.userName;noerr]
 					</a></li>
 					<li><a
-						href="./controladores/cerrar_sesion.php?newPage=[var.newPage;noerr]"
+						href="javascript:cerrarSesion();"
 						class="[var.menuHid;noerr]"><span
 							class="glyphicon glyphicon-log-out"></span>Log out</a></li>
 				</ul>
