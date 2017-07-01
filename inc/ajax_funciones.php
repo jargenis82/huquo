@@ -394,6 +394,7 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 			}
 			$quoteComment = $myQuote->getAtributo ( "quote_comment" );
 			$quoteDiscount = convertToDoubleval ( $myQuote->getAtributo ( "quote_discount" ) );
+			$objResponse->addScript ( "discount = $quoteDiscount;" );
 			$quoteDiscountPer = $quoteDiscount * 100 / $subTotalProducts;
 			$subTotal = $subTotal - $quoteDiscount;
 			$quoteHstRate = doubleval ( $myQuote->getAtributo ( "quote_hst_rate" ) );
