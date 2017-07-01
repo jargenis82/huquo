@@ -313,8 +313,8 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 		$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
 		$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
 		$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" class="form-control" ></td>';
-		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" size="7"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
-		$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="4" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" size="7" class="validNumber" onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="4" class="validNumber" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
 		$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '"></span></td>';
 		$jq = "
      		var tr='$textoHtml';
@@ -339,6 +339,7 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 		$objResponse->addScript ( $js );
 		$objResponse->addScript ( "window.parent.ajustarIframe();" );
 		$objResponse->addScript ( "document.getElementById('txt_decrip$idTxtDescrip').focus();" );
+		$objResponse->addScript ( "validarKeyPress();" );
 	}
 	if (comprobarVar ( $quoteId ) and comprobarVar ( $customerRegionId ) and comprobarVar ( $priceTypeId )) {
 		$miConexionBd = new ConexionBd ( "mysql" );

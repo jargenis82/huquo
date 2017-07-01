@@ -42,154 +42,188 @@ table, td, th {
 </style>
 
 <script type="text/javascript">
- $(document).ready(function() {
-    var table = $('#descripId').DataTable( {
-        searching: false,
-        "scrollY": "auto",
-      	 minDate: "today",
-        "bInfo": false,
-        "paging": false
-    } );
-} );
-
- var contactInsId = "";
- var idTxtDescrip = 0;
- var availableContact = [ [var.jsDataContact;htmlconv=no;noerr]  ];
- var availableContactId = [ [var.jsDataContactId;htmlconv=no;noerr]  ];
- var availableDescrip = [ [var.jsData;htmlconv=no;noerr]  ];
- var availableId = [ [var.jsDataId;htmlconv=no;noerr]  ];
- var opportunityId = "[var.opportunityId;noerr]";
- var organizationId = "[var.organizationId;noerr]";
- var customerRegionId = "[var.customerRegionId;noerr]";
- var priceTypeId = "[var.priceTypeId;noerr]";
- var arrProductSale = new Array();
- arrProductSale[0] = new Array();
- arrProductSale[0]['product_sale_id'] = "";
- arrProductSale[0]['quote_line_desc'] = "";
- arrProductSale[0]['quote_line_price'] = "";
- var subTotalProducts = 0.00;
- var discount = 0.00;
- 
- function saveQuote() {
-	 var quote = new Array();
-	 quote['contact_name'] = $('#txt_contact').val();
-	 quote['contact_email'] = $('#sel_email').val();
-	 quote['contact_ins_id'] = contactInsId;	 
-	 quote['quote_date'] = $('#span_date').text();
-	 quote['quote_valid_until'] = $('#txt_valid_until').val();
-	 quote['quote_discount'] = $('#txt_discount_val').val();
-	 quote['quote_hst_rate'] = $('#txt_hst_rate').val();
-	 quote['quote_ship_to'] = $('#txt_ship_to').val();
-	 quote['quote_number'] = $('#span_number').text();
-	 quote['oppor_id'] = opportunityId;
-	 quote['quote_comment'] = $('#txt_comment').val();
-	 quote['org_name'] = $('#span_name').text();
-	 quote['org_address'] = $('#span_address').text();
-	 quote['org_web'] = $('#href_web').html();
-	 quote['org_phone'] = $('#span_phone').text();
-	 quote['org_city'] = "[var.city;noerr]";
-	 quote['org_country'] = "[var.country;noerr]";
-	 quote['org_ins_id'] = organizationId;
-	 var arrProduct = new Array();
-	 for (var i=0;i <= idTxtDescrip;i++) {
-		 arrProduct[i] = new Array();
-		 arrProduct[i]['product_sale_id'] = arrProductSale[i]['product_sale_id'];
-		 arrProduct[i]['product_sale_desc'] = arrProductSale[i]['quote_line_desc'];
-		 arrProduct[i]['product_sale_price'] = arrProductSale[i]['quote_line_price'];
-		 arrProduct[i]['quote_line_desc'] = $('#txt_decrip'+i.toString()).val();
-		 arrProduct[i]['quote_line_price'] = $('#txt_unit'+i.toString()).val();
-		 arrProduct[i]['quote_line_qty'] = $('#txt_qty'+i.toString()).val();
-	 }
-	 xajax_saveQuote(quote,arrProduct);
- }
-  
- function calculateAmount(id,getQuoteLine) {
-	var unit = $('#txt_unit'+id).val();
-	var qty = $('#txt_qty'+id).val();
-	var amount = $('#span_amount'+id).text();
-	var subtotal = $('#span_subtotal').text();
-	var hstRate = $('#txt_hst_rate').val();
-	var productSaleId = "";
-	if (typeof arrProductSale[id] != "undefined"){
-		if (typeof arrProductSale[id]['product_sale_id'] != "undefined"){
-			productSaleId = arrProductSale[id]['product_sale_id'];
+	// Se declara el DataTable de la cotizaciones (filas de productos, precios, cantidades y montos)
+	$(document).ready(function() {
+		var table = $('#descripId').DataTable({
+			searching: false,
+			"scrollY": "auto",
+			minDate: "today",
+			"bInfo": false,
+			"paging": false
+	    });
+	});
+	
+	// Variables generales
+	var contactInsId = "";
+	var idTxtDescrip = 0;
+	var availableContact = [ [var.jsDataContact;htmlconv=no;noerr]  ];
+	var availableContactId = [ [var.jsDataContactId;htmlconv=no;noerr]  ];
+	var availableDescrip = [ [var.jsData;htmlconv=no;noerr]  ];
+	var availableId = [ [var.jsDataId;htmlconv=no;noerr]  ];
+	var opportunityId = "[var.opportunityId;noerr]";
+	var organizationId = "[var.organizationId;noerr]";
+	var customerRegionId = "[var.customerRegionId;noerr]";
+	var priceTypeId = "[var.priceTypeId;noerr]";
+	var arrProductSale = new Array();
+	arrProductSale[0] = new Array();
+	arrProductSale[0]['product_sale_id'] = "";
+	arrProductSale[0]['quote_line_desc'] = "";
+	arrProductSale[0]['quote_line_price'] = "";
+	var subTotalProducts = 0.00;
+	var discount = 0.00;
+	
+	// Funcion que prepara la cotizacion para su registro en XAJAX
+	function saveQuote() {
+		var quote = new Array();
+		quote['contact_name'] = $('#txt_contact').val();
+		quote['contact_email'] = $('#sel_email').val();
+		quote['contact_ins_id'] = contactInsId;
+		quote['quote_date'] = $('#span_date').text();
+		quote['quote_valid_until'] = $('#txt_valid_until').val();
+		quote['quote_discount'] = $('#txt_discount_val').val();
+		quote['quote_hst_rate'] = $('#txt_hst_rate').val();
+		quote['quote_ship_to'] = $('#txt_ship_to').val();
+		quote['quote_number'] = $('#span_number').text();
+		quote['oppor_id'] = opportunityId;
+		quote['quote_comment'] = $('#txt_comment').val();
+		quote['org_name'] = $('#span_name').text();
+		quote['org_address'] = $('#span_address').text();
+		quote['org_web'] = $('#href_web').html();
+		quote['org_phone'] = $('#span_phone').text();
+		quote['org_city'] = "[var.city;noerr]";
+		quote['org_country'] = "[var.country;noerr]";
+		quote['org_ins_id'] = organizationId;
+		var arrProduct = new Array();
+		for (var i=0;i <= idTxtDescrip;i++) {
+			arrProduct[i] = new Array();
+			arrProduct[i]['product_sale_id'] = arrProductSale[i]['product_sale_id'];
+			arrProduct[i]['product_sale_desc'] = arrProductSale[i]['quote_line_desc'];
+			arrProduct[i]['product_sale_price'] = arrProductSale[i]['quote_line_price'];
+			arrProduct[i]['quote_line_desc'] = $('#txt_decrip'+i.toString()).val();
+			arrProduct[i]['quote_line_price'] = $('#txt_unit'+i.toString()).val();
+			arrProduct[i]['quote_line_qty'] = $('#txt_qty'+i.toString()).val();
 		}
+		xajax_saveQuote(quote,arrProduct);
 	}
-	xajax_calculateAmount(id,unit,qty,amount,subtotal,hstRate,productSaleId);
- }
- 
- function calculateDiscount(objeto) {
-	var id = objeto.id;
-	var val = objeto.value;
-	var subtotal = $('#span_subtotal').text();
-	var hstRate = $('#txt_hst_rate').val();
-	xajax_calculateDiscount(id,val,subTotalProducts,discount,subtotal,hstRate);	
- }
- 
- function introQty(e) {
+	
+	// Calcula el monto de cada linea de la cotización después de la actualizacion (onChange) de algún valor
+	function calculateAmount(id,getQuoteLine) {
+		var unit = $('#txt_unit'+id).val();
+		var qty = $('#txt_qty'+id).val();
+		var amount = $('#span_amount'+id).text();
+		var subtotal = $('#span_subtotal').text();
+		var hstRate = $('#txt_hst_rate').val();
+		var productSaleId = "";
+		if (typeof arrProductSale[id] != "undefined") {
+			if (typeof arrProductSale[id]['product_sale_id'] != "undefined"){
+				productSaleId = arrProductSale[id]['product_sale_id'];
+			}
+		}
+		xajax_calculateAmount(id,unit,qty,amount,subtotal,hstRate,productSaleId);
+	}
+	
+	// Calcula el descuento y valor total de la cotización después de la actualizacion (onChange) de algún valor
+	function calculateDiscount(objeto) {
+		var id = objeto.id;
+		var val = objeto.value;
+		var subtotal = $('#span_subtotal').text();
+		var hstRate = $('#txt_hst_rate').val();
+		xajax_calculateDiscount(id,val,subTotalProducts,discount,subtotal,hstRate);
+	}
+	
+	// Agrega una nueva fila despues de pulsar Intro en cualquier campor Unit
+	function introQty(e) {
 		tecla = (document.all) ? e.keyCode : e.which;
 		if (tecla == 13){
-			//window.event.keyCode=0;
 			addNewProduct();			
 		}
 	}
- 
- $(function() {
-        $( "#txt_valid_until" ).datepicker
-        ({
-        	 minDate: 0,
-        	dateFormat: 'dd-M-yy',
-        	changeMonth: true,
-          changeYear: true
- 
-        });
-  
-    });
- $( function() {
-     $( "#txt_contact" ).autocomplete({
-        source: availableContact
-      });
-     
-     $(document).ready(function () {
- 	    $('#txt_contact').on('autocompleteselect', function (e, ui) {	    	
- 	    		var i = availableContact.indexOf(ui.item.value);
- 	    		contactInsId = availableContactId[i];
- 	    		xajax_getContactInfos(contactInsId);
- 	    		document.getElementById('sel_email').focus();
- 	    });
- 		});     
-     } );
- 
-  $( function() {
-     $( "#txt_decrip0" ).autocomplete({
-        source: availableDescrip
-      });
+	
+	// Genera un DatePicker para el campo Valid Until
+	$(function() {
+		$( "#txt_valid_until" ).datepicker({
+			minDate: 0,
+			dateFormat: 'dd-M-yy',
+			changeMonth: true,
+			changeYear: true
+		});
+	});
+	
+	// Genera un campo de tipo AutoComplete para los nombres de los contactos
+	$( function() {
+		$( "#txt_contact" ).autocomplete({
+			source: availableContact
+		});
+		
+		$(document).ready(function () {
+			$('#txt_contact').on('autocompleteselect', function (e, ui) {
+				var i = availableContact.indexOf(ui.item.value);
+				contactInsId = availableContactId[i];
+				xajax_getContactInfos(contactInsId);
+				document.getElementById('sel_email').focus();
+			});
+		});
+	});
+	
+	// Genera un campo de tipo AutoComplete para la primera fila de productos de la cotización
+	$( function() {
+		$( "#txt_decrip0" ).autocomplete({
+			source: availableDescrip
+		});
+		
+		$(document).ready(function () {
+			$('#txt_decrip0').on('autocompleteselect', function (e, ui) {
+				var i = availableDescrip.indexOf(ui.item.value);
+				xajax_getDescripProduct(availableId[i],this.id,customerRegionId,priceTypeId,ui.item.value);
+			});
+		});
+	});
+	
+	// Función del evento click del botón Delete (Eliminar la última fila)
+	$(document).ready(function(){
+		$('#remove').click(function(){
+			if (idTxtDescrip > 0) {
+				var amount = $('#span_amount'+idTxtDescrip).text();
+				var subtotal = $('#span_subtotal').text();
+				var hstRate = $('#txt_hst_rate').val();
+				xajax_calculateAmount(idTxtDescrip,0,0,amount,subtotal,hstRate);
+				$('#descripId tr:last').remove();
+				idTxtDescrip--;
+				arrProductSale.pop();
+			}
+		})
+	});
 
-     $(document).ready(function () {
-	    $('#txt_decrip0').on('autocompleteselect', function (e, ui) {	    	
-	    		var i = availableDescrip.indexOf(ui.item.value);
-	    		xajax_getDescripProduct(availableId[i],this.id,customerRegionId,priceTypeId,ui.item.value);
-	    });
-		});  
-     } );
- $(document).ready(function(){
-    
-    $('#remove').click(function(){
-    	if (idTxtDescrip > 0) {
-	    	var amount = $('#span_amount'+idTxtDescrip).text();
-	    	var subtotal = $('#span_subtotal').text();
-	    	var hstRate = $('#txt_hst_rate').val();
-	    	xajax_calculateAmount(idTxtDescrip,0,0,amount,subtotal,hstRate);
-	    	$('#descripId tr:last').remove();
-	    	idTxtDescrip--;
-	    	arrProductSale.pop();
-    	}
-    })
-	})
-  </script>
-
+	// Función que inicializa el código a ejecutar en el evento keypress de la clase .validnumber
+	// Es necesario ejecutarla cada vez que se crea un nuevo elemento con la clase .validnumber
+	function validarKeyPress() {	
+		//called when key is pressed in textbox
+		$(".validNumber").keypress(function (e) {
+			// Si no es punto, Tecla Intro o números
+			if (e.which != 46 && e.which != 13 && (e.which < 48 || e.which > 57)) {
+				mostrarMsjFadeOut("Digits Only", $(this));
+				return false;
+			}
+			// Si es punto se valida que no sea en los campos qty o que no sea doble punto para los otros campos
+			if (e.which == 46 && (this.id.indexOf('txt_qty') != -1 || this.value.indexOf('.') != -1)) {
+				mostrarMsjFadeOut("Must be a valid number", $(this));
+				return false;
+			}
+   		});
+	}
+	
+	// Función que muestra un mensaje que de desvanece (FadeOut) dentro del span errorMsg
+	// que se ubica cerca de la posicion del objeto especificado
+ 	function mostrarMsjFadeOut(msj,objeto) {
+ 		$('#errorMsg').show();
+		$("#errorMsg").offset({ top: objeto.offset().top - 20, left: objeto.offset().left - 20});
+		$("#errorMsg").html("<strong>"+msj+"</strong>").show().fadeOut(1000);
+		window.parent.ajustarIframe();
+ 	}
+</script>
 </head>
-<body onload="document.getElementById('txt_contact').focus();xajax_addNewProduct(0,'[var.quoteId;noerr]',customerRegionId,priceTypeId);">
+<body
+	onload="validarKeyPress();document.getElementById('txt_contact').focus();xajax_addNewProduct(0,'[var.quoteId;noerr]',customerRegionId,priceTypeId);">
 	<div class="container">
 		<div class="col-sm-8">
 			<div class="panel panel-primary">
@@ -288,10 +322,12 @@ table, td, th {
 								<td><input id="txt_decrip0" class="form-control"
 									tabindex="6"></td>
 								<td align="center"><input id="txt_unit0" size="7"
-									tabindex="7" onchange="calculateAmount(0);" dir="rtl"
-									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
+									class="validNumber" tabindex="7" onchange="calculateAmount(0);"
+									dir="rtl" onfocus="this.dir = 'ltr';"
+									onblur="this.dir = 'rtl';"></td>
 								<td align="center"><input id="txt_qty0" size="4"
-									tabindex="8" onKeyDown="javascript:return introQty(event);"
+									class="validNumber" tabindex="8"
+									onKeyDown="javascript:return introQty(event);"
 									onchange="calculateAmount(0);" dir="rtl"
 									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
 								<td align="right"><span id="span_amount0"></span></td>
@@ -314,10 +350,12 @@ table, td, th {
 
 										<td>Discount</td>
 										<td><input type="text" id="txt_discount_val" size="8"
-											value="0" onchange="calculateDiscount(this);" dir="rtl"
+											class="validNumber" value="0"
+											onchange="calculateDiscount(this);" dir="rtl"
 											onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
-											$ <input type="text" id="txt_discount_per" size="4" value="0"
-											dir="rtl" onchange="calculateDiscount(this);"
+											$ <input type="text" id="txt_discount_per" size="4"
+											class="validNumber" value="0" dir="rtl"
+											onchange="calculateDiscount(this);"
 											onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
 											%</td>
 
@@ -332,9 +370,9 @@ table, td, th {
 
 										<td>HST Rate</td>
 										<td><input type="text" id="txt_hst_rate" size="4"
-											value="0" dir="rtl" onchange="calculateAmount(0)" onfocus="this.dir = 'ltr';"
-											onblur="this.dir = 'rtl';"></input>
-											%</td>
+											class="validNumber" value="0" dir="rtl"
+											onchange="calculateAmount(0)" onfocus="this.dir = 'ltr';"
+											onblur="this.dir = 'rtl';"></input> %</td>
 
 									</tr>
 									<tr>
@@ -384,5 +422,6 @@ table, td, th {
 			</footer>
 		</div>
 	</div>
+	<span id="errorMsg"></span>
 </body>
 </html>
