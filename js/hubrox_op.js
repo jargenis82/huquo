@@ -22,7 +22,7 @@ function dataTable(customerName) {
 			dataTableQuote(null);
 }
 
-function dataTableQuote(opportunityId) {
+function dataTableQuote(opportunityId,opporState) {
 	var valueSearch=true;
 	if(opportunityId==null)valueSearch=false;
 	$('#tQuote').DataTable({
@@ -43,7 +43,7 @@ function dataTableQuote(opportunityId) {
 		              { className: "dt-center" },
 		              { className: "dt-center" }
 		            ],		  
-		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php?opportunityId="+opportunityId
+		"sAjaxSource" : "../controladores/json_consultas/json_consulta_quote.php?opportunityId="+opportunityId+"&opporState="+opporState
 	});
 }
 

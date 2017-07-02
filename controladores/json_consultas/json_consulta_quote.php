@@ -12,6 +12,7 @@ $arrJson = array (
 );
 
 $opportunityId = comprobarVar ( $_GET ['opportunityId'] ) ? $_GET ['opportunityId'] : null;
+$opporState = comprobarVar ( $_GET ['opporState'] ) ? $_GET ['opporState'] : null;
 $arrJson ['aaData'] = array ();
 if (comprobarVar ( $opportunityId )) {
 	$myQuote = new Quote ();
@@ -26,7 +27,11 @@ if (comprobarVar ( $opportunityId )) {
 		$unDato [0] [1] = $quoteDate;
 		$unDato [0] [2] = $myQuote->getObjeto ( "User" )->getAtributo ( "user_name" );
 		$unDato [0] [3] = $quoteTotal;
-		$unDato [0] [4] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='viewQuote($quoteId,$opportunityId)'></span>";
+		if (comprobarVar($opporState) and $opporState == 'OPEN') {
+			$unDato [0] [4] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='viewQuote($quoteId,$opportunityId)'></span>";
+		} else {
+			$unDato [0] [4] = "<span></span>";
+		}
 		$unDato [0] [5] = "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-download-alt' data-modulo='' data-accion='' onclick='openPdfQuote($quoteId,true)'></span>";
 		$arrJson ['aaData'] [] = $unDato [0];
 	}
