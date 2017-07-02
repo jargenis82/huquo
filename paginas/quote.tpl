@@ -7,6 +7,11 @@
 <!-- Boostrap -->
 <link rel="stylesheet"
 	href="../librerias/bootstrap3.3.7/css/bootstrap.min.css">
+<style type="text/css">
+	form input:focus:invalid {
+		border:2px solid red;
+	}
+</style>
 [var.js;htmlconv=no;noerr]
 <script type="text/javascript"
 	src="../librerias/jquery_actual/js/jquery.min.js"></script>
@@ -220,195 +225,207 @@ table, td, th {
 		$("#errorMsg").html("<strong>"+msj+"</strong>").show().fadeOut(1000);
 		window.parent.ajustarIframe();
  	}
+	
+	// Código que evita que se invoque el evento submit del formulario al pulsar la Tecla Enter en cualquier campo
+	$(document).ready(function() {
+		$(window).keydown(function(event){
+			if(event.keyCode == 13) {
+				event.preventDefault();
+				return false;
+			}
+		});
+	});
 </script>
 </head>
 <body
 	onload="validarKeyPress();document.getElementById('txt_contact').focus();xajax_addNewProduct(0,'[var.quoteId;noerr]',customerRegionId,priceTypeId);">
-	<div class="container">
-		<div class="col-sm-8">
-			<div class="panel panel-primary">
-				<div class="panel-heading">Customer</div>
-				<div class="panel-body">
-					<table class="table-responsive" border="0">
-						<tr>
-							<td width="100px"><label>Contact</label></td>
-							<td width="200px"><input type="text" id="txt_contact"
-								tabindex="1"></input></td>
-							<td><label>Email</label></td>
-							<td><select id="sel_email" tabindex="2"></select></td>
-						</tr>
-						<tr>
-							<td width="100px"><label>Name</label></td>
-							<td width="200px"><span id="span_name">[var.organizationName;noerr]</span></td>
-							<td rowspan="2"><label>Ship to</label></td>
-							<td>Shipping Address&nbsp;<input type="radio"
-								name="rad_ship" id="rad_ship_1" tabindex="3">&nbsp;&nbsp;Billing
-								Address<input type="radio" name="rad_ship" checked="checked"
-								tabindex="3"></td>
-						</tr>
-						<tr>
-							<td><label>Address</label></td>
-							<td><span id="span_address">[var.address;noerr]</span></td>
-							<td><textarea rows="2" cols="40" tabindex="4"
-									id="txt_ship_to">[var.address;noerr]</textarea></td>
-						</tr>
-						<tr>
-							<td><label>Web</label></td>
-							<td><a href="[var.web;noerr]" id="href_web" target="_blank">[var.web;noerr]</a></td>
-							<td><label>Region</label></td>
-							<td><span id="span_region">[var.region;noerr]</span></td>
-						</tr>
-						<tr>
-							<td><label>Phone</label></td>
-							<td><span id="span_phone">[var.phone;noerr]</span></td>
-							<td><label>Type</label></td>
-							<td><span id="span_price_type">[var.customerType;noerr]</span></td>
-						</tr>
-					</table>
+	<form action="javascript:saveQuote();" id="form_quote">
+	<input type="submit" style="display: none;" id="submit_quote">
+		<div class="container">
+			<div class="col-sm-8">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Customer</div>
+					<div class="panel-body">
+						<table class="table-responsive" border="0">
+							<tr>
+								<td width="100px"><label>Contact</label></td>
+								<td width="200px"><input type="text" id="txt_contact" required="required"
+									tabindex="1"></input></td>
+								<td><label>Email</label></td>
+								<td><select id="sel_email" tabindex="2"></select></td>
+							</tr>
+							<tr>
+								<td width="100px"><label>Name</label></td>
+								<td width="200px"><span id="span_name">[var.organizationName;noerr]</span></td>
+								<td rowspan="2"><label>Ship to</label></td>
+								<td>Shipping Address&nbsp;<input type="radio"
+									name="rad_ship" id="rad_ship_1" tabindex="3">&nbsp;&nbsp;Billing
+									Address<input type="radio" name="rad_ship" checked="checked"
+									tabindex="3"></td>
+							</tr>
+							<tr>
+								<td><label>Address</label></td>
+								<td><span id="span_address">[var.address;noerr]</span></td>
+								<td><textarea rows="2" cols="40" tabindex="4"
+										id="txt_ship_to" required="required">[var.address;noerr]</textarea></td>
+							</tr>
+							<tr>
+								<td><label>Web</label></td>
+								<td><a href="[var.web;noerr]" id="href_web" target="_blank">[var.web;noerr]</a></td>
+								<td><label>Region</label></td>
+								<td><span id="span_region">[var.region;noerr]</span></td>
+							</tr>
+							<tr>
+								<td><label>Phone</label></td>
+								<td><span id="span_phone">[var.phone;noerr]</span></td>
+								<td><label>Type</label></td>
+								<td><span id="span_price_type">[var.customerType;noerr]</span></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-sm-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Quote</div>
+					<div class="panel-body">
+						<table class="table-responsive" border="0">
+							<tr>
+								<td width="100px"><label>DATE</label></td>
+								<td><span id="span_date">[var.fecha;noerr]</span></td>
+							</tr>
+							<tr>
+								<td><label>QUOTE #</label></td>
+								<td><span id="span_number">[var.quoteNumber;noerr]</span></td>
+							</tr>
+							<tr>
+								<td><label>CUSTOMER ID</label></td>
+								<td>[var.organizationId;noerr]</td>
+							</tr>
+							<tr>
+								<td><label>VALID UNTIL</label></td>
+								<td><input id="txt_valid_until" required="required"
+									value="[var.quoteValidUntil;noerr]" tabindex="5" size="10"></td>
+							</tr>
+							<tr>
+								<td><label>Prepared by</label></td>
+								<td>[var.userName;noerr]</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 			</div>
 
+
 		</div>
-		<div class="col-sm-4">
-			<div class="panel panel-primary">
-				<div class="panel-heading">Quote</div>
-				<div class="panel-body">
-					<table class="table-responsive" border="0">
-						<tr>
-							<td width="100px"><label>DATE</label></td>
-							<td><span id="span_date">[var.fecha;noerr]</span></td>
-						</tr>
-						<tr>
-							<td><label>QUOTE #</label></td>
-							<td><span id="span_number">[var.quoteNumber;noerr]</span></td>
-						</tr>
-						<tr>
-							<td><label>CUSTOMER ID</label></td>
-							<td>[var.organizationId;noerr]</td>
-						</tr>
-						<tr>
-							<td><label>VALID UNTIL</label></td>
-							<td><input id="txt_valid_until"
-								value="[var.quoteValidUntil;noerr]" tabindex="5" size="10"></td>
-						</tr>
-						<tr>
-							<td><label>Prepared by</label></td>
-							<td>[var.userName;noerr]</td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</div>
-
-
-	</div>
-	<div class="container">
-		<div class="col-sm-12">
-			<div class="panel panel-primary">
-				<div class="panel-heading">Description</div>
-				<div class="panel-body">
-					<table id="descripId" class="table table-striped" width="100%"
-						cellspacing="0">
-						<thead>
-							<tr>
-								<th width="600">DESCRIPTION</th>
-								<th>UNIT PRICE</th>
-								<th>QTY</th>
-								<th width="100">AMOUNT (US$)</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input id="txt_decrip0" class="form-control"
-									tabindex="6"></td>
-								<td align="center"><input id="txt_unit0" size="7"
-									class="validNumber" tabindex="7" onchange="calculateAmount(0);"
-									dir="rtl" onfocus="this.dir = 'ltr';"
-									onblur="this.dir = 'rtl';"></td>
-								<td align="center"><input id="txt_qty0" size="4"
-									class="validNumber" tabindex="8"
-									onKeyDown="javascript:return introQty(event);"
-									onchange="calculateAmount(0);" dir="rtl"
-									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
-								<td align="right"><span id="span_amount0"></span></td>
-							</tr>
-						</tbody>
-					</table>
-					<br>
-					<div class="row">
-						<div class="col-sm-7">
-							<label for="comment">Comment:</label>
-							<textarea class="form-control" rows="5" id="txt_comment"></textarea>
-						</div>
-						<div class="col-sm-5">
-							<table class="table table-striped">
-								<thead>
-								</thead>
-								<tbody>
-
-									<tr>
-
-										<td>Discount</td>
-										<td><input type="text" id="txt_discount_val" size="8"
-											class="validNumber" value="0"
-											onchange="calculateDiscount(this);" dir="rtl"
-											onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
-											$ <input type="text" id="txt_discount_per" size="4"
-											class="validNumber" value="0" dir="rtl"
-											onchange="calculateDiscount(this);"
-											onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
-											%</td>
-
-									</tr>
-									<tr>
-
-										<td>Subtotal (US$)</td>
-										<td><span id="span_subtotal">0.00</span></td>
-
-									</tr>
-									<tr>
-
-										<td>HST Rate</td>
-										<td><input type="text" id="txt_hst_rate" size="4"
-											class="validNumber" value="0" dir="rtl"
-											onchange="calculateAmount(0)" onfocus="this.dir = 'ltr';"
-											onblur="this.dir = 'rtl';"></input> %</td>
-
-									</tr>
-									<tr>
-										<td>HST (US$)</td>
-										<td><span id="span_hst">0.00</span></td>
-									</tr>
-									<tr>
-										<td><b>TOTAL (US$)</b></td>
-										<td><b><span id="span_total">0.00</span></b></td>
-									</tr>
-								</tbody>
-							</table>
-							<div class="row">
-								<div class="col-sm-3"></div>
-								<div class="cols-sm-9">
-									<span
-										class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
-										id="" data-accion="" onclick="addNewProduct()">ADD</span> <span
-										class="btn btn-primary btn-sm glyphicon glyphicon-minus biselado"
-										id="remove" data-accion="" onclick="">DELETE</span> <span
-										class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk biselado"
-										id="" data-accion="" onclick="saveQuote()">SAVE</span> <span
-										class="btn btn-primary btn-sm glyphicon glyphicon-log-out biselado"
-										id="" data-accion="" onclick="window.parent.close()">CLOSE</span><span
-										class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
-										id="" data-accion="" onclick="" style="visibility: hidden">VIEW
-										PDF</span>
-								</div>
+		<div class="container">
+			<div class="col-sm-12">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Description</div>
+					<div class="panel-body">
+						<table id="descripId" class="table table-striped" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th width="600">DESCRIPTION</th>
+									<th>UNIT PRICE</th>
+									<th>QTY</th>
+									<th width="100">AMOUNT (US$)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><input id="txt_decrip0" class="form-control"
+										required="required" tabindex="6"></td>
+									<td align="center"><input id="txt_unit0" size="7" required="required"
+										class="validNumber" tabindex="7"
+										onchange="calculateAmount(0);" dir="rtl"
+										onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
+									<td align="center"><input id="txt_qty0" size="4" required="required"
+										class="validNumber" tabindex="8"
+										onKeyDown="javascript:return introQty(event);" onchange="calculateAmount(0);" dir="rtl"
+										onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
+									<td align="right"><span id="span_amount0"></span></td>
+								</tr>
+							</tbody>
+						</table>
+						<br>
+						<div class="row">
+							<div class="col-sm-7">
+								<label for="comment">Comment:</label>
+								<textarea class="form-control" rows="5" id="txt_comment"></textarea>
 							</div>
+							<div class="col-sm-5">
+								<table class="table table-striped">
+									<thead>
+									</thead>
+									<tbody>
 
+										<tr>
+
+											<td>Discount</td>
+											<td><input type="text" id="txt_discount_val" size="8"
+												class="validNumber" value="0"
+												onchange="calculateDiscount(this);" dir="rtl"
+												onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
+												$ <input type="text" id="txt_discount_per" size="4"
+												class="validNumber" value="0" dir="rtl"
+												onchange="calculateDiscount(this);"
+												onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
+												%</td>
+
+										</tr>
+										<tr>
+
+											<td>Subtotal (US$)</td>
+											<td><span id="span_subtotal">0.00</span></td>
+
+										</tr>
+										<tr>
+
+											<td>HST Rate</td>
+											<td><input type="text" id="txt_hst_rate" size="4"
+												class="validNumber" value="0" dir="rtl"
+												onchange="calculateAmount(0)" onfocus="this.dir = 'ltr';"
+												onblur="this.dir = 'rtl';"></input> %</td>
+
+										</tr>
+										<tr>
+											<td>HST (US$)</td>
+											<td><span id="span_hst">0.00</span></td>
+										</tr>
+										<tr>
+											<td><b>TOTAL (US$)</b></td>
+											<td><b><span id="span_total">0.00</span></b></td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="row">
+									<div class="col-sm-3"></div>
+									<div class="cols-sm-9">
+										<span
+											class="btn btn-primary btn-sm glyphicon glyphicon-plus biselado"
+											id="" data-accion="" onclick="addNewProduct()">ADD</span> <span
+											class="btn btn-primary btn-sm glyphicon glyphicon-minus biselado"
+											id="remove" data-accion="" onclick="">DELETE</span> <span
+											class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk biselado"
+											id="" data-accion="" onclick="$('#submit_quote').click();">SAVE</span> <span
+											class="btn btn-primary btn-sm glyphicon glyphicon-log-out biselado"
+											id="" data-accion="" onclick="window.parent.close()">CLOSE</span><span
+											class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
+											id="" data-accion="" onclick="" style="visibility: hidden">VIEW
+											PDF</span>
+									</div>
+								</div>
+
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 	<div class="container-fluid">
 		<div class="col-sm-4"></div>
 		<div class="col-sm-8">

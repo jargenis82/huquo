@@ -211,7 +211,6 @@ function saveQuote($quote, $arrProduct) {
 		$objResponse->addAlert ( "Error (SQ-005). Please contact your administrator." );
 		return $objResponse;
 	}
-	
 	if (comprobarVar ( strstr ( $_SERVER ['HTTP_REFERER'], "hubrox.com" ) )) {
 		// Se agrega un enlace de la cotización en Insighly
 		$i = new Insightly ( APIKEY );
@@ -226,10 +225,9 @@ function saveQuote($quote, $arrProduct) {
 		$objeto->NOTELINKS = $arrNoteLinks;
 		$objeto = $i->addNote ( $objeto );
 	}
-	
 	$objResponse->addScript ( "openPdfQuote($quoteId);" );
 	$objResponse->addScript ( "window.parent.opener.dataTable('" . $quote ['org_name'] . "');" );
-	$objResponse->addScript ( "window.parent.opener.dataTableQuote(" . $quote ['oppor_id'] . ");" );
+	$objResponse->addScript ( "window.parent.opener.dataTableQuote(" . $quote ['oppor_id'] . ",'OPEN');" );
 	return $objResponse;
 }
 function calculateAmount($id, $unit, $qty, $amountAct, $subtotal, $hstRate, $productSaleId) {
@@ -312,9 +310,9 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 	if (comprobarVar ( $idTxtDescrip ) and intval ( $idTxtDescrip ) != 0) {
 		$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
 		$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
-		$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" class="form-control" ></td>';
-		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" size="7" class="validNumber" onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
-		$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" size="4" class="validNumber" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" required="required" class="form-control" ></td>';
+		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" required="required" size="7" class="validNumber" onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" required="required" size="4" class="validNumber" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
 		$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '"></span></td>';
 		$jq = "
      		var tr='$textoHtml';
@@ -381,7 +379,7 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 				$objResponse->addAssign ( "txt_decrip$i", "value", $quoteLineDesc );
 				$objResponse->addAssign ( "txt_unit$i", "value", $quoteLinePrice );
 				$objResponse->addAssign ( "txt_qty$i", "value", $quoteLineQty );
-				$objResponse->addAssign ( "span_amount$i", "innerHTML", $quoteLineAmount );				
+				$objResponse->addAssign ( "span_amount$i", "innerHTML", $quoteLineAmount );
 			}
 			$myQuote = new Quote ( $miConexionBd, $quoteId );
 			$myContact = $myQuote->getObjeto ( "Contact" );
@@ -391,7 +389,6 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 				$contactInsId = $myContact->getAtributo ( "contact_ins_id" );
 				$objResponse->addAssign ( "txt_contact", "value", $contactName );
 				$objResponse->addScript ( "xajax_getContactInfos($contactInsId,'$contactEmail');" ); // FALTA MARCARLO
-				
 			}
 			$quoteComment = $myQuote->getAtributo ( "quote_comment" );
 			$quoteDiscount = convertToDoubleval ( $myQuote->getAtributo ( "quote_discount" ) );
