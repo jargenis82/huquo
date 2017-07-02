@@ -308,11 +308,12 @@ function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $price
 function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId) {
 	$objResponse = new xajaxResponse ();
 	if (comprobarVar ( $idTxtDescrip ) and intval ( $idTxtDescrip ) != 0) {
+		$tabIndex = (intval ( $idTxtDescrip ) - 1) * 3 + 9;
 		$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
 		$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
-		$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" required="required" class="form-control" ></td>';
-		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" required="required" size="7" class="validNumber" onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
-		$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" required="required" size="4" class="validNumber" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" tabindex="'.$tabIndex.'" required="required" class="form-control" ></td>';
+		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" tabindex="'.($tabIndex + 1).'" required="required" onkeydown="javascript:return introTxt(event,this)" size="7" class="validNumber" onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" tabindex="'.($tabIndex + 2).'" required="required" size="4" class="validNumber" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
 		$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '"></span></td>';
 		$jq = "
      		var tr='$textoHtml';

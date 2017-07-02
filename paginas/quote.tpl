@@ -8,9 +8,9 @@
 <link rel="stylesheet"
 	href="../librerias/bootstrap3.3.7/css/bootstrap.min.css">
 <style type="text/css">
-	form input:focus:invalid {
-		border:2px solid red;
-	}
+form input:focus:invalid {
+	border: 2px solid red;
+}
 </style>
 [var.js;htmlconv=no;noerr]
 <script type="text/javascript"
@@ -144,6 +144,27 @@ table, td, th {
 		}
 	}
 	
+	// Coloca el foco en el siguiente campo de texto al pulsar la tecla Enter
+	function introTxt(e,objeto) {
+		tecla = (document.all) ? e.keyCode : e.which;
+		if (tecla == 13){
+			if (objeto.id == 'txt_hst_rate') {
+				$('#'+objeto.id).change();
+			} else {
+				cb = parseInt(objeto.tabIndex);
+				$(':input[tabindex=\'' + (cb + 1) + '\']').focus();
+			}
+		}
+	}
+	
+	// Permite pulsa Enter en el campo comment
+	function introComment(e,objeto) {
+		tecla = (document.all) ? e.keyCode : e.which;
+		if (tecla == 13){
+			objeto.value = objeto.value + String.fromCharCode(13);
+		}
+	}
+	
 	// Genera un DatePicker para el campo Valid Until
 	$(function() {
 		$( "#txt_valid_until" ).datepicker({
@@ -240,7 +261,7 @@ table, td, th {
 <body
 	onload="validarKeyPress();document.getElementById('txt_contact').focus();xajax_addNewProduct(0,'[var.quoteId;noerr]',customerRegionId,priceTypeId);">
 	<form action="javascript:saveQuote();" id="form_quote">
-	<input type="submit" style="display: none;" id="submit_quote">
+		<input type="submit" style="display: none;" id="submit_quote">
 		<div class="container">
 			<div class="col-sm-8">
 				<div class="panel panel-primary">
@@ -249,8 +270,8 @@ table, td, th {
 						<table class="table-responsive" border="0">
 							<tr>
 								<td width="100px"><label>Contact</label></td>
-								<td width="200px"><input type="text" id="txt_contact" required="required"
-									tabindex="1"></input></td>
+								<td width="200px"><input type="text" id="txt_contact"
+									required="required" tabindex="1"></input></td>
 								<td><label>Email</label></td>
 								<td><select id="sel_email" tabindex="2"></select></td>
 							</tr>
@@ -338,13 +359,15 @@ table, td, th {
 								<tr>
 									<td><input id="txt_decrip0" class="form-control"
 										required="required" tabindex="6"></td>
-									<td align="center"><input id="txt_unit0" size="7" required="required"
-										class="validNumber" tabindex="7"
+									<td align="center"><input id="txt_unit0" size="7"
+										required="required" class="validNumber" tabindex="7"
 										onchange="calculateAmount(0);" dir="rtl"
+										onkeydown="javascript:return introTxt(event,this)"
 										onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
-									<td align="center"><input id="txt_qty0" size="4" required="required"
-										class="validNumber" tabindex="8"
-										onKeyDown="javascript:return introQty(event);" onchange="calculateAmount(0);" dir="rtl"
+									<td align="center"><input id="txt_qty0" size="4"
+										required="required" class="validNumber" tabindex="8"
+										onKeyDown="javascript:return introQty(event);"
+										onchange="calculateAmount(0);" dir="rtl"
 										onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></td>
 									<td align="right"><span id="span_amount0"></span></td>
 								</tr>
@@ -354,7 +377,8 @@ table, td, th {
 						<div class="row">
 							<div class="col-sm-7">
 								<label for="comment">Comment:</label>
-								<textarea class="form-control" rows="5" id="txt_comment"></textarea>
+								<textarea class="form-control" rows="5" id="txt_comment" onkeydown="javascript:return introComment(event,this)"
+									tabindex="1000"></textarea>
 							</div>
 							<div class="col-sm-5">
 								<table class="table table-striped">
@@ -366,11 +390,13 @@ table, td, th {
 
 											<td>Discount</td>
 											<td><input type="text" id="txt_discount_val" size="8"
-												class="validNumber" value="0"
+												tabindex="1001" class="validNumber" value="0"
+												onkeydown="javascript:return introTxt(event,this)"
 												onchange="calculateDiscount(this);" dir="rtl"
 												onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
 												$ <input type="text" id="txt_discount_per" size="4"
-												class="validNumber" value="0" dir="rtl"
+												tabindex="1002" class="validNumber" value="0" dir="rtl"
+												onkeydown="javascript:return introTxt(event,this)"
 												onchange="calculateDiscount(this);"
 												onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';"></input>
 												%</td>
@@ -386,7 +412,8 @@ table, td, th {
 
 											<td>HST Rate</td>
 											<td><input type="text" id="txt_hst_rate" size="4"
-												class="validNumber" value="0" dir="rtl"
+												tabindex="1003" class="validNumber" value="0" dir="rtl"
+												onkeydown="javascript:return introTxt(event,this)"
 												onchange="calculateAmount(0)" onfocus="this.dir = 'ltr';"
 												onblur="this.dir = 'rtl';"></input> %</td>
 
@@ -410,7 +437,8 @@ table, td, th {
 											class="btn btn-primary btn-sm glyphicon glyphicon-minus biselado"
 											id="remove" data-accion="" onclick="">DELETE</span> <span
 											class="btn btn-primary btn-sm glyphicon glyphicon-floppy-disk biselado"
-											id="" data-accion="" onclick="$('#submit_quote').click();">SAVE</span> <span
+											id="" data-accion="" onclick="$('#submit_quote').click();">SAVE</span>
+										<span
 											class="btn btn-primary btn-sm glyphicon glyphicon-log-out biselado"
 											id="" data-accion="" onclick="window.parent.close()">CLOSE</span><span
 											class="btn btn-info btn-sm glyphicon glyphicon-floppy-save biselado"
