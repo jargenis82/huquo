@@ -58,7 +58,7 @@ if (isset ( $myOrganization )) {
 			$myQuote = new Quote ();
 			$myQuote->setAtributo ( "oppor_id", $opportunityId );
 			$cantidad = $myQuote->consultar ( true );
-			($cantidad > 0) ? $unDato [4] = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" data-modulo="" data-accion="" onclick="dataTableQuote(' . $opportunityId . ',' . $opporState . ')"></span>' : $unDato [4] = '<span></span>';
+			($cantidad > 0) ? $unDato [4] = '<span id="btn_listQ" class="btn btn-default btn-xs glyphicon glyphicon-th-list" data-modulo="" data-accion="" onclick="dataTableQuote(' . $opportunityId . ',\'' . $opporState . '\')"></span>' : $unDato [4] = '<span></span>';
 			$unDato [5] = ($opporState == "OPEN") ? "<span id='btn_quote' class='btn btn-default btn-xs glyphicon glyphicon-file' data-modulo='' data-accion='' onclick='newQuote($opportunityId)'></span>" : '<span></span>';
 			$arrJson ['aaData'] [] = $unDato;
 		}
