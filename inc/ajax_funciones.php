@@ -160,6 +160,8 @@ function saveQuote($quote, $arrProduct) {
 	$myQuote->setAtributo ( "quote_ship_to", $quote ['quote_ship_to'] );
 	$quoteNumber = $myQuote->getNextQuoteNumber ();
 	$myQuote->setAtributo ( "quote_number", $quoteNumber );
+	$hash = sha1 ( rand ( 0, 1000 ) . time () );
+	$myQuote->setAtributo ( "quote_hash", $hash );
 	if ($quoteNumber != $quote ['quote_number']) {
 		$objResponse->addAlert ( "The quote number has changed to $quoteNumber." );
 	}
@@ -218,7 +220,7 @@ function saveQuote($quote, $arrProduct) {
 		$objeto->TITLE = 'Test of PDF Quote From HUQUO';
 		$objeto->LINK_SUBJECT_ID = $quote ['oppor_id'];
 		$objeto->LINK_SUBJECT_TYPE = 'Opportunity';
-		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf.php?quoteId=' . $quoteId . '" target="_blank">Quote ' . $quoteNumber . '</a>';
+		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf.php?pdf=' . $hash . '" target="_blank">Quote ' . $quoteNumber . '</a>';
 		$noteLinks = new stdClass ();
 		$noteLinks->ORGANISATION_ID = $quote ['org_ins_id'];
 		$arrNoteLinks [0] = $noteLinks;
@@ -311,9 +313,9 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 		$tabIndex = (intval ( $idTxtDescrip ) - 1) * 3 + 9;
 		$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
 		$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
-		$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" tabindex="'.$tabIndex.'" required="required" class="form-control" ></td>';
-		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" tabindex="'.($tabIndex + 1).'" required="required" onkeydown="javascript:return introTxt(event,this)" size="7" class="validNumber" onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
-		$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" tabindex="'.($tabIndex + 2).'" required="required" size="4" class="validNumber" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" tabindex="' . $tabIndex . '" required="required" class="form-control" ></td>';
+		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" tabindex="' . ($tabIndex + 1) . '" required="required" onkeydown="javascript:return introTxt(event,this)" size="7" class="validNumber" onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
+		$textoHtml .= '<td align="center"><input id="txt_qty' . $idTxtDescrip . '" tabindex="' . ($tabIndex + 2) . '" required="required" size="4" class="validNumber" onKeyDown="javascript:return introQty(event);"  onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
 		$textoHtml .= '<td align="right"><span id="span_amount' . $idTxtDescrip . '"></span></td>';
 		$jq = "
      		var tr='$textoHtml';

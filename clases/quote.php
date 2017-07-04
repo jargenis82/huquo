@@ -18,6 +18,7 @@ class Quote extends ClaseBd {
 		$atributos ['quote_hst_rate'] ['esPk'] = false;
 		$atributos ['quote_ship_to'] ['esPk'] = false;
 		$atributos ['quote_number'] ['esPk'] = false;
+		$atributos ['quote_hash'] ['esPk'] = false;
 		$atributos ['hubrox_id'] ['esPk'] = false;
 		$atributos ['oppor_id'] ['esPk'] = false;
 		$atributos ['quote_comment'] ['esPk'] = false;

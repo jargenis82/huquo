@@ -8,15 +8,30 @@ include_once '../../clases/organisation.php';
 include_once '../../clases/quote.php';
 // include_once '../../clases/quote_line.php';
 
-$quoteId = comprobarVar ( $_GET ['quoteId'] ) ? $_GET ['quoteId'] : null;
+$quoteId = comprobarVar ( $_GET ['quoteId'] ) ? limpiarPalabra ( aceptarComilla ( $_GET ['quoteId'] ) ) : null;
+$pdf = comprobarVar ( $_GET ['pdf'] ) ? limpiarPalabra ( aceptarComilla ( $_GET ['pdf'] ) ) : null;
 
 // Valida si existe el quote
-if (! comprobarVar ( $quoteId )) {
+if ((comprobarVar ( $quoteId ) and ! comprobarVar ( $_SESSION ['user_id'] )) or (! comprobarVar ( $quoteId ) and ! comprobarVar ( $pdf ))) {
 	exit ();
 }
 
 $miConexionBd = new ConexionBd ( "mysql" );
-$myQuote = new Quote ( $miConexionBd, $quoteId );
+$myQuote = new Quote ( $miConexionBd );
+
+if (comprobarVar ( $quoteId )) {
+	$myQuote->setAtributo ( "quote_id", $quoteId );
+} else {
+	$myQuote->setAtributo ( "quote_hash", $pdf );
+	$arrQuote = $myQuote->consultar();
+	if (count($arrQuote) == 1) {
+		$myQuote = $arrQuote[0];
+	} else {
+		exit;
+	}
+}
+$quoteId = $myQuote->getAtributo ( "quote_id" );
+
 $myOrganisation = $myQuote->getObjeto ( "Organisation" );
 $myContact = $myQuote->getObjeto ( "Contact" );
 $myUser = $myQuote->getObjeto ( "User" );
