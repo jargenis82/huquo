@@ -1,6 +1,6 @@
 <div align="center" style="font-size: 16px; color: #666666;">
-	If you have any questions about this price quote, please contact <strong>[var.prepared;noerr]</strong>
-	by email: [var.userEmail;noerr]
+	If you have any questions about this price quote, please contact:<br>
+	<strong>[var.prepared;noerr]</strong>, [var.userSkype;noerr][var.userEmail;noerr]
 </div>
 <div align="center" style="font-size: 25px; color: #666666;">
 	<strong>Thank You For Your Business!</strong>

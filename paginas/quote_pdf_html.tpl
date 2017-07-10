@@ -52,15 +52,7 @@ tr:hover {
 					<th align="left"><label>TERMS AND CONDITIONS </label></th>
 				</tr>
 				<tr>
-					<td><ol>
-							<li>Customer will be billed after indicating acceptance of
-								this quote</li>
-							<li>Payment will be due prior to delivery of service and
-								goods</li>
-							<li>CIF-Miami. Freight to Miami is included in this price.</li>
-							<li>Please fax or mail the signed price quote to the address
-								above</li>
-						</ol></td>
+					<td>[var.quoteComment;noerr]</td>
 				</tr>
 				<tr>
 					<td>

@@ -376,9 +376,12 @@ table, td, th {
 						<br>
 						<div class="row">
 							<div class="col-sm-7">
-								<label for="comment">Comment:</label>
-								<textarea class="form-control" rows="5" id="txt_comment" onkeydown="javascript:return introComment(event,this)"
-									tabindex="1000"></textarea>
+								<label for="comment">Terms and Conditions:</label>
+								<textarea class="form-control" rows="5" id="txt_comment"
+									onkeydown="javascript:return introComment(event,this)"
+									tabindex="1000">1. Customer will be billed after indicating acceptance of this quote.
+2. Payment will be due prior to delivery of service and goods.
+3. Please fax or mail the signed price quote to the address above.</textarea>
 							</div>
 							<div class="col-sm-5">
 								<table class="table table-striped">

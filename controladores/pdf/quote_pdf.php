@@ -31,7 +31,6 @@ if (comprobarVar ( $quoteId )) {
 	}
 }
 $quoteId = $myQuote->getAtributo ( "quote_id" );
-
 $myOrganisation = $myQuote->getObjeto ( "Organisation" );
 $myContact = $myQuote->getObjeto ( "Contact" );
 $myUser = $myQuote->getObjeto ( "User" );
@@ -45,6 +44,8 @@ $myDateTime = DateTime::createFromFormat ( "Y-m-d H:i:s", $myQuote->getAtributo 
 $validUntil = $myDateTime->format ( "d-M-Y" );
 $prepared = $myUser->getAtributo ( "user_name" );
 $userEmail = $myUser->getAtributo ( "user_email" );
+$userSkype = $myUser->getAtributo ( "user_skype" );
+$userSkype = comprobarVar($userSkype) ? "Skype: $userSkype, " : "";
 $customerInfor = $myContact->getAtributo ( "contact_name" ) . "<br>";
 $customerInfor .= $myContact->getAtributo ( "contact_email" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_name" ) . "<br>";
@@ -53,6 +54,13 @@ $customerInfor .= $myOrganisation->getAtributo ( "org_web" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_phone" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_city" ) . ", " . $myOrganisation->getAtributo ( "org_country" );
 $shipTo = $myQuote->getAtributo ( "quote_ship_to" );
+$quoteComment = $myQuote->getAtributo ( "quote_comment" );
+// Delete this code when the system is in production state
+if (!comprobarVar($quoteComment)) {
+	$quoteComment = "1. Customer will be billed after indicating acceptance of this quote.
+2. Payment will be due prior to delivery of service and goods.
+3. Please fax or mail the signed price quote to the address above.";
+}
 $discountVal = doubleval ( $myQuote->getAtributo ( "quote_discount" ) );
 $hstRate = doubleval ( $myQuote->getAtributo ( "quote_hst_rate" ) );
 $hstUst = $hstRate / 100;
