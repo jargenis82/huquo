@@ -23,11 +23,11 @@ if (comprobarVar ( $quoteId )) {
 	$myQuote->setAtributo ( "quote_id", $quoteId );
 } else {
 	$myQuote->setAtributo ( "quote_hash", $pdf );
-	$arrQuote = $myQuote->consultar();
-	if (count($arrQuote) == 1) {
-		$myQuote = $arrQuote[0];
+	$arrQuote = $myQuote->consultar ();
+	if (count ( $arrQuote ) == 1) {
+		$myQuote = $arrQuote [0];
 	} else {
-		exit;
+		exit ();
 	}
 }
 $quoteId = $myQuote->getAtributo ( "quote_id" );
@@ -44,6 +44,7 @@ $customerId = $myOrganisation->getAtributo ( "org_ins_id" );
 $myDateTime = DateTime::createFromFormat ( "Y-m-d H:i:s", $myQuote->getAtributo ( "quote_valid_until" ) );
 $validUntil = $myDateTime->format ( "d-M-Y" );
 $prepared = $myUser->getAtributo ( "user_name" );
+$userEmail = $myUser->getAtributo ( "user_email" );
 $customerInfor = $myContact->getAtributo ( "contact_name" ) . "<br>";
 $customerInfor .= $myContact->getAtributo ( "contact_email" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_name" ) . "<br>";
