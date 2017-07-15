@@ -126,5 +126,6 @@ $mpdf->SetHTMLHeader ( $cabecera );
 $mpdf->SetDisplayMode ( 'fullpage', 'single' );
 $mpdf->SetHTMLFooter ( $piePagina );
 $mpdf->WriteHTML ( $html );
-$mpdf->Output ();
+$fileName="Quote# ".$quoteNumber.".pdf";
+$mpdf->Output($fileName,'I');
 ?>
