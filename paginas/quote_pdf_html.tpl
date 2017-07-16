@@ -37,7 +37,7 @@ tr:hover {
 		<th align="center" width="380px"><label>DESCRIPTION</label></th>
 		<th align="right" width="70px"><label>UNIT PRICE</label></th>
 		<th align="center" width="95px"><label>QTY</label></th>
-		<th align="center" width="100px"><label>AMOUNT (US$)</label></th>
+		<th align="center" width="100px"><label>AMOUNT ([var.currency;noerr])</label></th>
 	</tr>
 	<tr>
 		<td align="left">[products.desc;block=tr;noerr]</td>
@@ -69,7 +69,7 @@ tr:hover {
 					<td align="right" width="100px">[var.discountVal;noerr]</td>
 				</tr>
 				<tr>
-					<td><label> SubTotal(US$)</label></td>
+					<td><label> SubTotal([var.currency;noerr])</label></td>
 					<td align="right">[var.sunTotal;noerr]</td>
 				</tr>
 				<tr>
@@ -77,11 +77,11 @@ tr:hover {
 					<td align="right">[var.hstRate;noerr]</td>
 				</tr>
 				<tr>
-					<td><label>HST (US$)</label></td>
+					<td><label>HST ([var.currency;noerr])</label></td>
 					<td align="right">[var.hstUst;noerr]</td>
 				</tr>
 				<tr>
-					<td><label>TOTAL(US$)</label></td>
+					<td><label>TOTAL([var.currency;noerr])</label></td>
 					<td align="right">[var.total;noerr]</td>
 				</tr>
 			</table>

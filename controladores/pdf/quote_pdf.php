@@ -53,6 +53,12 @@ $customerInfor .= $myOrganisation->getAtributo ( "org_address" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_web" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_phone" ) . "<br>";
 $customerInfor .= $myOrganisation->getAtributo ( "org_city" ) . ", " . $myOrganisation->getAtributo ( "org_country" );
+// Check the use of canadian dollar
+if ($myOrganisation->getAtributo ( "org_country" ) == "Canada") {
+	$currency = "CA$";
+} else {
+	$currency = "US$";
+}
 $shipTo = $myQuote->getAtributo ( "quote_ship_to" );
 $quoteComment = $myQuote->getAtributo ( "quote_comment" );
 // Delete this code when the system is in production state

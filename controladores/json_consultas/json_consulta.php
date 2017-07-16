@@ -54,7 +54,11 @@ if (isset ( $myOrganization )) {
 			$myPipelineStage = $i->getPipelineStage ( $myOpportunity->STAGE_ID );
 			$stageOrder = $myPipelineStage->STAGE_ORDER;
 			$stageName = $myPipelineStage->STAGE_NAME;
-			$unDato [3] = "$stageName<br><img alt='$stageName' src='../imagenes/pipeline_$stageOrder.png' style='width: 100px'>";
+			if (comprobarVar ( $stageOrder )) {
+				$unDato [3] = "$stageName<br><img alt='$stageName' src='../imagenes/pipeline_$stageOrder.png' style='width: 100px'>";
+			} else {
+				$unDato [3] = "undefined";
+			}			
 			$myQuote = new Quote ();
 			$myQuote->setAtributo ( "oppor_id", $opportunityId );
 			$cantidad = $myQuote->consultar ( true );

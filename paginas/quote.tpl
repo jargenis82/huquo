@@ -260,7 +260,7 @@ table, td, th {
 </script>
 </head>
 <body
-	onload="validarKeyPress();document.getElementById('txt_contact').focus();xajax_addNewProduct(0,'[var.quoteId;noerr]',customerRegionId,priceTypeId);">
+	onload="validarKeyPress();document.getElementById('txt_contact').focus();xajax_addNewProduct(0,'[var.quoteId;noerr]',customerRegionId,priceTypeId);window.parent.ajustarIframe();">
 	<form action="javascript:saveQuote();" id="form_quote">
 		<input type="submit" style="display: none;" id="submit_quote">
 		<div class="container">
@@ -303,7 +303,7 @@ table, td, th {
 								<td><label>Type</label></td>
 								<td><span id="span_price_type">[var.customerType;noerr]</span></td>
 							</tr>
-							<tr style='[var.displayExchangeRate;noerr]'>
+							<tr style=''>
 								<td nowrap="nowrap"><label>Exchange Rate</label></td>
 								<td><input type="text" id="txt_exchange_rate" tabindex="4"
 									size="8" dir="rtl" value="[var.exchangeRate;noerr]">
