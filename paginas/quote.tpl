@@ -303,10 +303,11 @@ table, td, th {
 								<td><label>Type</label></td>
 								<td><span id="span_price_type">[var.customerType;noerr]</span></td>
 							</tr>
-							<tr style='[var.displayExchangeRate;noerr]'>
+							<tr style=''>
 								<td nowrap="nowrap"><label>Exchange Rate</label></td>
 								<td><input type="text" id="txt_exchange_rate" tabindex="4"
-									size="8" dir="rtl" value="[var.exchangeRate;noerr]">
+									size="8" dir="rtl" value="[var.exchangeRate;noerr]"
+									onfocus="this.dir = 'ltr';" onblur="this.dir = 'rtl';">
 									CA$ / US$</td>
 								<td></td>
 								<td></td>
