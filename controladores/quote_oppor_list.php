@@ -7,6 +7,12 @@ include_once '../librerias/xajax_0.2.4/xajax.inc.php';
 include_once '../librerias/insightly.php';
 include_once '../inc/funciones.php';
 
+// SE VERIFICA LA SESIÓN Y ACCESO DEL USUARIO
+session_start ();
+if (! comprobarVar ( $_SESSION ['user_id'] )) {
+	exit ();
+}
+
 // XAJAX
 $xajax = new xajax ( "../inc/ajax_funciones.php" );
 $xajax->registerFunction ( "getCustomer" );

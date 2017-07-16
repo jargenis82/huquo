@@ -3,6 +3,12 @@ include_once '../../conf.inc.php';
 include_once '../../inc/funciones.php';
 include_once '../../clases/quote.php';
 
+// SE VERIFICA LA SESIÓN Y ACCESO DEL USUARIO
+session_start ();
+if (! comprobarVar ( $_SESSION ['user_id'] )) {
+	exit ();
+}
+
 // Se inicializa el arreglo a transformar en JSON con los resultados de la busqueda
 $arrJson = array (
 		"sEcho" => 3,

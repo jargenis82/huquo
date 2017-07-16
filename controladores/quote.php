@@ -12,13 +12,12 @@ include_once '../clases/quote.php';
 include_once '../inc/funciones.php';
 
 // SE VERIFICA LA SESIÓN Y ACCESO DEL USUARIO
-// $miConexionBd = new ConexionBd();
-// $miInstUsua = new InstUsua($miConexionBd);
-// validarAcceso($miInstUsua);
+session_start ();
+if (! comprobarVar ( $_SESSION ['user_id'] )) {
+	exit ();
+}
 
 // DEFINE LAS VARIABLES $_GET, $_POST Y $_SESSION
-session_start ();
-// isset($_SESSION['instUsuaId']) ? $instUsuaId = $_SESSION['instUsuaId'] : $instUsuaId = null;
 $opportunityId = comprobarVar ( $_GET ['opportunityId'] ) ? $_GET ['opportunityId'] : null;
 $quoteId = comprobarVar ( $_GET ['quoteId'] ) ? $_GET ['quoteId'] : null;
 

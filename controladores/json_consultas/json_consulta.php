@@ -4,6 +4,12 @@ include_once '../../inc/funciones.php';
 include_once '../../librerias/insightly.php';
 include_once '../../clases/quote.php';
 
+// SE VERIFICA LA SESIÓN Y ACCESO DEL USUARIO
+session_start ();
+if (! comprobarVar ( $_SESSION ['user_id'] )) {
+	exit ();
+}
+
 // Se consulta una copia local para mejorar el desempeño en máquinas de desarrollo (provisional)
 if (defined ( "CUSTOMERS" )) {
 	include_once '../../log/arrJson.php';
