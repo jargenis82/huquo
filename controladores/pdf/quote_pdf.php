@@ -126,6 +126,6 @@ $mpdf->SetHTMLHeader ( $cabecera );
 $mpdf->SetDisplayMode ( 'fullpage', 'single' );
 $mpdf->SetHTMLFooter ( $piePagina );
 $mpdf->WriteHTML ( $html );
-$fileName="Quote# ".$quoteNumber.".pdf";
+$fileName="Quote ".$quoteNumber." ".aceptarComilla($myOrganisation->getAtributo ( "org_name" )).".pdf";
 $mpdf->Output($fileName,'I');
 ?>
