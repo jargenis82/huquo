@@ -285,7 +285,7 @@ function calculateDiscount($id, $val, $subTotalProducts, $discountAct, $subtotal
 	$objResponse->addAssign ( "span_total", "innerHTML", $total );
 	return $objResponse;
 }
-function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $priceTypeId, $quoteLineDesc) {
+function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $priceTypeId, $quoteLineDesc, $exchangeRate) {
 	$objResponse = new xajaxResponse ();
 	$idTxtDescrip = str_replace ( "txt_decrip", "", $txtDecrip );
 	$miConexionBd = new ConexionBd ( "mysql" );
@@ -295,7 +295,8 @@ function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $price
 	$myPrice->setObjeto ( "PriceType", $priceTypeId );
 	$arrPrice = $myPrice->consultar ();
 	if (count ( $arrPrice ) == 1) {
-		$priceValue = $arrPrice [0]->getAtributo ( "price_value" );
+		$priceValue = doubleval ( $arrPrice [0]->getAtributo ( "price_value" ) );
+		$priceValue = $priceValue * doubleval($exchangeRate);
 		$priceValue = number_format ( $priceValue, 2, ".", "," );
 		$objResponse->addAssign ( "txt_unit$idTxtDescrip", "value", $priceValue );
 		$objResponse->addAssign ( "txt_qty$idTxtDescrip", "value", "" );
@@ -331,7 +332,8 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
      $(document).ready(function () {
 	    $('#txt_decrip$idTxtDescrip').on('autocompleteselect', function (e, ui) {
 	    	 	var i = availableDescrip.indexOf(ui.item.value);
-	    	 	xajax_getDescripProduct(availableId[i],this.id,customerRegionId,priceTypeId,ui.item.value);
+	    	 	var exchangeRate = $('#txt_exchange_rate').val();
+	    	 	xajax_getDescripProduct(availableId[i],this.id,customerRegionId,priceTypeId,ui.item.value,exchangeRate);
 	    });
 		});
      } )";

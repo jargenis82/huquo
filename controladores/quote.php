@@ -168,14 +168,30 @@ if (comprobarVar ( $opportunityId )) {
 		}
 	}
 	
-	// Se detecta la región del cliente
+	// Check the contry value
 	if (comprobarVar ( $country )) {
+		// Check the region of the customer
 		if ($country == "United States" or $country == "Canada") {
 			$customerRegionId = 2;
 			$region = "US & Canada";
 		} else {
 			$customerRegionId = 1;
 			$region = "Outside US & Canada";
+		}
+		// Check the use of canadian dollar
+		if ($country == "Canada") {
+			$ch = curl_init ();
+			curl_setopt ( $ch, CURLOPT_URL, "https://openexchangerates.org/api/latest.json?app_id=f683795877b449fc8b9aab01153e93f3&symbols=CAD" );
+			curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+			$json = json_decode ( curl_exec ( $ch ), true );
+			curl_close ( $ch );
+			$exchangeRate = $json ['rates'] ['CAD'];
+			$displayExchangeRate = "";
+			$currency = "CA$";
+		} else {
+			$exchangeRate = "1";
+			$displayExchangeRate = "display: none;";
+			$currency = "US$";
 		}
 	}
 }

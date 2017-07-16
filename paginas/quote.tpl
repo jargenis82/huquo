@@ -200,7 +200,8 @@ table, td, th {
 		$(document).ready(function () {
 			$('#txt_decrip0').on('autocompleteselect', function (e, ui) {
 				var i = availableDescrip.indexOf(ui.item.value);
-				xajax_getDescripProduct(availableId[i],this.id,customerRegionId,priceTypeId,ui.item.value);
+				var exchangeRate = $('#txt_exchange_rate').val();
+				xajax_getDescripProduct(availableId[i],this.id,customerRegionId,priceTypeId,ui.item.value,exchangeRate);
 			});
 		});
 	});
@@ -302,6 +303,15 @@ table, td, th {
 								<td><label>Type</label></td>
 								<td><span id="span_price_type">[var.customerType;noerr]</span></td>
 							</tr>
+							<tr style='[var.displayExchangeRate;noerr]'>
+								<td nowrap="nowrap"><label>Exchange Rate</label></td>
+								<td><input type="text" id="txt_exchange_rate" tabindex="4"
+									size="8" dir="rtl" value="[var.exchangeRate;noerr]">
+									CA$ / US$</td>
+								<td></td>
+								<td></td>
+							</tr>
+
 						</table>
 					</div>
 				</div>
@@ -352,7 +362,7 @@ table, td, th {
 									<th width="600">DESCRIPTION</th>
 									<th>UNIT PRICE</th>
 									<th>QTY</th>
-									<th width="100">AMOUNT (US$)</th>
+									<th width="100">AMOUNT ([var.currency;noerr])</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -407,7 +417,7 @@ table, td, th {
 										</tr>
 										<tr>
 
-											<td>Subtotal (US$)</td>
+											<td>Subtotal ([var.currency;noerr])</td>
 											<td><span id="span_subtotal">0.00</span></td>
 
 										</tr>
@@ -422,11 +432,11 @@ table, td, th {
 
 										</tr>
 										<tr>
-											<td>HST (US$)</td>
+											<td>HST ([var.currency;noerr])</td>
 											<td><span id="span_hst">0.00</span></td>
 										</tr>
 										<tr>
-											<td><b>TOTAL (US$)</b></td>
+											<td><b>TOTAL ([var.currency;noerr])</b></td>
 											<td><b><span id="span_total">0.00</span></b></td>
 										</tr>
 									</tbody>
