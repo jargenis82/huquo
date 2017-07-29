@@ -296,7 +296,7 @@ function getDescripProduct($productSaleId, $txtDecrip, $customerRegionId, $price
 	$arrPrice = $myPrice->consultar ();
 	if (count ( $arrPrice ) == 1) {
 		$priceValue = doubleval ( $arrPrice [0]->getAtributo ( "price_value" ) );
-		$priceValue = $priceValue * doubleval($exchangeRate);
+		$priceValue = $priceValue * doubleval ( $exchangeRate );
 		$priceValue = number_format ( $priceValue, 2, ".", "," );
 		$objResponse->addAssign ( "txt_unit$idTxtDescrip", "value", $priceValue );
 		$objResponse->addAssign ( "txt_qty$idTxtDescrip", "value", "" );
@@ -393,7 +393,8 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 				$contactEmail = $myContact->getAtributo ( "contact_email" );
 				$contactInsId = $myContact->getAtributo ( "contact_ins_id" );
 				$objResponse->addAssign ( "txt_contact", "value", $contactName );
-				$objResponse->addScript ( "xajax_getContactInfos($contactInsId,'$contactEmail');" ); // FALTA MARCARLO
+				$objResponse->addScript ( "contactInsId = '$contactInsId';" );
+				$objResponse->addScript ( "xajax_getContactInfos($contactInsId,'$contactEmail');" );
 			}
 			$quoteComment = $myQuote->getAtributo ( "quote_comment" );
 			$quoteDiscount = convertToDoubleval ( $myQuote->getAtributo ( "quote_discount" ) );
