@@ -258,7 +258,11 @@ function calculateDiscount($id, $val, $subTotalProducts, $discountAct, $subtotal
 	$subTotalProducts = doubleval ( $subTotalProducts );
 	if ($id == "txt_discount_val") {
 		$val = convertToDoubleval ( $val );
-		$per = ($val / $subTotalProducts) * 100;
+		if ($subTotalProducts > 0) {
+			$per = ($val / $subTotalProducts) * 100;
+		} else {
+			$per = 0;
+		}
 	} else if ($id == "txt_discount_per") {
 		$per = convertToDoubleval ( $val );
 		$val = ($per / 100) * $subTotalProducts;
@@ -399,7 +403,11 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 			$quoteComment = $myQuote->getAtributo ( "quote_comment" );
 			$quoteDiscount = convertToDoubleval ( $myQuote->getAtributo ( "quote_discount" ) );
 			$objResponse->addScript ( "discount = $quoteDiscount;" );
-			$quoteDiscountPer = $quoteDiscount * 100 / $subTotalProducts;
+			if ($subTotalProducts > 0) {
+				$quoteDiscountPer = $quoteDiscount * 100 / $subTotalProducts;
+			} else {
+				$quoteDiscountPer = 0;
+			}
 			$subTotal = $subTotal - $quoteDiscount;
 			$quoteHstRate = doubleval ( $myQuote->getAtributo ( "quote_hst_rate" ) );
 			$quoteHst = $subTotal * $quoteHstRate / 100;
