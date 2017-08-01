@@ -107,13 +107,51 @@ if (comprobarVar ( $opportunityId )) {
 				$myOrganization = $i->getOrganization ( $organizationId );
 				$organizationName = $myOrganization->ORGANISATION_NAME;
 				$arrAddresses = $myOrganization->ADDRESSES;
+				$address = "";
+				$address1 = "";
+				$address2 = "";
+				$addChk1 = "";
+				$addChk2 = "";
+				$shipTo = "";
 				if (isset ( $arrAddresses [0] )) {
-					$address = $arrAddresses [0]->STREET . ", " . $arrAddresses [0]->CITY . ", " . $arrAddresses [0]->COUNTRY . ".";
-					$address = str_replace ( "\n", " ", $address );
-					$address = str_replace ( "\r", " ", $address );
+					$addressTemp = $arrAddresses [0]->STREET . ", " . $arrAddresses [0]->CITY . ", " . $arrAddresses [0]->COUNTRY . ".";
+					$addressTemp = str_replace ( "\n", " ", $addressTemp );
+					$addressTemp = str_replace ( "\r", " ", $addressTemp );
 					$country = $arrAddresses [0]->COUNTRY;
 					$city = $arrAddresses [0]->CITY;
+					if (trim ( $addressTemp ) != "") {
+						if (strcmp ( trim ( $arrAddresses [0]->ADDRESS_TYPE ), 'POSTAL' ) == 0) {
+							$address1 = $addressTemp;
+						} else if (strcmp ( trim ( $arrAddresses [0]->ADDRESS_TYPE ), 'PRIMARY' ) == 0) {
+							$address2 = $addressTemp;
+						}
+					}
 				}
+				if (isset ( $arrAddresses [1] )) {
+					$addressTemp = $arrAddresses [1]->STREET . ", " . $arrAddresses [1]->CITY . ", " . $arrAddresses [1]->COUNTRY . ".";
+					$addressTemp = str_replace ( "\n", " ", $addressTemp );
+					$addressTemp = str_replace ( "\r", " ", $addressTemp );
+					if (trim ( $addressTemp ) != "") {
+						if (strcmp ( trim ( $arrAddresses [1]->ADDRESS_TYPE ), 'POSTAL' ) == 0) {
+							$address1 = $addressTemp;
+						} else if (strcmp ( trim ( $arrAddresses [1]->ADDRESS_TYPE ), 'PRIMARY' ) == 0) {
+							$address2 = $addressTemp;
+						}
+					}
+				}
+				if (trim ( $address2 ) != "") {
+					$addChk2 = 'checked="checked"';
+					$shipTo = $address2;
+				} else {
+					$addChk1 = 'checked="checked"';
+					$shipTo = $address1;
+				}
+				if (trim ( $address1 ) != "") {
+					$address = $address1;
+				} else {
+					$address = $address2;
+				}
+				
 				$arrContactInfos = $myOrganization->CONTACTINFOS;
 				$contadorW = 0;
 				$contadorP = 0;

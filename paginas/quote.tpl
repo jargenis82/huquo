@@ -76,6 +76,17 @@ table, td, th {
 	arrProductSale[0]['quote_line_price'] = "";
 	var subTotalProducts = 0.00;
 	var discount = 0.00;
+	var address1 = "[var.address1;noerr]";
+	var address2 = "[var.address2;noerr]";
+	
+	// Function to change the value of the field Ship To
+	function putShipTo(id) {
+		if (id == "rad_ship_2") {
+			document.getElementById('txt_ship_to').value = address1;
+		} else {
+			document.getElementById('txt_ship_to').value = address2;
+		}		
+	}
 	
 	// Funcion que prepara la cotizacion para su registro en XAJAX
 	function saveQuote() {
@@ -281,15 +292,17 @@ table, td, th {
 								<td width="200px"><span id="span_name">[var.organizationName;noerr]</span></td>
 								<td rowspan="2"><label>Ship to</label></td>
 								<td>Shipping Address&nbsp;<input type="radio"
-									name="rad_ship" id="rad_ship_1" tabindex="3">&nbsp;&nbsp;Billing
-									Address<input type="radio" name="rad_ship" checked="checked"
-									tabindex="3"></td>
+									name="rad_ship" id="rad_ship_1" [var.addChk2;noerr]
+									tabindex="3" onclick="putShipTo(this.id)">&nbsp;&nbsp;Billing
+									Address<input type="radio" name="rad_ship" id="rad_ship_2"
+									[var.addChk1;noerr] tabindex="3"
+									onclick="putShipTo(this.id)"></td>
 							</tr>
 							<tr>
 								<td><label>Address</label></td>
 								<td><span id="span_address">[var.address;noerr]</span></td>
 								<td><textarea rows="2" cols="40" tabindex="4"
-										id="txt_ship_to" required="required">[var.address;noerr]</textarea></td>
+										id="txt_ship_to" required="required">[var.shipTo;noerr]</textarea></td>
 							</tr>
 							<tr>
 								<td><label>Web</label></td>
@@ -303,7 +316,7 @@ table, td, th {
 								<td><label>Type</label></td>
 								<td><span id="span_price_type">[var.customerType;noerr]</span></td>
 							</tr>
-							<tr style='[var.displayExchangeRate;noerr]'>
+							<tr style=''>
 								<td nowrap="nowrap"><label>Exchange Rate</label></td>
 								<td><input type="text" id="txt_exchange_rate" tabindex="4"
 									size="8" dir="rtl" value="[var.exchangeRate;noerr]"
