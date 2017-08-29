@@ -13,6 +13,7 @@ class User extends ClaseBd {
 		$atributos ['user_email'] ['esPk'] = false;
 		$atributos ['user_creation_date'] ['esPk'] = false;
 		$atributos ['user_skype'] ['esPk'] = false;
+        $atributos ['user_api_key'] ['esPk'] = false;
 		$strOrderBy = "user_id";
 		$this->registrarTabla ( $tabla, $atributos, $objetos, $strOrderBy );
 		$this->dsn = "mysql";
