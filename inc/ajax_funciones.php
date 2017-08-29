@@ -214,10 +214,16 @@ function saveQuote($quote, $arrProduct) {
 		return $objResponse;
 	}
 	if (comprobarVar ( strstr ( $_SERVER ['HTTP_REFERER'], "hubrox.com" ) )) {
+		// Se busca el usuario de la cotizacion para obtener el API key de Insightly
+		$myUser = $myQuote->getObjeto('User');
+		$userApiKey = $myUser->getAtributo('user_api_key');
+		if (!comprobarVar($userApiKey)) {
+			$userApiKey = APIKEY;
+		}
 		// Se agrega un enlace de la cotización en Insighly
-		$i = new Insightly ( APIKEY );
+		$i = new Insightly ( $userApiKey );
 		$objeto = new stdClass ();
-		$objeto->TITLE = 'Test of PDF Quote From HUQUO';
+		$objeto->TITLE = 'Quote of HUQUO - '.$quoteNumber;
 		$objeto->LINK_SUBJECT_ID = $quote ['oppor_id'];
 		$objeto->LINK_SUBJECT_TYPE = 'Opportunity';
 		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf.php?pdf=' . $hash . '" target="_blank">Quote ' . $quoteNumber . '</a>';
