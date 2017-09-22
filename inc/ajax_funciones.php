@@ -70,12 +70,17 @@ function validateUser($user, $password) {
 			if (count ( $arrUser ) == 1) {
 				$myUser = $arrUser [0];
 			} else {
+				$miConexionBd->hacerConsulta ( "ROLLBACK;" );
+				$objResponse->addAlert ( "Restricted access. Please contact your administrator." );
+				return $objResponse;
+				/**
 				$myUser->setAtributo ( "user_creation_date", date ( "Y-m-d H:i:s" ) );
 				if (! $myUser->registrar ()) {
 					$miConexionBd->hacerConsulta ( "ROLLBACK;" );
 					$objResponse->addAlert ( "Error (VU-001). Please contact your administrator." );
 					return $objResponse;
 				}
+				*/
 			}
 			$_SESSION ['user_id'] = $myUser->getAtributo ( "user_id" );
 			$_SESSION ['user_login_ftp'] = $myUser->getAtributo ( "user_login_ftp" );
