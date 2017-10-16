@@ -54,7 +54,8 @@ table, td, th {
 			"scrollY": "auto",
 			minDate: "today",
 			"bInfo": false,
-			"paging": false
+			"paging": false,
+			"ordering": false
 	    });
 	});
 	
@@ -367,7 +368,7 @@ table, td, th {
 		<div class="container">
 			<div class="col-sm-12">
 				<div class="panel panel-primary">
-					<div class="panel-heading">Description</div>
+					<div class="panel-heading">Products</div>
 					<div class="panel-body">
 						<table id="descripId" class="table table-striped" width="100%"
 							cellspacing="0">

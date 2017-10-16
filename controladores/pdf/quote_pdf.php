@@ -2,7 +2,7 @@
 include_once '../../conf.inc.php';
 include_once '../../inc/funciones.php';
 include_once '../../librerias/conexion_bd.php';
-include_once '../../librerias/mpdf53/mpdf.php';
+include_once '../../librerias/mpdf60/mpdf.php';
 include_once '../../librerias/tbs_class/tbs_class.php';
 include_once '../../clases/organisation.php';
 include_once '../../clases/quote.php';
