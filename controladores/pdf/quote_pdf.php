@@ -65,7 +65,8 @@ $quoteComment = $myQuote->getAtributo ( "quote_comment" );
 if (!comprobarVar($quoteComment)) {
 	$quoteComment = "1. Customer will be billed after indicating acceptance of this quote.
 2. Payment will be due prior to delivery of service and goods.
-3. Please fax or mail the signed price quote to the address above.";
+3. Please fax or mail the signed price quote to the address above.
+4. Customers are responsible for import duties and brokerage fees if applied during the shipment.";
 }
 $discountVal = doubleval ( $myQuote->getAtributo ( "quote_discount" ) );
 $hstRate = doubleval ( $myQuote->getAtributo ( "quote_hst_rate" ) );

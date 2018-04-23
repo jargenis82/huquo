@@ -406,7 +406,8 @@ table, td, th {
 									onkeydown="javascript:return introComment(event,this)"
 									tabindex="1000">1. Customer will be billed after indicating acceptance of this quote.
 2. Payment will be due prior to delivery of service and goods.
-3. Please fax or mail the signed price quote to the address above.</textarea>
+3. Please fax or mail the signed price quote to the address above.
+4. Customers are responsible for import duties and brokerage fees if applied during the shipment.</textarea>
 							</div>
 							<div class="col-sm-5">
 								<table class="table table-striped">
