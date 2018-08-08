@@ -488,7 +488,7 @@ table, td, th {
 		<div class="col-sm-8">
 			<footer>
 				<p>
-					370 Magnetic Dr. North York, ON M3J 2C4,Toronto, Canada <label>
+					39 Chopin Dr. Vaughan, ON L4J 8Y6,Toronto, Canada <label>
 						Phone:+ 1-647-499-5741</label>Contact information: <a
 						href="http://www.hubrox.com/">www.hubrox.com</a>.
 				</p>

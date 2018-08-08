@@ -6,7 +6,7 @@
 			</h1></td>
 	</tr>
 	<tr>
-		<td><h5>370 Magnetic Dr. North York, ON M3J 2C4, Toronto,
+		<td><h5>39 Chopin Dr. Vaughan, ON L4J 8Y6,Toronto,
 				Canada</h5></td>
 		<td><label>DATE</label></td>
 		<td align="right"><h4>[var.date;noerr]</h4></td>
