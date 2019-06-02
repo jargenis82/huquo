@@ -16,5 +16,5 @@ class Contact extends ClaseBd {
 		$this->dsn = "mysql";
 	}
 }
-
+// Fin
 ?>
