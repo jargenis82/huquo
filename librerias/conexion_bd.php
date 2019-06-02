@@ -21,11 +21,10 @@ class ConexionBd {
 	private $consultaPendiente;
 
 	// Conecta con la Base de Datos
-	function __construct($dsn,$enlace,$ejecutar) {
+	function __construct($dsn=null,$enlace=null,$ejecutar=null) {
 		session_start();
 		$this->consultaPendiente = "";
 		$this->ejecutar = isset($ejecutar) ? $ejecutar : true;
-
 		if (isset($enlace))
 			$this->enlace = $enlace;
 		else {
@@ -38,11 +37,11 @@ class ConexionBd {
 			} else {
 				$this->enlace = new PDO("pgsql:host=".W.";port=".V.";dbname=".Z.";user=".X.";password=".Y);
 			}
-		}		
+		}	
 	}
 	
 	// Realiza las consultas a la Base de Datos
-	function hacerSelect($strSelect,$strFrom,$strWhere,$strGroupBy,$strOrderBy) {
+	function hacerSelect($strSelect=null,$strFrom=null,$strWhere=null,$strGroupBy=null,$strOrderBy=null) {
 		$consulta = isset($strSelect) ? "SELECT $strSelect" : "";
 		$consulta .= isset($strFrom) ? " FROM $strFrom" : "";
 		$consulta .= (isset($strWhere) and (strcmp($strWhere,"") != 0)) ? " WHERE $strWhere" : "";
@@ -53,7 +52,7 @@ class ConexionBd {
 	}
 	
 	// Realiza los ingreso a la Base de Datos
-	function hacerInsert($strInsertInto,$strValues,$idRetorno) {
+	function hacerInsert($strInsertInto=null,$strValues=null,$idRetorno=null) {
 		$consulta = isset($strInsertInto) ? "INSERT INTO ".$strInsertInto : "";
 		$consulta .= isset($strValues) ? " VALUES ($strValues)" : "";
 
@@ -68,7 +67,7 @@ class ConexionBd {
 		return $retorno;
 	}
 	// Realiza la eliminacion en la Base de Datos
-	function hacerDelete($strDeleteFrom,$strWhere) {
+	function hacerDelete($strDeleteFrom=null,$strWhere=null) {
 		$consulta = isset($strDeleteFrom) ? "DELETE FROM $strDeleteFrom" : "";
 		$consulta .= isset($strWhere) ? " WHERE $strWhere" : "";
 		$consulta .= ";";
@@ -76,7 +75,7 @@ class ConexionBd {
 	}
 
 	// Realiza las actualizaciones en la Base de Datos
-	function hacerUpdate($strUpdate,$strSet,$strWhere) {
+	function hacerUpdate($strUpdate=null,$strSet=null,$strWhere=null) {
 		$consulta = isset($strUpdate) ? "UPDATE $strUpdate" : "";
 		$consulta .= isset($strSet) ? " SET $strSet" : "";
 		$consulta .= isset($strWhere) ? " WHERE $strWhere" : "";
@@ -95,7 +94,7 @@ class ConexionBd {
 		return false;		
 	}
 	// Realiza la ejecuci�n de una consulta
-	function hacerConsulta($consulta,$devolver) {
+	function hacerConsulta($consulta=null,$devolver=null) {
 		if ($this->ejecutar) {
 			if (isset($devolver) and $devolver) {
 				$resultado = $this->enlace->query($consulta);

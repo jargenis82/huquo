@@ -12,7 +12,7 @@ class ClaseBd {
 	protected $miConexionBd;
 	private $estaMaterializado;
 	protected $dsn;
-	function __construct($miConexionBd, $valorListaPk) {
+	function __construct($miConexionBd=null, $valorListaPk=null) {
 		$this->declararTabla ();
 		if (isset ( $miConexionBd )) {
 			$this->miConexionBd = $miConexionBd;
@@ -199,7 +199,7 @@ class ClaseBd {
 		}
 		return $datos;
 	}
-	function consultar($soloCantidad) {
+	function consultar($soloCantidad=null) {
 		$datos = $this->getDatos ( true );
 		$strOrderBy = null;
 		if ($soloCantidad === true) {
