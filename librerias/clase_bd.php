@@ -35,13 +35,13 @@ class ClaseBd {
 	 * $this->registrarTabla($tabla,$atributos,$objetos,$strOrderBy);
 	 * }
 	 */
-	function registrarTabla($tabla, $atributos, $objetos, $strOrderBy) {
+	function registrarTabla($tabla=null, $atributos=null, $objetos=null, $strOrderBy=null) {
 		$this->tabla = $tabla;
 		$this->atributos = $atributos;
 		$this->objetos = $objetos;
 		$this->strOrderBy = $strOrderBy;
 	}
-	private function getId(&$atributoPk) {
+	private function getId(&$atributoPk=null) {
 		$atributoLista = array ();
 		foreach ( $this->atributos as $atributo => $registro ) {
 			if ($registro ['esPk']) {
@@ -58,13 +58,13 @@ class ClaseBd {
 			return $atributoLista;
 		}
 	}
-	function getAtributo($atributo) {
+	function getAtributo($atributo=null) {
 		return $this->getVar ( strtolower ( $atributo ) );
 	}
-	function getObjeto($clase) {
+	function getObjeto($clase=null) {
 		return $this->getObj ( $clase );
 	}
-	private function setId($valorListaPk) {
+	private function setId($valorListaPk=null) {
 		$this->estaMaterializado = false;
 		// Se verifica si el parametro $valorListaPk es arreglo o un solo valor
 		if ($valorListaPk != NULL) {
@@ -91,7 +91,7 @@ class ClaseBd {
 			}
 		}
 	}
-	function setAtributo($atributo, $valor) {
+	function setAtributo($atributo=null, $valor=null) {
 		if (array_key_exists ( strtolower ( $atributo ), $this->atributos )) {
 			$this->atributos [strtolower ( $atributo )] ['valor'] = ($valor != NULL) ? $valor : null;
 			if ($this->atributos [strtolower ( $atributo )] ['esPk']) {
@@ -100,7 +100,7 @@ class ClaseBd {
 			}
 		}
 	}
-	function setObjeto($objeto, $valor) {
+	function setObjeto($objeto=null, $valor=null) {
 		if (isset ( $this->objetos [$objeto] ['objeto'] )) {
 			$this->objetos [$objeto] ['objeto']->setId ( $valor );
 		} else {
@@ -160,7 +160,7 @@ class ClaseBd {
 			$this->listaAtribObj [$registro ['id']] = $clase;
 		}
 	}
-	private function getVar($atributo) {
+	private function getVar($atributo=null) {
 		if ($this->atributos [strtolower ( $atributo )] ['valor'] != NULL) {
 			return $this->atributos [strtolower ( $atributo )] ['valor'];
 		} else if (! ($this->estaMaterializado)) {
@@ -173,7 +173,7 @@ class ClaseBd {
 			return null;
 		}
 	}
-	private function getObj($clase) {
+	private function getObj($clase=null) {
 		if (isset ( $this->objetos [$clase] ['objeto'] )) {
 			return $this->objetos [$clase] ['objeto'];
 		} else if (! ($this->estaMaterializado)) {
@@ -186,7 +186,7 @@ class ClaseBd {
 			return null;
 		}
 	}
-	function getDatos($noMaterializar) {
+	function getDatos($noMaterializar=null) {
 		if (! $noMaterializar) {
 			$this->materializar ();
 		}
