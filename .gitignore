@@ -8,4 +8,5 @@ log/
 .phpintel/
 error_log
 pruebas/
+vendor/
 
