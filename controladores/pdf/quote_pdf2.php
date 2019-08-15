@@ -1,52 +1,28 @@
 <?php
-ini_set ( "display_errors", "1" );
-
-// Require composer autoload
-require_once '../../vendor/autoload.php';
-
-// Create an instance of the class:
-$mpdf = new \Mpdf\Mpdf();
-
-// Write some HTML code:
-$mpdf->WriteHTML('Hello World');
-
-// Output a PDF file directly to the browser
-$mpdf->Output();
-exit;
-
 include_once '../../conf.inc.php';
 include_once '../../inc/funciones.php';
 include_once '../../librerias/conexion_bd.php';
-include_once '../../librerias/mpdf60/mpdf.php';
 include_once '../../librerias/tbs_class/tbs_class.php';
 include_once '../../clases/organisation.php';
 include_once '../../clases/quote.php';
-// include_once '../../clases/quote_line.php';
+
+// Require composer autoload
+require_once '../../vendor/autoload.php';
+/*
+// Se capturan 
 $quoteId = comprobarVar ( $_GET ['quoteId'] ) ? limpiarPalabra ( aceptarComilla ( $_GET ['quoteId'] ) ) : null;
 $pdf = comprobarVar ( $_GET ['pdf'] ) ? limpiarPalabra ( aceptarComilla ( $_GET ['pdf'] ) ) : null;
 
-
-// PROVISIONAL
-//----------------------------------------
-$quoteId = 963;
-
-include_once '../../clases/quote.php';
-$myUser = new User();
-$myUser->setAtributo ( "user_id" ,1);
-$_SESSION ['user_id'] = $myUser->getAtributo ( "user_id" );
-$_SESSION ['user_login_ftp'] = $myUser->getAtributo ( "user_login_ftp" );
-$_SESSION ['user_name'] = $myUser->getAtributo ( "user_name" );
-$_SESSION ['user_email'] = $myUser->getAtributo ( "user_email" );
-//----------------------------------------
-
-// Valida si existe el quote
+// Valida si existe el id de la cotización y el hash de búsqueda de la cotización
 if ((comprobarVar ( $quoteId ) and ! comprobarVar ( $_SESSION ['user_id'] )) or (! comprobarVar ( $quoteId ) and ! comprobarVar ( $pdf ))) {
 	exit ();
 }
 
+// Se genera la instancia de conexión con la BD
 $miConexionBd = new ConexionBd ( "mysql" );
-$myQuote = new Quote ( $miConexionBd );
 
+// Se genera la instancia con Quote
+$myQuote = new Quote ( $miConexionBd );
 if (comprobarVar ( $quoteId )) {
 	$myQuote->setAtributo ( "quote_id", $quoteId );
 } else {
@@ -58,109 +34,28 @@ if (comprobarVar ( $quoteId )) {
 		exit ();
 	}
 }
+
+// Se capturan los valores a mostrar en el PDF
 $quoteId = $myQuote->getAtributo ( "quote_id" );
-$myOrganisation = $myQuote->getObjeto ( "Organisation" );
-$myContact = $myQuote->getObjeto ( "Contact" );
-$myUser = $myQuote->getObjeto ( "User" );
-$quote = "QUOTE";
-$logo = "hubrox1.png";
-$myDateTime = DateTime::createFromFormat ( "Y-m-d H:i:s", $myQuote->getAtributo ( "quote_date" ) );
-$date = $myDateTime->format ( "d-M-Y" );
-$quoteNumber = $myQuote->getAtributo ( "quote_number" );
-$customerId = $myOrganisation->getAtributo ( "org_ins_id" );
-$myDateTime = DateTime::createFromFormat ( "Y-m-d H:i:s", $myQuote->getAtributo ( "quote_valid_until" ) );
-$validUntil = $myDateTime->format ( "d-M-Y" );
-$prepared = $myUser->getAtributo ( "user_name" );
-$userEmail = $myUser->getAtributo ( "user_email" );
-$userSkype = $myUser->getAtributo ( "user_skype" );
-$userSkype = comprobarVar($userSkype) ? "Skype: $userSkype, " : "";
-$customerInfor = $myContact->getAtributo ( "contact_name" ) . "<br>";
-$customerInfor .= $myContact->getAtributo ( "contact_email" ) . "<br>";
-$customerInfor .= $myOrganisation->getAtributo ( "org_name" ) . "<br>";
-$customerInfor .= $myOrganisation->getAtributo ( "org_address" ) . "<br>";
-$customerInfor .= $myOrganisation->getAtributo ( "org_web" ) . "<br>";
-$customerInfor .= $myOrganisation->getAtributo ( "org_phone" ) . "<br>";
-$customerInfor .= $myOrganisation->getAtributo ( "org_city" ) . ", " . $myOrganisation->getAtributo ( "org_country" );
-// Check the use of canadian dollar
-if ($myOrganisation->getAtributo ( "org_country" ) == "Canada") {
-	$currency = "CA$";
-} else {
-	$currency = "US$";
-}
-$shipTo = $myQuote->getAtributo ( "quote_ship_to" );
-$quoteComment = $myQuote->getAtributo ( "quote_comment" );
-// Delete this code when the system is in production state
-if (!comprobarVar($quoteComment)) {
-	$quoteComment = "1. Customer will be billed after indicating acceptance of this quote.
-2. Payment will be due prior to delivery of service and goods.
-3. Please fax or mail the signed price quote to the address above.
-4. Customers are responsible for import duties and brokerage fees if applied during the shipment.";
-}
-$discountVal = doubleval ( $myQuote->getAtributo ( "quote_discount" ) );
-$hstRate = doubleval ( $myQuote->getAtributo ( "quote_hst_rate" ) );
-$hstUst = $hstRate / 100;
-if ($hstRate == doubleval ( intval ( $hstRate ) )) {
-	$hstRate = intval ( $hstRate );
-} else {
-	$hstRate = number_format ( $hstRate, 2, ",", "." );
-}
-$hstRate .= "%";
-$sunTotal = doubleval ( 0 );
-$total = doubleval ( 0 );
-$myQuoteLine = new QuoteLine ( $miConexionBd );
-$myQuoteLine->setObjeto ( "Quote", $quoteId );
-$products = array ();
-$arrQuoteLine = $myQuoteLine->consultar ();
-foreach ( $arrQuoteLine as $i => $aQuoteLine ) {
-	$desc = $aQuoteLine->getAtributo ( "quote_line_desc" );
-	$price = doubleval ( $aQuoteLine->getAtributo ( "quote_line_price" ) );
-	$qty = $aQuoteLine->getAtributo ( "quote_line_qty" );
-	$amount = $price * $qty;
-	$sunTotal += $amount;
-	$products [$i] = array ();
-	$products [$i] ['desc'] = $desc;
-	$products [$i] ['qty'] = $qty;
-	$products [$i] ['qty'] = $qty;
-	$price = number_format ( $price, 2, ".", "," );
-	$products [$i] ['price'] = $price;
-	$amount = number_format ( $amount, 2, ".", "," );
-	$products [$i] ['amount'] = $amount;
-}
+*/
 
-$sunTotal = $sunTotal - $discountVal;
-$hstUst = $sunTotal * $hstUst;
-$total = $sunTotal + $hstUst;
+// Variables de configuración del MPDF
+$config['mode'] = 'utf-8';
+$config['format'] = 'Letter';
+$config['orientation'] = 'P';
+$config['margin_top'] = '18.7';
+$config['margin_left'] = '15.9';
+$config['margin_right'] = '30.3';
+$config['margin_bottom'] = '4.9';
 
-$discountVal = number_format ( $discountVal, 2, ".", "," );
-$sunTotal = number_format ( $sunTotal, 2, ".", "," );
-$hstUst = number_format ( $hstUst, 2, ".", "," );
-$total = number_format ( $total, 2, ".", "," );
+// Create an instance of the class:
+$mpdf = new \Mpdf\Mpdf($config);
 
-$TBS1 = new clsTinyButStrong ();
-$TBS1->LoadTemplate ( '../../paginas/quote_pdf_cabecera2.tpl' );
-$TBS1->Show ( TBS_NOTHING ); // terminate the merging without leaving the script nor to display the result
-$cabecera = $TBS1->Source;
 
-$TBS2 = new clsTinyButStrong ();
-$TBS2->LoadTemplate ( '../../paginas/quote_pdf_html2.tpl' );
-$TBS2->MergeBlock ( 'products', $products );
-$TBS2->Show ( TBS_NOTHING ); // terminate the merging without leaving the script nor to display the result
-$html = $TBS2->Source;
 
-$TBS3 = new clsTinyButStrong ();
-$TBS3->LoadTemplate ( '../../paginas/quote_pdf_pie2.tpl' );
-$TBS3->Show ( TBS_NOTHING ); // terminate the merging without leaving the script nor to display the result
-$piePagina = $TBS3->Source;
+// Write some HTML code:
+$mpdf->WriteHTML(file_get_contents('../../paginas/quote_pdf_body.tpl'));
 
-// mode,format,default_font_size,default_font,margin_left 15,margin_right 15,margin_top 16,
-// margin_bottom 16,margin_header 9,margin_footer 9,orientation P o L,
-$mpdf = new mPDF ( 'c', 'Letter', 10, null, 10, 10, 60, 18, 9, 5 );
-$mpdf->SetHTMLHeader ( $cabecera );
-// zoom 'fullpage,fullwidth,real,default o un entero representando el porcentaje',
-// layout 'single,continuous,two,twoleft,tworight,default'
-$mpdf->SetDisplayMode ( 'fullpage', 'single' );
-$mpdf->SetHTMLFooter ( $piePagina );
-$mpdf->WriteHTML ( $html );
-$fileName="Quote ".$quoteNumber." ".aceptarComilla($myOrganisation->getAtributo ( "org_name" )).".pdf";
-$mpdf->Output($fileName,'I');
-?>
+// Output a PDF file directly to the browser
+$mpdf->Output();
+exit;

@@ -9,4 +9,6 @@ log/
 error_log
 pruebas/
 vendor/
+permissions
+sync.ffs_db
 

@@ -56,7 +56,7 @@ function validateUser($user, $password) {
 	$r = $miConexionBd->hacerSelect ( "user_pass,user_email,display_name", "wp_users", "user_login = '$user'" );
 	if (comprobarVar ( $r [0] ['user_pass'] )) {
 		// Se instancia la clase para validar el password con el HASH
-		$myPasswordHash = new PasswordHash ();
+		$myPasswordHash = new PasswordHash (null,null);
 		if ($myPasswordHash->CheckPassword ( aceptarComilla ( $password ), $r [0] ['user_pass'] )) {
 			// Se busca el usuario en la BD de Huquo
 			$miConexionBd = new ConexionBd ( "mysql" );
