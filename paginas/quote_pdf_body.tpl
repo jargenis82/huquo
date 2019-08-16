@@ -142,7 +142,9 @@
             <td>
                 <div class="cls_005"><span class="cls_005">DATE</span></div>
             </td>
-            <td></td>
+            <td>
+                <div class="cls_005"><span class="cls_005"></span>[var.date;noerr]</span></div>
+            </td>
         </tr>
         <tr>
             <td colspan="2">
@@ -152,7 +154,9 @@
             <td>
                 <div class="cls_005"><span class="cls_005">INVOICE #</span></div>
             </td>
-            <td></td>
+            <td>
+                <div class="cls_005"><span class="cls_005">[var.quoteNumber;noerr]</span></div>
+            </td>
         </tr>
         <tr>
             <td colspan="2">
@@ -172,7 +176,9 @@
             <td>
                 <div class="cls_005"><span class="cls_005">SALES PERSON</span>
             </td>
-            <td></td>
+            <td>
+                <div class="cls_005"><span class="cls_005">[var.prepared;noerr]</span>
+            </td>
         </tr>
         <tr>
             <td colspan="2">
@@ -200,7 +206,9 @@
             <td>
                 <div class="cls_005"><span class="cls_005">[Name]</span></div>
             </td>
-            <td colspan="2"></td>
+            <td colspan="2">
+                <div class="cls_005"><span class="cls_005">[var.contactName;noerr]</span></div>
+            </td>
             <td colspan="2"></td>
         </tr>
         <tr>
