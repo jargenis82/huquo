@@ -231,7 +231,19 @@ function saveQuote($quote, $arrProduct) {
 		$objeto->TITLE = 'Quote of HUQUO - '.$quoteNumber;
 		$objeto->LINK_SUBJECT_ID = $quote ['oppor_id'];
 		$objeto->LINK_SUBJECT_TYPE = 'Opportunity';
-		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf.php?pdf=' . $hash . '" target="_blank">Quote ' . $quoteNumber . '</a>';
+		
+		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf.php?pdf=' . $hash . '" target="_blank">(US$) Quote ' . $quoteNumber . '</a>';
+		$objeto->BODY .= '<br>';
+		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf.php?pdf=' . $hash . '&currency=2" target="_blank">(EUR€) Quote ' . $quoteNumber . '</a>';
+		$objeto->BODY .= '<br>';
+		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf2.php?pdf=' . $hash . '" target="_blank">(US$) Invoice ' . $quoteNumber . '</a>';
+		$objeto->BODY .= '<br>';
+		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf2.php?pdf=' . $hash . '&currency=2" target="_blank">(EUR€) Invoice ' . $quoteNumber . '</a>';
+		$objeto->BODY .= '<br>';
+		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf2.php?pdf=' . $hash . '&format=3" target="_blank">(US$) Proforma Invoice ' . $quoteNumber . '</a>';
+		$objeto->BODY .= '<br>';
+		$objeto->BODY = '<a href="http://www.hubrox.com/huquo_pro/controladores/pdf/quote_pdf2.php?pdf=' . $hash . '&format=3&currency=2" target="_blank">(EUR€) Proforma Invoice ' . $quoteNumber . '</a>';
+		
 		$noteLinks = new stdClass ();
 		$noteLinks->ORGANISATION_ID = $quote ['org_ins_id'];
 		$arrNoteLinks [0] = $noteLinks;

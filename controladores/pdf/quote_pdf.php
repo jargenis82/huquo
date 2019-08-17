@@ -10,6 +10,13 @@ include_once '../../clases/quote.php';
 
 $quoteId = comprobarVar ( $_GET ['quoteId'] ) ? limpiarPalabra ( aceptarComilla ( $_GET ['quoteId'] ) ) : null;
 $pdf = comprobarVar ( $_GET ['pdf'] ) ? limpiarPalabra ( aceptarComilla ( $_GET ['pdf'] ) ) : null;
+$currency = comprobarVar($_GET['currency']) ? limpiarPalabra(aceptarComilla($_GET['currency'])) : 2;
+
+if (isset($currency) and $currency == 2) {
+	$currency = "EUR€";
+} else {
+	$currency = "US$";
+}
 
 // Valida si existe el quote
 if ((comprobarVar ( $quoteId ) and ! comprobarVar ( $_SESSION ['user_id'] )) or (! comprobarVar ( $quoteId ) and ! comprobarVar ( $pdf ))) {
@@ -56,9 +63,8 @@ $customerInfor .= $myOrganisation->getAtributo ( "org_city" ) . ", " . $myOrgani
 // Check the use of canadian dollar
 if ($myOrganisation->getAtributo ( "org_country" ) == "Canada") {
 	$currency = "CA$";
-} else {
-	$currency = "US$";
 }
+
 $shipTo = $myQuote->getAtributo ( "quote_ship_to" );
 $quoteComment = $myQuote->getAtributo ( "quote_comment" );
 // Delete this code when the system is in production state

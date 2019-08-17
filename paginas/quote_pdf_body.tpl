@@ -116,7 +116,7 @@
 
 <body>
 
-    <table border="0" width="100%" cellSpacing="0" cellPadding="2">
+    <table border="0" width="100%" cellSpacing="0" cellPadding="2" style="line-height:20px;">
         <tr>
             <td colspan="3">
                 <div class="cls_003"><span class="cls_003">HUBROX TECHNOLOGY INC.</span></div>
