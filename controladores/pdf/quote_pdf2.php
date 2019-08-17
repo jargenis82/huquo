@@ -12,6 +12,22 @@ require_once '../../vendor/autoload.php';
 // Se capturan el id de la cotización y el hash de ubicación de la cotización
 $quoteId = comprobarVar($_GET['quoteId']) ? limpiarPalabra(aceptarComilla($_GET['quoteId'])) : null;
 $pdf = comprobarVar($_GET['pdf']) ? limpiarPalabra(aceptarComilla($_GET['pdf'])) : null;
+$format = comprobarVar($_GET['format']) ? limpiarPalabra(aceptarComilla($_GET['format'])) : 2;
+$currency = comprobarVar($_GET['currency']) ? limpiarPalabra(aceptarComilla($_GET['currency'])) : 2;
+
+if (isset($format) and $format == 3) {
+	$format = "PROFORMA INVOICE";
+} else {
+	$format = "INVOICE";
+}
+
+if (isset($currency) and $currency == 2) {
+	$currency = "EUR€";
+} else {
+	$currency = "US$";
+}
+
+
 
 // Valida si existe el id de la cotización y el hash de búsqueda de la cotización
 if ((comprobarVar($quoteId) and !comprobarVar($_SESSION['user_id'])) or (!comprobarVar($quoteId) and !comprobarVar($pdf))) {

@@ -67,9 +67,19 @@ function addNewProduct(quoteId) {
 	xajax_addNewProduct(idTxtDescrip,quoteId,customerRegionId,priceTypeId);
 }
 function openPdfQuote(quoteId,newTag){
-	if (newTag) {
-		window.open("../controladores/pdf/quote_pdf.php?quoteId="+quoteId);
+
+	var page = "";
+	var format = "";
+	var currency = "&currency="+$("#sel_currency").val();
+	if ($("#sel_format").val() == "1") {
+		page = "quote_pdf";
 	} else {
-		window.parent.location = "../controladores/pdf/quote_pdf.php?quoteId="+quoteId;
+		page = "quote_pdf2";
+		format = "&format="+$("#sel_format").val();
+	}
+	if (newTag) {
+		window.open("../controladores/pdf/"+page+".php?quoteId="+quoteId+format+currency);
+	} else {
+		window.parent.location = "../controladores/pdf/"+page+".php?quoteId="+quoteId+format+currency;
 	}	
 }

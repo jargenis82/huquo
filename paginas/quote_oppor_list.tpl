@@ -137,13 +137,30 @@ table, td, th {
 						<div class="panel panel-primary">
 							<div class="panel-heading">Quotes List</div>
 							<div class="panel-body">
-								<table id="tQuote" class="display nowrap" width="100%"
-									cellspacing="0">
+								<div class="row" style="white-space: nowrap">
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<label for="sel_currency">PDF Format:&nbsp;</label>
+										<select name="sel_format" id="sel_format" class="form-control">
+											<option value="1">Quote</option>
+											<option value="2">Invoice</option>
+											<option value="3">Proforma Invoice</option>
+										</select>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-6">
+										<label for="sel_currency">PDF Currency:</label>
+										<select name="sel_currency" id="sel_currency" class="form-control">
+											<option value="1">US$</option>
+											<option value="2">EUR€</option>
+										</select>
+									</div>
+								</div>
+								<br>
+								<table id="tQuote" class="display nowrap" width="100%" cellspacing="0">
 									<thead>
 										<tr>
 											<th>Quote Number</th>
 											<th>Quote Date and Time</th>
-											<th>Name</th>
+										<th>Name</th>
 											<th>Total ($)</th>
 											<th>View / Edit</th>
 											<th>PDF</th>

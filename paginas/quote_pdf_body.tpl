@@ -24,7 +24,7 @@
 
         span.cls_004 {
             font-family: "Cambria Bold", serif;
-            font-size: 21px;
+            font-size: 19px;
             color: rgb(148, 179, 214);
             font-weight: bold;
             font-style: normal;
@@ -33,7 +33,7 @@
 
         div.cls_004 {
             font-family: "Cambria Bold", serif;
-            font-size: 21px;
+            font-size: 19px;
             color: rgb(148, 179, 214);
             font-weight: bold;
             font-style: normal;
@@ -122,7 +122,7 @@
                 <div class="cls_003"><span class="cls_003">HUBROX TECHNOLOGY INC.</span></div>
             </td>
             <td colspan="2" align="center">
-                <div class="cls_004"><span class="cls_004">INVOICE</span>
+                <div class="cls_004"><span class="cls_004">[var.format;noerr]</span>
                 </div>
             </td>
         </tr>
@@ -284,7 +284,7 @@
                 </div>
             </td>
             <td bgcolor="rgb(79, 129, 189)" align="center">
-                <div class="cls_002"><span class="cls_002">AMOUNT (US$)</span>
+                <div class="cls_002"><span class="cls_002">AMOUNT ([var.currency;noerr])</span>
                 </div>
             </td>
         </tr>
@@ -310,7 +310,7 @@
                 <div class="cls_005"><span class="cls_005">&nbsp;</span></div>
             </td>
             <td align="right">
-                <div class="cls_010"><span class="cls_010">TOTAL (US$)</span></div>
+                <div class="cls_010"><span class="cls_010">TOTAL ([var.currency;noerr])</span></div>
             </td>
             <td align="center">
                 <div class="cls_005"><span class="cls_005">[var.sunTotal;noerr]</span></div>
