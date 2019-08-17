@@ -78,7 +78,7 @@
 
         span.cls_011 {
             font-family: "Calibri Bold Italic", serif;
-            font-size: 13.5px;
+            font-size: 18px;
             color: rgb(0, 0, 0);
             font-weight: bold;
             font-style: italic;
@@ -87,7 +87,7 @@
 
         div.cls_011 {
             font-family: "Calibri Bold Italic", serif;
-            font-size: 13.5px;
+            font-size: 18px;
             color: rgb(0, 0, 0);
             font-weight: bold;
             font-style: italic;
@@ -127,12 +127,12 @@
             </td>
         </tr>
         <tr>
-            <td width="40%" colspan="2">
+            <td width="49%" colspan="2">
                 <div class="cls_005"><span class="cls_005">325 Autumn Hill Blvd</span></div>
             </td>
-            <td width="20%"></td>
-            <td width="20%"></td>
-            <td width="20%"></td>
+            <td width="17%"></td>
+            <td width="17%"></td>
+            <td width="17%"></td>
         </tr>
         <tr>
             <td colspan="2">
@@ -207,51 +207,59 @@
                 <div class="cls_005"><span class="cls_005">[Name]</span></div>
             </td>
             <td colspan="2">
-                <div class="cls_005"><span class="cls_005">[var.contactName;noerr]</span></div>
+                <div class="cls_005"><span class="cls_005">[var.contactName;noerr].</span></div>
             </td>
-            <td colspan="2"></td>
+            <td colspan="2" rowspan="7" valign="top">
+                <div class="cls_005"><span class="cls_005">[var.shipTo;noerr].</span></div>
+            </td>
         </tr>
         <tr>
             <td>
                 <div class="cls_005"><span class="cls_005">[Company Name]</span></div>
             </td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
+            <td colspan="2">
+                <div class="cls_005"><span class="cls_005">[var.orgName;noerr].</span></div>
+            </td>
         </tr>
         <tr>
             <td>
                 <div class="cls_005"><span class="cls_005">[Street Address]</span></div>
             </td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
+            <td colspan="2">
+                <div class="cls_005"><span class="cls_005">[var.orgAddress;noerr]</span></div>
+            </td>
         </tr>
         <tr>
             <td>
                 <div class="cls_005"><span class="cls_005">[City, ST, ZIP]</span></div>
             </td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
+            <td colspan="2">
+                <div class="cls_005"><span class="cls_005">[var.orgCity;noerr], [var.orgCountry;noerr].</span></div>
+            </td>
         </tr>
         <tr>
             <td>
                 <div class="cls_005"><span class="cls_005">[Phone]</span></div>
             </td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
+            <td colspan="2">
+                <div class="cls_005"><span class="cls_005">[var.orgPhone;noerr]</span></div>
+            </td>
         </tr>
         <tr>
             <td>
                 <div class="cls_005"><span class="cls_005">[E-mail]</span></div>
             </td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
+            <td colspan="2">
+                <div class="cls_005"><span class="cls_005">[var.orgEmail;noerr]</span></div>
+            </td>
         </tr>
         <tr>
             <td>
                 <div class="cls_005"><span class="cls_005">[Website]</span></div>
             </td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
+            <td colspan="2">
+                <div class="cls_005"><span class="cls_005">[var.orgWeb;noerr]</span></div>
+            </td>
         </tr>
         <tr>
             <td colspan="5">
@@ -280,122 +288,20 @@
                 </div>
             </td>
         </tr>
-        <tr>
-            <td colspan="2" bgcolor="rgb(255, 255, 255)">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span></div>
+        <tr bgcolor="rgb([products.line_color;block=tr;noerr], [products.line_color;noerr], [products.line_color;noerr])">
+            <td colspan="2">
+                <div class="cls_010"><span class="cls_010">[products.desc;noerr]</span></div>
             </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
+            <td align="center">
+                <div class="cls_005"><span class="cls_005">[products.price;noerr]</span>
                 </div>
             </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
+            <td align="center">
+                <div class="cls_005"><span class="cls_005">[products.qty;noerr]</span>
                 </div>
             </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" bgcolor="rgb(243, 243, 243)">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span></div>
-            </td>
-            <td bgcolor="rgb(243, 243, 243)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(243, 243, 243)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(243, 243, 243)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" bgcolor="rgb(255, 255, 255)">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span></div>
-            </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" bgcolor="rgb(243, 243, 243)">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span></div>
-            </td>
-            <td bgcolor="rgb(243, 243, 243)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(243, 243, 243)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(243, 243, 243)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" bgcolor="rgb(255, 255, 255)">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span></div>
-            </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" bgcolor="rgb(243, 243, 243)">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span></div>
-            </td>
-            <td bgcolor="rgb(243, 243, 243)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(243, 243, 243)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(243, 243, 243)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" bgcolor="rgb(255, 255, 255)">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span></div>
-            </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
-                </div>
-            </td>
-            <td bgcolor="rgb(255, 255, 255)" align="center">
-                <div class="cls_002"><span class="cls_002">&nbsp;</span>
+            <td align="center">
+                <div class="cls_005"><span class="cls_005">[products.amount;noerr]</span>
                 </div>
             </td>
         </tr>
@@ -403,18 +309,18 @@
             <td colspan="3">
                 <div class="cls_005"><span class="cls_005">&nbsp;</span></div>
             </td>
-            <td>
+            <td align="right">
                 <div class="cls_010"><span class="cls_010">TOTAL (US$)</span></div>
             </td>
-            <td>
-                <div class="cls_005"><span class="cls_005">&nbsp;</span></div>
+            <td align="center">
+                <div class="cls_005"><span class="cls_005">[var.sunTotal;noerr]</span></div>
             </td>
         </tr>
         <tr>
             <td colspan="3" bgcolor="rgb(79, 129, 189)">
                 <div class="cls_002"><span class="cls_002">TERMS AND CONDITIONS</span></div>
             </td>
-            <td>
+            <td align="right">
                 <div class="cls_010"><span class="cls_010">CIP MIAMI</span></div>
             </td>
             <td>
@@ -441,8 +347,8 @@
         </tr>
         <tr>
             <td colspan="5">
-                <div class="cls_010"><span class="cls_010">HST#: 822913786RT0001 </span>
-                </div>
+                <!-- <div class="cls_010"><span class="cls_010">HST#: 822913786RT0001 </span>
+                </div> -->
             </td>
         </tr>
         <tr>

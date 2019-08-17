@@ -37,7 +37,7 @@ if (comprobarVar($quoteId)) {
 
 // Se capturan los valores a mostrar en el PDF
 $quoteId = $myQuote->getAtributo("quote_id");
-// $myOrganisation = $myQuote->getObjeto("Organisation");
+$myOrganisation = $myQuote->getObjeto("Organisation");
 $myContact = $myQuote->getObjeto("Contact");
 $myUser = $myQuote->getObjeto("User");
 // $quote = "QUOTE";
@@ -53,6 +53,16 @@ $prepared = $myUser->getAtributo("user_name");
 // $userSkype = $myUser->getAtributo("user_skype");
 // $userSkype = comprobarVar($userSkype) ? "Skype: $userSkype, " : "";
 $contactName = $myContact->getAtributo("contact_name");
+$orgName = $myOrganisation->getAtributo("org_name");
+$orgAddress = $myOrganisation->getAtributo("org_address");
+$orgCity = $myOrganisation->getAtributo("org_city");
+$orgCountry = $myOrganisation->getAtributo("org_country");
+$orgPhone = $myOrganisation->getAtributo("org_phone");
+$orgEmail = $myContact->getAtributo("contact_email");
+$orgWeb = $myOrganisation->getAtributo("org_web");
+$shipTo = $myQuote->getAtributo("quote_ship_to");
+
+
 // $customerInfor = $myContact->getAtributo("contact_name") . "<br>";
 // $customerInfor .= $myContact->getAtributo("contact_email") . "<br>";
 // $customerInfor .= $myOrganisation->getAtributo("org_name") . "<br>";
@@ -75,45 +85,48 @@ $contactName = $myContact->getAtributo("contact_name");
 // 3. Please fax or mail the signed price quote to the address above.
 // 4. Customers are responsible for import duties and brokerage fees if applied during the shipment.";
 // }
-// $discountVal = doubleval($myQuote->getAtributo("quote_discount"));
-// $hstRate = doubleval($myQuote->getAtributo("quote_hst_rate"));
-// $hstUst = $hstRate / 100;
-// if ($hstRate == doubleval(intval($hstRate))) {
-// 	$hstRate = intval($hstRate);
-// } else {
-// 	$hstRate = number_format($hstRate, 2, ",", ".");
-// }
-// $hstRate .= "%";
-// $sunTotal = doubleval(0);
-// $total = doubleval(0);
-// $myQuoteLine = new QuoteLine($miConexionBd);
-// $myQuoteLine->setObjeto("Quote", $quoteId);
-// $products = array();
-// $arrQuoteLine = $myQuoteLine->consultar();
-// foreach ($arrQuoteLine as $i => $aQuoteLine) {
-// 	$desc = $aQuoteLine->getAtributo("quote_line_desc");
-// 	$price = doubleval($aQuoteLine->getAtributo("quote_line_price"));
-// 	$qty = $aQuoteLine->getAtributo("quote_line_qty");
-// 	$amount = $price * $qty;
-// 	$sunTotal += $amount;
-// 	$products[$i] = array();
-// 	$products[$i]['desc'] = $desc;
-// 	$products[$i]['qty'] = $qty;
-// 	$products[$i]['qty'] = $qty;
-// 	$price = number_format($price, 2, ".", ",");
-// 	$products[$i]['price'] = $price;
-// 	$amount = number_format($amount, 2, ".", ",");
-// 	$products[$i]['amount'] = $amount;
-// }
+$discountVal = doubleval($myQuote->getAtributo("quote_discount"));
+$hstRate = doubleval($myQuote->getAtributo("quote_hst_rate"));
+$hstUst = $hstRate / 100;
+if ($hstRate == doubleval(intval($hstRate))) {
+	$hstRate = intval($hstRate);
+} else {
+	$hstRate = number_format($hstRate, 2, ",", ".");
+}
+$hstRate .= "%";
+$sunTotal = doubleval(0);
+$total = doubleval(0);
+$myQuoteLine = new QuoteLine($miConexionBd);
+$myQuoteLine->setObjeto("Quote", $quoteId);
+$products = array();
+$arrQuoteLine = $myQuoteLine->consultar();
+$line_color = 255;
+foreach ($arrQuoteLine as $i => $aQuoteLine) {
+	$desc = $aQuoteLine->getAtributo("quote_line_desc");
+	$price = doubleval($aQuoteLine->getAtributo("quote_line_price"));
+	$qty = $aQuoteLine->getAtributo("quote_line_qty");
+	$amount = $price * $qty;
+	$sunTotal += $amount;
+	$products[$i] = array();
+	$products[$i]['desc'] = $desc;
+	$products[$i]['qty'] = $qty;
+	$products[$i]['qty'] = $qty;
+	$price = number_format($price, 2, ".", ",");
+	$products[$i]['price'] = $price;
+	$amount = number_format($amount, 2, ".", ",");
+	$products[$i]['amount'] = $amount;
+	$products[$i]['line_color'] = $line_color;
+	$line_color = $line_color == 255 ? 243 : 255;
+}
 
-// $sunTotal = $sunTotal - $discountVal;
-// $hstUst = $sunTotal * $hstUst;
-// $total = $sunTotal + $hstUst;
+$sunTotal = $sunTotal - $discountVal;
+$hstUst = $sunTotal * $hstUst;
+$total = $sunTotal + $hstUst;
 
-// $discountVal = number_format($discountVal, 2, ".", ",");
-// $sunTotal = number_format($sunTotal, 2, ".", ",");
-// $hstUst = number_format($hstUst, 2, ".", ",");
-// $total = number_format($total, 2, ".", ",");
+$discountVal = number_format($discountVal, 2, ".", ",");
+$sunTotal = number_format($sunTotal, 2, ".", ",");
+$hstUst = number_format($hstUst, 2, ".", ",");
+$total = number_format($total, 2, ".", ",");
 
 // Variables de configuración del MPDF
 $config['mode'] = 'utf-8';
