@@ -68,14 +68,19 @@ function addNewProduct(quoteId) {
 }
 function openPdfQuote(quoteId,newTag){
 
-	var page = "";
+	var page = "quote_pdf";
 	var format = "";
-	var currency = "&currency="+$("#sel_currency").val();
-	if ($("#sel_format").val() == "1") {
-		page = "quote_pdf";
-	} else {
-		page = "quote_pdf2";
-		format = "&format="+$("#sel_format").val();
+	var currency = "&currency=1";
+	if ($("#sel_currency").length) {
+		currency = "&currency="+$("#sel_currency").val();
+	}
+	if ($("#sel_format").length) {
+		if ($("#sel_format").val() == "1") {
+			page = "quote_pdf";
+		} else {
+			page = "quote_pdf2";
+			format = "&format="+$("#sel_format").val();
+		}
 	}
 	if (newTag) {
 		window.open("../controladores/pdf/"+page+".php?quoteId="+quoteId+format+currency);
