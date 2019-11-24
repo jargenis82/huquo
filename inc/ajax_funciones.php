@@ -6,7 +6,9 @@ include_once '../librerias/xajax_0.2.4/xajax.inc.php';
 include_once '../librerias/insightly.php';
 include_once '../librerias/class-phpass.php';
 include_once '../clases/contact.php';
+include_once '../clases/contact_ins.php';
 include_once '../clases/organisation.php';
+include_once '../clases/organization.php';
 include_once '../clases/price.php';
 include_once '../clases/product.php';
 include_once '../clases/product_sale.php';
@@ -25,23 +27,37 @@ $xajax->registerFunction ( "getContactInfos" );
 $xajax->registerFunction ( "validateUser" );
 function getContactInfos($contactInsId, $contactEmail) {
 	$objResponse = new xajaxResponse ();
-	$i = new Insightly ( APIKEY );
-	$myContact = $i->getContact ( $contactInsId );
-	$arrContactInfos = $myContact->CONTACTINFOS;
-	$htmlSelect = '';
-	foreach ( $arrContactInfos as $i => $myContactinfo ) {
-		if ($myContactinfo->TYPE == "EMAIL") {
+	// $i = new Insightly ( APIKEY );
+	// $myContact = $i->getContact ( $contactInsId );
+	// $arrContactInfos = $myContact->CONTACTINFOS;
+	// $htmlSelect = '';
+	// foreach ( $arrContactInfos as $i => $myContactinfo ) {
+		// if ($myContactinfo->TYPE == "EMAIL") {
+	// 		$selected = '';
+	// 		if (comprobarVar ( $contactEmail )) {
+	// 			if (trim ( $myContactinfo->DETAIL ) == $contactEmail) {
+	// 				$selected = 'selected="selected"';
+	// 			}
+	// 		}
+	// 		$htmlSelect .= '<option value="' . $myContactinfo->DETAIL . '" ' . $selected . '>' . $myContactinfo->DETAIL . '</option>';
+	// 	}
+	// }
+	if (isset($contactInsId)) {
+		$myContactIns = new ContactIns();
+		$myContactIns->setAtributo("recordid",$contactInsId);
+		$arrContactIns = $myContactIns->consultar();
+		$htmlSelect = '';
+		foreach ( $arrContactIns as $i => $aContactIns ) {
 			$selected = '';
 			if (comprobarVar ( $contactEmail )) {
-				if (trim ( $myContactinfo->DETAIL ) == $contactEmail) {
+				if (trim ( $aContactIns->getAtributo("emailaddress") ) == $contactEmail) {
 					$selected = 'selected="selected"';
 				}
 			}
-			$htmlSelect .= '<option value="' . $myContactinfo->DETAIL . '" ' . $selected . '>' . $myContactinfo->DETAIL . '</option>';
+			$htmlSelect .= '<option value="' . $aContactIns->getAtributo("emailaddress") . '" ' . $selected . '>' . $aContactIns->getAtributo("emailaddress") . '</option>';
 		}
+		$objResponse->addAssign ( "sel_email", "innerHTML", $htmlSelect );
 	}
-	$htmlSelect = $htmlSelect == '' ? '<option value="0">Any...</option>' : $htmlSelect;
-	$objResponse->addAssign ( "sel_email", "innerHTML", $htmlSelect );
 	return $objResponse;
 }
 function validateUser($user, $password) {
@@ -339,7 +355,7 @@ function addNewProduct($idTxtDescrip, $quoteId, $customerRegionId, $priceTypeId)
 	$objResponse = new xajaxResponse ();
 	if (comprobarVar ( $idTxtDescrip ) and intval ( $idTxtDescrip ) != 0) {
 		$tabIndex = (intval ( $idTxtDescrip ) - 1) * 3 + 9;
-		$_SESSION ['trId'] = $_SESSION ['trId'] + 1;
+		$_SESSION ['trId'] = isset($_SESSION ['trId']) ? $_SESSION ['trId'] + 1 : 1;
 		$textoHtml = '<tr id="' . $_SESSION ['trId'] . '">';
 		$textoHtml .= '<td><input id="txt_decrip' . $idTxtDescrip . '" tabindex="' . $tabIndex . '" required="required" class="form-control" ></td>';
 		$textoHtml .= '<td align="center"><input id="txt_unit' . $idTxtDescrip . '" tabindex="' . ($tabIndex + 1) . '" required="required" onkeydown="javascript:return introTxt(event,this)" size="7" class="validNumber" onchange="calculateAmount(' . $idTxtDescrip . ');" dir="rtl" onfocus="this.dir = ' . "\'ltr\'" . ';" onblur="this.dir = ' . "\'rtl\'" . ';"></td>';
@@ -478,38 +494,67 @@ function getCustomer($customerName, $getOpportunities) {
 		$objResponse->addScript ( "dataTable('$customerName');" );
 		return $objResponse;
 	}
-	$i = new Insightly ( APIKEY );
-	$options ['filters'] [0] = "ORGANISATION_NAME = '$customerName'";
-	$arrOrganization = $i->getOrganizations ( $options );
+	// $i = new Insightly ( APIKEY );
+	// $options ['filters'] [0] = "ORGANISATION_NAME = '$customerName'";
+	// $arrOrganization = $i->getOrganizations ( $options );
+	$myOrganization = new Organization();
+	$myOrganization->setAtributo('organizationname',$customerName);
+	$arrOrganization = $myOrganization->consultar();
+
 	if (isset ( $arrOrganization [0] )) {
-		$organizationId = $arrOrganization [0]->ORGANISATION_ID;
+		// $organizationId = $arrOrganization [0]->ORGANISATION_ID;
+		$organizationId = $arrOrganization [0]->getAtributo("recordid");
 		$objResponse->addScript ( "organizationId = '$organizationId';" );
-		$arrAddresses = $arrOrganization [0]->ADDRESSES;
-		if (isset ( $arrAddresses [0] )) {
-			$address = $arrAddresses [0]->STREET . ", " . $arrAddresses [0]->CITY . ", " . $arrAddresses [0]->COUNTRY . ".";
+
+		$billingaddressstreet = $arrOrganization [0]->getAtributo("billingaddressstreet");
+		$shippingaddressstreet = $arrOrganization [0]->getAtributo("shippingaddressstreet");
+		if (comprobarVar($billingaddressstreet)) {
+			$addressstreet = $billingaddressstreet;
+			$city = $arrOrganization [0]->getAtributo("billingaddresscity");
+			$country = $arrOrganization [0]->getAtributo("billingaddresscountry");
+		} else if (comprobarVar($shippingaddressstreet)) {
+			$addressstreet = $shippingaddressstreet;
+			$city = $arrOrganization [0]->getAtributo("shippingaddresscity");
+			$country = $arrOrganization [0]->getAtributo("shippingaddresscountry");
+		} else {
+			$addressstreet = "";
+			$city = "";
+			$country = "";
+		}
+		// $arrAddresses = $arrOrganization [0]->ADDRESSES;
+		// if (isset ( $arrAddresses [0] )) {
+		if (comprobarVar($addressstreet)) {
+			// $address = $arrAddresses [0]->STREET . ", " . $arrAddresses [0]->CITY . ", " . $arrAddresses [0]->COUNTRY . ".";
+			$address = $addressstreet . ", " . $city . ", " . $country . ".";
 			$address = str_replace ( "\n", " ", $address );
 			$address = str_replace ( "\r", " ", $address );
 			$objResponse->addAssign ( "span_address", "innerHTML", $address );
 		}
-		$arrContactInfos = $arrOrganization [0]->CONTACTINFOS;
-		$contadorW = 0;
-		$contadorP = 0;
-		foreach ( $arrContactInfos as $myContactInfos ) {
-			if ($myContactInfos->TYPE == "WEBSITE" and $contadorW == 0) {
-				$web = $myContactInfos->DETAIL;
-				$objResponse->addAssign ( "a_web", "href", $web );
-				$objResponse->addAssign ( "a_web", "innerHTML", $web );
-				$contadorW ++;
-			}
-			if ($myContactInfos->TYPE == "PHONE" and $contadorP == 0) {
-				$phone = $myContactInfos->DETAIL;
-				$objResponse->addAssign ( "span_phone", "innerHTML", $phone );
-				$contadorP ++;
-			}
-			if (($contadorP + $contadorW) == 2) {
-				break 1;
-			}
-		}
+		// $arrContactInfos = $arrOrganization [0]->CONTACTINFOS;
+		// $contadorW = 0;
+		// $contadorP = 0;
+		// foreach ( $arrContactInfos as $myContactInfos ) {
+		// 	if ($myContactInfos->TYPE == "WEBSITE" and $contadorW == 0) {
+		// 		$web = $myContactInfos->DETAIL;
+		// 		$objResponse->addAssign ( "a_web", "href", $web );
+		// 		$objResponse->addAssign ( "a_web", "innerHTML", $web );
+		// 		$contadorW ++;
+		// 	}
+		// 	if ($myContactInfos->TYPE == "PHONE" and $contadorP == 0) {
+		// 		$phone = $myContactInfos->DETAIL;
+		// 		$objResponse->addAssign ( "span_phone", "innerHTML", $phone );
+		// 		$contadorP ++;
+		// 	}
+		// 	if (($contadorP + $contadorW) == 2) {
+		// 		break 1;
+		// 	}
+		// }
+		$web = $arrOrganization [0]->getAtributo("website");
+		$objResponse->addAssign ( "a_web", "href", $web );
+		$objResponse->addAssign ( "a_web", "innerHTML", $web );
+		$phone = $arrOrganization [0]->getAtributo("phone");
+		$objResponse->addAssign ( "span_phone", "innerHTML", $phone );
+
 		if (comprobarVar ( $getOpportunities ) and $getOpportunities == "1") {
 			$objResponse->addScript ( "dataTable('$customerName');" );
 		}

@@ -1,18 +1,15 @@
 <?php
-if ((!defined("X")) or (!defined("Y")) or (!defined("Z")) or (!defined("W")) or (!defined("V")) or
-(!defined("XI")) or (!defined("YI")) or (!defined("ZI")) or (!defined("WI")) or (!defined("VI")) or (!defined("UI"))) {
-	define ("X","");
-	define ("Y","");
-	define ("Z","");
-	define ("W","");
-	define ("V","");	
-	define ("XI","");
-	define ("YI","");
-	define ("ZI","");
-	define ("WI","");
-	define ("VI","");
-	define ("UI","");
-}
+(!defined("X")) ? define ("X","") : null;
+(!defined("Y")) ? define ("Y","") : null;
+(!defined("Z")) ? define ("Z","") : null;
+(!defined("W")) ? define ("W","") : null;
+(!defined("V")) ? define ("V","") : null;
+(!defined("XI")) ? define ("XI","") : null;
+(!defined("YI")) ? define ("YI","") : null;
+(!defined("ZI")) ? define ("ZI","") : null;
+(!defined("WI")) ? define ("WI","") : null;
+(!defined("VI")) ? define ("VI","") : null;
+(!defined("UI")) ? define ("UI","") : null;
 
 // Clase para realizar la conexion con la BD
 class ConexionBd {
@@ -22,7 +19,7 @@ class ConexionBd {
 
 	// Conecta con la Base de Datos
 	function __construct($dsn=null,$enlace=null,$ejecutar=null) {
-		session_start();
+		(session_id() == "") ? session_start () : null;
 		$this->consultaPendiente = "";
 		$this->ejecutar = isset($ejecutar) ? $ejecutar : true;
 		if (isset($enlace))

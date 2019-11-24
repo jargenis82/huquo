@@ -4,7 +4,7 @@ include_once '../../inc/funciones.php';
 include_once '../../clases/quote.php';
 
 // SE VERIFICA LA SESIÓN Y ACCESO DEL USUARIO
-session_start ();
+(session_id() == "") ? session_start () : null;
 if (! comprobarVar ( $_SESSION ['user_id'] )) {
 	exit ();
 }

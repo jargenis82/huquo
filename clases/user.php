@@ -15,7 +15,7 @@ class User extends ClaseBd {
 		$atributos ['user_skype'] ['esPk'] = false;
         $atributos ['user_api_key'] ['esPk'] = false;
 		$strOrderBy = "user_id";
-		$this->registrarTabla ( $tabla, $atributos, $objetos, $strOrderBy );
+		$this->registrarTabla ( $tabla, $atributos, null, $strOrderBy );
 		$this->dsn = "mysql";
 	}
 }

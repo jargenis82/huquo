@@ -1,7 +1,7 @@
 <?php
 include_once '../conf.inc.php';
 include_once RUTA_SISTEMA.'inc/funciones.php';
-session_start();
+(session_id() == "") ? session_start () : null;
 
 // Variable GET que indica si la página actual esta activa en una nueva pestaña o es la única página del sistema
 $newPage = comprobarVar ( $_GET ['newPage'] ) ? trim ( $_GET ['newPage'] ) : "0";

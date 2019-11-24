@@ -46,7 +46,7 @@ class ClaseBd {
 		foreach ( $this->atributos as $atributo => $registro ) {
 			if ($registro ['esPk']) {
 				$atributoPk = strtolower ( $atributo );
-				$atributoLista [strtolower ( $atributo )] = $registro ['valor'];
+				$atributoLista [strtolower ( $atributo )] = isset($registro ['valor']) ? $registro ['valor'] : "";
 			}
 		}
 		// Devuelve el valor
@@ -71,8 +71,10 @@ class ClaseBd {
 			if (is_array ( $valorListaPk )) {
 				// Se recorren todos los valores de la lista
 				foreach ( $valorListaPk as $atributo => $valor ) {
-					if ($this->atributos [strtolower ( $atributo )] ['esPk']) {
-						$this->atributos [strtolower ( $atributo )] ['valor'] = ($valor != NULL) ? $valor : null;
+					if (isset($this->atributos [strtolower ( $atributo )] ['esPk'])) {
+						if ($this->atributos [strtolower ( $atributo )] ['esPk']) {
+							$this->atributos [strtolower ( $atributo )] ['valor'] = ($valor != NULL) ? $valor : null;
+						}
 					}
 				}
 			} else {
@@ -156,12 +158,14 @@ class ClaseBd {
 	}
 	private function crearListaAtribObj() {
 		$this->listaAtribObj = array ();
-		foreach ( $this->objetos as $clase => $registro ) {
-			$this->listaAtribObj [$registro ['id']] = $clase;
+		if (isset($this->objetos)) {
+			foreach ( $this->objetos as $clase => $registro ) {
+				$this->listaAtribObj [$registro ['id']] = $clase;
+			}
 		}
 	}
 	private function getVar($atributo=null) {
-		if ($this->atributos [strtolower ( $atributo )] ['valor'] != NULL) {
+		if (isset($this->atributos [strtolower ( $atributo )] ['valor']) and $this->atributos [strtolower ( $atributo )] ['valor'] != NULL) {
 			return $this->atributos [strtolower ( $atributo )] ['valor'];
 		} else if (! ($this->estaMaterializado)) {
 			if ($this->materializar ()) {
@@ -192,10 +196,12 @@ class ClaseBd {
 		}
 		$datos = array ();
 		foreach ( $this->atributos as $atributo => $registro ) {
-			$datos [strtolower ( $atributo )] = $registro ['valor'];
+			$datos [strtolower ( $atributo )] = isset($registro ['valor']) ? $registro ['valor'] : "";
 		}
-		foreach ( $this->objetos as $registro ) {
-			$datos [$registro ['id']] = isset ( $registro ['objeto'] ) ? $registro ['objeto']->getId () : null;
+		if (isset($this->objetos)) {
+			foreach ( $this->objetos as $registro ) {
+				$datos [$registro ['id']] = isset ( $registro ['objeto'] ) ? $registro ['objeto']->getId () : null;
+			}
 		}
 		return $datos;
 	}

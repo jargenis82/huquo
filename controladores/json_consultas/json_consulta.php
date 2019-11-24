@@ -1,11 +1,12 @@
 <?php
 include_once '../../conf.inc.php';
 include_once '../../inc/funciones.php';
-include_once '../../librerias/insightly.php';
+// include_once '../../librerias/insightly.php';
+include_once '../../clases/opportunity.php';
 include_once '../../clases/quote.php';
 
 // SE VERIFICA LA SESIÓN Y ACCESO DEL USUARIO
-session_start ();
+(session_id() == "") ? session_start () : null;
 if (! comprobarVar ( $_SESSION ['user_id'] )) {
 	exit ();
 }
@@ -30,36 +31,60 @@ $arrJson = array (
 
 // Busqueda de oportunidades de la organizacion
 $organizationId = $_GET ['organizationId'];
-if (comprobarVar ( $organizationId )) {
-	$i = new Insightly ( APIKEY );
-	$myOrganization = $i->getOrganization ( $organizationId );
-}
+
+// if (comprobarVar ( $organizationId )) {
+// 	$i = new Insightly ( APIKEY );
+// 	$myOrganization = $i->getOrganization ( $organizationId );
+// }
 
 $unDato = array ();
-if (isset ( $myOrganization )) {
-	$arrLinks = $myOrganization->LINKS;
-	foreach ( $arrLinks as $aLink ) {
-		$opportunityId = $aLink->OPPORTUNITY_ID;
-		if (comprobarVar ( $opportunityId )) {
-			$myOpportunity = $i->getOpportunity ( $opportunityId );
-			$unDato [0] = $myOpportunity->OPPORTUNITY_NAME;
+// if (isset ( $myOrganization )) {
+// 	$arrLinks = $myOrganization->LINKS;
+// 	foreach ( $arrLinks as $aLink ) {
+// 		$opportunityId = $aLink->OPPORTUNITY_ID;
+if (comprobarVar($organizationId)) {
+	$myOpportunity = new Opportunity();
+	$myOpportunity->setAtributo("organizationid",$organizationId);
+	$arrOpportunity = $myOpportunity->consultar();
+	foreach ($arrOpportunity as $aOpportunity) {
+		$opportunityId = $aOpportunity->getAtributo("recordid");
+		// if (comprobarVar ( $opportunityId )) {
+		if (isset($aOpportunity) and comprobarVar($aOpportunity->getAtributo("datecreated"))) {
+			// $myOpportunity = $i->getOpportunity ( $opportunityId );
+			// $unDato [0] = $myOpportunity->OPPORTUNITY_NAME;
+			$unDato [0] = utf8_encode($aOpportunity->getAtributo("opportunityname"));
 			$myDateTimeZone = new DateTimeZone ( "UTC" );
-			$myDateTime = DateTime::createFromFormat ( "Y-m-d H:i:s", $myOpportunity->DATE_CREATED_UTC, $myDateTimeZone );
+			// $myDateTime = DateTime::createFromFormat ( "Y-m-d H:i:s", $myOpportunity->DATE_CREATED_UTC, $myDateTimeZone );
+			$myDateTime = DateTime::createFromFormat ( "n/j/Y", $aOpportunity->getAtributo("datecreated"), $myDateTimeZone );
 			$myDateTimeZone = new DateTimeZone ( date_default_timezone_get () );
 			$myDateTime->setTimezone ( $myDateTimeZone );
 			$unDato [1] = "<span style='display: none;'>" . $myDateTime->format ( "Y-m-d" ) . "</span>" . $myDateTime->format ( "d-M-Y" );
 			// Se coloca un caracter oculto adelante del estado de la oportunidad
 			// de tal manera que siempre ordene de primero a las oportunidades OPEN
-			$opporState = $myOpportunity->OPPORTUNITY_STATE;
+			// $opporState = $myOpportunity->OPPORTUNITY_STATE;
+			$opporState = $aOpportunity->getAtributo("currentstate");
 			if ($opporState == 'OPEN') {
 				$dato = "1";
 			} else {
 				$dato = "2";
 			}
-			$unDato [2] = "<span style='display: none;'>$dato</span>" . $myOpportunity->OPPORTUNITY_STATE;
-			$myPipelineStage = $i->getPipelineStage ( $myOpportunity->STAGE_ID );
-			$stageOrder = $myPipelineStage->STAGE_ORDER;
-			$stageName = $myPipelineStage->STAGE_NAME;
+			// $unDato [2] = "<span style='display: none;'>$dato</span>" . $myOpportunity->OPPORTUNITY_STATE;
+			$unDato [2] = "<span style='display: none;'>$dato</span>" . $opporState;
+			// $myPipelineStage = $i->getPipelineStage ( $myOpportunity->STAGE_ID );
+			// $stageOrder = $myPipelineStage->STAGE_ORDER;
+			// $stageName = $myPipelineStage->STAGE_NAME;
+			$stageName = utf8_encode($aOpportunity->getAtributo("pipelinecurrentstage"));
+			if ($stageName == "Interested") {
+				$stageOrder = 1;
+			} else if ($stageName == "Quote sent") {
+				$stageOrder = 2;
+			} else if ($stageName == "Negotiation") {
+				$stageOrder = 3;
+			} else if ($stageName == "Commitment") {
+				$stageOrder = 4;
+			} else {
+				$stageOrder = 1;
+			}
 			if (comprobarVar ( $stageOrder )) {
 				$unDato [3] = "$stageName<br><img alt='$stageName' src='../imagenes/pipeline_$stageOrder.png' style='width: 100px'>";
 			} else {

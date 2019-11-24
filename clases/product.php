@@ -47,8 +47,10 @@ class Product extends ClaseBd {
 				$strWhere .= "product_w_feature.product_sale_id = product_sale.product_sale_id AND ";
 				$strWhere .= "product_master_id = $productId";
 				$r2 = $miConexionBd->hacerSelect ( "without_feature_name", $strFrom, $strWhere, "without_feature_name" );
-				foreach ( $r2 as $v2 ) {
-					$descActual .= ", without " . $v2 ['without_feature_name'];
+				if (isset($r2)) {
+					foreach ( $r2 as $v2 ) {
+						$descActual .= ", without " . $v2 ['without_feature_name'];
+					}
 				}
 			}
 			// Si el producto es de tipo secundario, se le agrega el producto master a la descripcion

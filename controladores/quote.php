@@ -12,7 +12,8 @@ include_once '../clases/quote.php';
 include_once '../inc/funciones.php';
 
 // SE VERIFICA LA SESIÓN Y ACCESO DEL USUARIO
-session_start ();
+(session_id() == "") ? session_start () : null;
+
 if (! comprobarVar ( $_SESSION ['user_id'] )) {
 	exit ();
 }
@@ -60,6 +61,7 @@ $myProduct = new Product ( $miConexionBd );
 $listaProducto = $myProduct->getListaProducto ();
 $jsData = "";
 $jsDataId = "";
+$contador = 0;
 foreach ( $listaProducto as $ii => $unProducto ) {
 	$unProducto = str_replace ( '"', '\"', $unProducto );
 	$jsData .= '"' . $unProducto . '",';

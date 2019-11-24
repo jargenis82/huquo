@@ -3,6 +3,11 @@ if (!defined("RUTA_SISTEMA")) {
 	include '../conf.inc.php';
 }
 
+function dd($elemento) {
+	var_export($elemento);
+	exit;
+}
+
 function devolverPermisos($miConexionBd,$miUsuario) {
 	$miPerfil = new Perfil($miConexionBd);
 	$miMenu = new Menu($miConexionBd);
@@ -208,7 +213,7 @@ function restarFechas($fecha1,$fecha2,$anos) {
 	}
 }
 
-function formatoFecha($fecha,$mesDia) {
+function formatoFecha($fecha=null,$mesDia=null) {
 	if (isset($fecha) and strcmp($fecha,"") != 0) {
 		if ($mesDia === true) {
 			$fechaNueva = substr($fecha,3,2)."/";
@@ -240,7 +245,7 @@ function sumarFecha($fecha,$dias) {
 	}
 }
 
-function formatoFechaBd($fecha,$otroFormato) {
+function formatoFechaBd($fecha=null,$otroFormato=null) {
 	if (isset($fecha)) {
 		// Se chequea que la fecha este separada por "/" o "-" y que sean 3 valores
 		$arregloFecha = explode("/",$fecha);
@@ -318,7 +323,7 @@ function formatoFechaBdIfx($fecha,$otroFormato) {
 	}
 }
 
-function verificarFormatoFecha($fecha,$ddmmyyyy) {
+function verificarFormatoFecha($fecha,$ddmmyyyy=null) {
 	$fecha = str_replace("-","/",trim($fecha));
 	if (isset($fecha) and strcmp($fecha,"") != 0) {
 		if (strlen($fecha) != 10 and ((!isset($ddmmyyyy)) or $ddmmyyyy === false))

@@ -16,7 +16,7 @@ class Organisation extends ClaseBd {
 		$atributos ['org_country'] ['esPk'] = false;
 		$atributos ['org_ins_id'] ['esPk'] = false;
 		$strOrderBy = "org_id";
-		$this->registrarTabla ( $tabla, $atributos, $objetos, $strOrderBy );
+		$this->registrarTabla ( $tabla, $atributos, null, $strOrderBy );
 		$this->dsn = "mysql";
 	}
 }

@@ -12,7 +12,7 @@ class Contact extends ClaseBd {
 		$atributos ['contact_email'] ['esPk'] = false;
 		$atributos ['contact_ins_id'] ['esPk'] = false;
 		$strOrderBy = "contact_name";
-		$this->registrarTabla ( $tabla, $atributos, $objetos, $strOrderBy );
+		$this->registrarTabla ( $tabla, $atributos, null, $strOrderBy );
 		$this->dsn = "mysql";
 	}
 }

@@ -6,9 +6,10 @@ include_once '../librerias/tbs_class/tbs_class.php';
 include_once '../librerias/xajax_0.2.4/xajax.inc.php';
 include_once '../librerias/insightly.php';
 include_once '../inc/funciones.php';
+include_once '../clases/organisation.php';
 
 // SE VERIFICA LA SESIÓN Y ACCESO DEL USUARIO
-session_start ();
+(session_id() == "") ? session_start () : null;
 if (! comprobarVar ( $_SESSION ['user_id'] )) {
 	exit ();
 }
@@ -24,11 +25,14 @@ if (defined("CUSTOMERS")) {
 } else {
 	// Se consulta en el API de Insightly la lista de organizaciones
 	$customers = "";
-	$i = new Insightly ( APIKEY );
-	$options ['top'] = defined ( "TOP_LIMIT" ) ? TOP_LIMIT : null; // Limite de consulta para mejorar el desempeño en máquinas de desarrollo (Provisional)
-	$arrOrganization = $i->getOrganizations ( $options );
+	// $i = new Insightly ( APIKEY );
+	// $options ['top'] = defined ( "TOP_LIMIT" ) ? TOP_LIMIT : null; // Limite de consulta para mejorar el desempeño en máquinas de desarrollo (Provisional)
+	// $arrOrganization = $i->getOrganizations ( $options );
+	$myOrganisation = new Organisation();
+	$arrOrganization = $myOrganisation->consultar();
 	foreach ( $arrOrganization as $j => $myOrganization ) {
-		$customers .= ',"' . $myOrganization->ORGANISATION_NAME . '"';
+		// $customers .= ',"' . $myOrganization->ORGANISATION_NAME . '"';
+		$customers .= ',"' . $myOrganization->getAtributo("org_name") . '"';
 	}
 	$customers = substr ( $customers, 1 );
 }
