@@ -11,7 +11,7 @@ class ProductSale extends ClaseBd {
 		$atributos ['product_master_id'] ['esPk'] = false;
 		$atributos ['product_secondary_id'] ['esPk'] = false;
 		$strOrderBy = "product_sale_id";
-		$this->registrarTabla ( $tabla, $atributos, $objetos, $strOrderBy );
+		$this->registrarTabla ( $tabla, $atributos, null, $strOrderBy );
 		$this->dsn = "mysql";
 	}
 }

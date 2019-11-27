@@ -5,6 +5,9 @@ include_once '../librerias/conexion_bd.php';
 include_once '../librerias/tbs_class/tbs_class.php';
 include_once '../librerias/xajax_0.2.4/xajax.inc.php';
 include_once '../librerias/insightly.php';
+include_once '../clases/contact_ins.php';
+include_once '../clases/opportunity.php';
+include_once '../clases/organization.php';
 include_once '../clases/product.php';
 include_once '../clases/quote.php';
 // include_once '../clases/inst_usua.php';
@@ -20,7 +23,7 @@ if (! comprobarVar ( $_SESSION ['user_id'] )) {
 
 // DEFINE LAS VARIABLES $_GET, $_POST Y $_SESSION
 $opportunityId = comprobarVar ( $_GET ['opportunityId'] ) ? $_GET ['opportunityId'] : null;
-$quoteId = comprobarVar ( $_GET ['quoteId'] ) ? $_GET ['quoteId'] : null;
+$quoteId = (isset($_GET ['quoteId']) and comprobarVar ( $_GET ['quoteId'] )) ? $_GET ['quoteId'] : null;
 
 // XAJAX
 $xajax = new xajax ( "../inc/ajax_funciones.php" );
@@ -96,51 +99,72 @@ if (comprobarVar ( $opportunityId )) {
 		$city = $quote [7];
 	} else {
 		// Se consulta en el API de Insightly los datos de la oportunidad
-		$i = new Insightly ( APIKEY ); // Se instanció para la carga de los contactos
-		$myOpportunity = $i->getOpportunity ( $opportunityId );
+		// $i = new Insightly ( APIKEY ); // Se instanció para la carga de los contactos
+		// $myOpportunity = $i->getOpportunity ( $opportunityId );
+		$myOpportunity = new Opportunity();
+		$myOpportunity->setAtributo("recordid",$opportunityId);
+		$arrOpportunity = $myOpportunity->consultar();
 		$country = "";
 		$city = "";
 		$customerType = "";
 		// Se consulta los links de la oportunidad para buscar los datos de la organización relacionada
-		$arrLinks = $myOpportunity->LINKS;
-		foreach ( $arrLinks as $aLink ) {
-			$organizationId = $aLink->ORGANISATION_ID;
-			if (comprobarVar ( $organizationId )) {
-				$myOrganization = $i->getOrganization ( $organizationId );
-				$organizationName = $myOrganization->ORGANISATION_NAME;
-				$arrAddresses = $myOrganization->ADDRESSES;
+		// $arrLinks = $myOpportunity->LINKS;
+		// foreach ( $arrLinks as $aLink ) {
+			// $organizationId = $aLink->ORGANISATION_ID;
+		$organizationId = (isset($arrOpportunity[0])) ? $arrOpportunity[0]->getAtributo("organizationid") : null;
+		if (comprobarVar ( $organizationId )) {
+			// $myOrganization = $i->getOrganization ( $organizationId );
+			$myOrganization = new Organization();
+			$myOrganization->setAtributo("recordid",$organizationId);
+			$arrMyOrganization = $myOrganization->consultar();
+			if (count($arrMyOrganization) == 1) {
+				$myOrganization = $arrMyOrganization[0];
+				// $organizationName = $myOrganization->ORGANISATION_NAME;
+				$organizationName = $myOrganization->getAtributo("organizationname");
+				// $arrAddresses = $myOrganization->ADDRESSES;
+
 				$address = "";
 				$address1 = "";
 				$address2 = "";
 				$addChk1 = "";
 				$addChk2 = "";
 				$shipTo = "";
-				if (isset ( $arrAddresses [0] )) {
-					$addressTemp = $arrAddresses [0]->STREET . ", " . $arrAddresses [0]->CITY . ", " . $arrAddresses [0]->COUNTRY . ".";
-					$addressTemp = str_replace ( "\n", " ", $addressTemp );
-					$addressTemp = str_replace ( "\r", " ", $addressTemp );
-					$country = $arrAddresses [0]->COUNTRY;
-					$city = $arrAddresses [0]->CITY;
-					if (trim ( $addressTemp ) != "") {
-						if (strcmp ( trim ( $arrAddresses [0]->ADDRESS_TYPE ), 'POSTAL' ) == 0) {
-							$address1 = $addressTemp;
-						} else if (strcmp ( trim ( $arrAddresses [0]->ADDRESS_TYPE ), 'PRIMARY' ) == 0) {
-							$address2 = $addressTemp;
-						}
-					}
-				}
-				if (isset ( $arrAddresses [1] )) {
-					$addressTemp = $arrAddresses [1]->STREET . ", " . $arrAddresses [1]->CITY . ", " . $arrAddresses [1]->COUNTRY . ".";
-					$addressTemp = str_replace ( "\n", " ", $addressTemp );
-					$addressTemp = str_replace ( "\r", " ", $addressTemp );
-					if (trim ( $addressTemp ) != "") {
-						if (strcmp ( trim ( $arrAddresses [1]->ADDRESS_TYPE ), 'POSTAL' ) == 0) {
-							$address1 = $addressTemp;
-						} else if (strcmp ( trim ( $arrAddresses [1]->ADDRESS_TYPE ), 'PRIMARY' ) == 0) {
-							$address2 = $addressTemp;
-						}
-					}
-				}
+				// if (isset ( $arrAddresses [0] )) {
+				// 	$addressTemp = $arrAddresses [0]->STREET . ", " . $arrAddresses [0]->CITY . ", " . $arrAddresses [0]->COUNTRY . ".";
+				// 	$addressTemp = str_replace ( "\n", " ", $addressTemp );
+				// 	$addressTemp = str_replace ( "\r", " ", $addressTemp );
+				// 	$country = $arrAddresses [0]->COUNTRY;
+				// 	$city = $arrAddresses [0]->CITY;
+				// 	if (trim ( $addressTemp ) != "") {
+				// 		if (strcmp ( trim ( $arrAddresses [0]->ADDRESS_TYPE ), 'POSTAL' ) == 0) {
+				// 			$address1 = $addressTemp;
+				// 		} else if (strcmp ( trim ( $arrAddresses [0]->ADDRESS_TYPE ), 'PRIMARY' ) == 0) {
+				// 			$address2 = $addressTemp;
+				// 		}
+				// 	}
+				// }
+				// if (isset ( $arrAddresses [1] )) {
+				// 	$addressTemp = $arrAddresses [1]->STREET . ", " . $arrAddresses [1]->CITY . ", " . $arrAddresses [1]->COUNTRY . ".";
+				// 	$addressTemp = str_replace ( "\n", " ", $addressTemp );
+				// 	$addressTemp = str_replace ( "\r", " ", $addressTemp );
+				// 	if (trim ( $addressTemp ) != "") {
+				// 		if (strcmp ( trim ( $arrAddresses [1]->ADDRESS_TYPE ), 'POSTAL' ) == 0) {
+				// 			$address1 = $addressTemp;
+				// 		} else if (strcmp ( trim ( $arrAddresses [1]->ADDRESS_TYPE ), 'PRIMARY' ) == 0) {
+				// 			$address2 = $addressTemp;
+				// 		}
+				// 	}
+				// }
+				$address1 = $myOrganization->getAtributo("billingaddressstreet");
+				$address1 .= ", ".$myOrganization->getAtributo("billingaddresscity");
+				$address1 .= ", ".$myOrganization->getAtributo("billingaddresscountry");
+				$address1 = str_replace ( "\n", " ", $address1 );
+				$address1 = str_replace ( "\r", " ", $address1 );
+				$address2 = $myOrganization->getAtributo("shippingaddressstreet");
+				$address2 .= ", ".$myOrganization->getAtributo("shippingaddresscity");
+				$address2 .= ", ".$myOrganization->getAtributo("shippingaddresscountry");
+				$address2 = str_replace ( "\n", " ", $address2 );
+				$address2 = str_replace ( "\r", " ", $address2 );
 				if (trim ( $address2 ) != "") {
 					$addChk2 = 'checked="checked"';
 					$shipTo = $address2;
@@ -154,38 +178,50 @@ if (comprobarVar ( $opportunityId )) {
 					$address = $address2;
 				}
 				
-				$arrContactInfos = $myOrganization->CONTACTINFOS;
-				$contadorW = 0;
-				$contadorP = 0;
-				foreach ( $arrContactInfos as $myContactInfos ) {
-					if ($myContactInfos->TYPE == "WEBSITE" and $contadorW == 0) {
-						$web = $myContactInfos->DETAIL;
-						$contadorW ++;
-					}
-					if ($myContactInfos->TYPE == "PHONE" and $contadorP == 0) {
-						$phone = $myContactInfos->DETAIL;
-						$contadorP ++;
-					}
-					if (($contadorP + $contadorW) == 2) {
-						break 1;
-					}
-				}
-				$arrCustomfields = $myOrganization->CUSTOMFIELDS;
-				foreach ( $arrCustomfields as $myCustomfield ) {
-					$customFieldId = $myCustomfield->CUSTOM_FIELD_ID;
-					if ($customFieldId == "ORGANISATION_FIELD_1") {
-						$customerType = $myCustomfield->FIELD_VALUE;
-						break 1;
-					}
-				}
-				$arrOrganizationLinks = $myOrganization->LINKS;
+				// $arrContactInfos = $myOrganization->CONTACTINFOS;
+				// $contadorW = 0;
+				// $contadorP = 0;
+				// foreach ( $arrContactInfos as $myContactInfos ) {
+				// 	if ($myContactInfos->TYPE == "WEBSITE" and $contadorW == 0) {
+				// 		$web = $myContactInfos->DETAIL;
+				// 		$contadorW ++;
+				// 	}
+				// 	if ($myContactInfos->TYPE == "PHONE" and $contadorP == 0) {
+				// 		$phone = $myContactInfos->DETAIL;
+				// 		$contadorP ++;
+				// 	}
+				// 	if (($contadorP + $contadorW) == 2) {
+				// 		break 1;
+				// 	}
+				// }
+				$web = $myOrganization->getAtributo("website");
+				$phone = $myOrganization->getAtributo("phone");
+
+				// $arrCustomfields = $myOrganization->CUSTOMFIELDS;
+				// foreach ( $arrCustomfields as $myCustomfield ) {
+				// 	$customFieldId = $myCustomfield->CUSTOM_FIELD_ID;
+				// 	if ($customFieldId == "ORGANISATION_FIELD_1") {
+				// 		$customerType = $myCustomfield->FIELD_VALUE;
+				// 		break 1;
+				// 	}
+				// }
+				$customerType = $myOrganization->getAtributo("type");
+
+				// $arrOrganizationLinks = $myOrganization->LINKS;
+				$myContactIns = new ContactIns();
+				$myContactIns->setAtributo("organizationrecordid",$organizationId);
+				$arrContactIns = $myContactIns->consultar();
 				$arrDataContact = array ();
-				foreach ( $arrOrganizationLinks as $aOrganizationLink ) {
-					$contactId = $aOrganizationLink->CONTACT_ID;
-					if (comprobarVar ( $contactId )) {
-						$myContact = $i->getContact ( $contactId );
-						$arrDataContact [$contactId] = $myContact->FIRST_NAME . " " . $myContact->LAST_NAME;
-					}
+				// foreach ( $arrOrganizationLinks as $aOrganizationLink ) {
+				// 	$contactId = $aOrganizationLink->CONTACT_ID;
+				// 	if (comprobarVar ( $contactId )) {
+				// 		$myContact = $i->getContact ( $contactId );
+				// 		$arrDataContact [$contactId] = $myContact->FIRST_NAME . " " . $myContact->LAST_NAME;
+				// 	}
+				// }
+				foreach ($arrContactIns as $aContactIns) {
+					$contactId = $aContactIns->getAtributo("recordid");
+					$arrDataContact [$contactId] = $aContactIns->getAtributo("firstname") . " " . $aContactIns->getAtributo("lastname");
 				}
 				asort ( $arrDataContact );
 				foreach ( $arrDataContact as $jj => $aDataContact ) {
@@ -194,9 +230,10 @@ if (comprobarVar ( $opportunityId )) {
 				}
 				$jsDataContact = $jsData != "" ? substr ( $jsDataContact, 0, - 1 ) : "";
 				$jsDataContactId = $jsDataContactId != "" ? substr ( $jsDataContactId, 0, - 1 ) : "";
-				break 1;
+				// break 1;
 			}
 		}
+		// }
 	}
 	// Se detecta el tipo de precio a aplicar en la cotización según el tipo de cliente
 	if (comprobarVar ( $customerType )) {

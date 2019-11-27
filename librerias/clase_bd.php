@@ -240,15 +240,17 @@ class ClaseBd {
 		} else {
 			$arrClase = array ();
 			$clase = get_class ( $this );
-			foreach ( $resultado as $valores ) {
-				$valorListaPk = array ();
-				foreach ( $valores as $atributo => $valor ) {
-					$valorListaPk [strtolower ( $atributo )] = $valor;
+			if (isset($resultado) and count($resultado) > 0) {
+				foreach ( $resultado as $valores ) {
+					$valorListaPk = array ();
+					foreach ( $valores as $atributo => $valor ) {
+						$valorListaPk [strtolower ( $atributo )] = $valor;
+					}
+					$valorListaPk = count ( $valorListaPk ) == 1 ? current ( $valorListaPk ) : $valorListaPk;
+					// Se cargan las propiedades a la Conexion Actual
+					$miClase = new $clase ( $this->miConexionBd, $valorListaPk );
+					$arrClase [] = $miClase;
 				}
-				$valorListaPk = count ( $valorListaPk ) == 1 ? current ( $valorListaPk ) : $valorListaPk;
-				// Se cargan las propiedades a la Conexion Actual
-				$miClase = new $clase ( $this->miConexionBd, $valorListaPk );
-				$arrClase [] = $miClase;
 			}
 			return $arrClase;
 		}
